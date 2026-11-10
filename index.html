@@ -691,7 +691,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.14</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.15</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -722,7 +722,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.14</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.15</div>
   </div>
 </aside>
 <main class="main">
@@ -738,7 +738,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Анализ содержимого изображений требует подключённой мультимодальной модели.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" title="Прикрепить изображение или файл">＋</button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" title="Прикрепить изображение или файл">＋</button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
  <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted" id="voiceState" style="margin-bottom:12px">Микрофон выключен</div><button class="voice-btn" id="voiceStart">Включить ожидание ключевой фразы</button><button class="btn ghost" id="voiceStop" style="width:100%;margin-top:7px">Полностью выключить микрофон</button><p class="footnote" style="margin-top:10px">Фразы: «Активировать» / «Деактивировать» или “Activate” / “Deactivate”. Выбери язык распознавания в настройках: браузер обычно слушает один язык за раз. Распознавание может передавать аудио выбранному браузерному сервису.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
@@ -853,7 +853,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.14.0</span></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.15.0</span></div>
    <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.13.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
@@ -866,7 +866,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   <button type="button" class="mobile-tab" data-mobile-page="library" aria-label="Открыть файлы"><span class="tab-symbol" aria-hidden="true">▤</span><span>Файлы</span></button>
   <button type="button" class="mobile-tab" data-mobile-page="settings" aria-label="Открыть настройки"><span class="tab-symbol" aria-hidden="true">⚙</span><span>Настройки</span></button>
 </nav>
-<div class="toast" id="toast"></div><input type="file" id="filePicker" multiple hidden accept=".txt,.md,.csv,.json,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.gif"><input type="file" id="chatFilePicker" multiple hidden accept=".txt,.md,.csv,.json,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.gif">
+<div class="toast" id="toast"></div><input type="file" id="filePicker" multiple hidden accept=".txt,.md,.csv,.json,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.gif,.mp3,.wav,.m4a,.ogg,.webm,.flac,.aac"><input type="file" id="chatFilePicker" multiple hidden accept=".txt,.md,.csv,.json,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.gif,.mp3,.wav,.m4a,.ogg,.webm,.flac,.aac">
 <div class="modal" id="modal"><div class="modal-panel"><div class="modal-head"><h3 id="modalTitle">Просмотр</h3><button class="icon-btn" id="closeModal">✕</button></div><div id="modalBody"></div></div></div>
 <script>
 'use strict';
@@ -1055,7 +1055,7 @@ function renderAssistantBody(target,value){
 function addMessage(role,text,attachment){const el=document.createElement('div');el.className='message '+role;const meta=document.createElement('div');meta.className='meta';meta.textContent=role==='user'?'ВЫ':'АРХАНГЕЛ';el.appendChild(meta);if(attachment?.data&&attachment.kind==='image'){const im=document.createElement('img');im.className='attach-preview';im.src=attachment.data;el.appendChild(im)}const body=document.createElement('div');if(role==='assistant')renderAssistantBody(body,text);else body.textContent=text;el.appendChild(body);$('messages').appendChild(el);$('messages').scrollTop=$('messages').scrollHeight;document.querySelector('.welcome')?.remove();state.messages.push({role,text,time:Date.now()});state.messages=state.messages.slice(-80);save()}
 function localAnswer(q){const s=q.trim(),l=s.toLowerCase();if(/^(привет|здравствуй|добрый день|добрый вечер|hello|hi)\b/.test(l))return'На связи. Сформулируй цель, ограничения и ожидаемый результат. Если можно действовать без уточнений, я выберу разумный вариант по умолчанию.';if(/помощь|что ты умеешь|команды/.test(l))return'Локальные возможности:\n• Математика: напиши «вычисли sqrt(81)+2^5».\n• Поиск: «найди …» — по библиотеке, заметкам, задачам и истории.\n• Задачи: «создай задачу …».\n• Заметки: «запомни …».\n• Изображения: прикрепи файл; для смыслового анализа нужна vision-модель в настройках.\nДля открытого диалога подключи совместимую языковую модель.';if(/который час|текущее время|сегодняшняя дата/.test(l))return`Локальное время устройства: ${new Date().toLocaleString('ru-RU')}.`;if(/^(вычисли|посчитай|сколько будет|calc)\s*/i.test(s)){const expression=s.replace(/^(вычисли|посчитай|сколько будет|calc)\s*/i,'');try{const n=mathEval(expression);record('math',expression,String(n));return`${expression} = ${n}`}catch(e){return'Ошибка вычисления: '+e.message}}if(/^(найди|поиск|найти)\s*/i.test(s)){const query=s.replace(/^(найди|поиск|найти)\s*/i,'');const hits=localSearch(query);record('search',query,`Результатов: ${hits.length}`);return hits.length?`Найдено ${hits.length} совпадений:\n`+hits.slice(0,8).map((x,i)=>`${i+1}. ${x.title} (${x.kind}, релевантность ${x.score.toFixed(1)})\n${(x.text||'').slice(0,180)}`).join('\n\n'):'В локальной библиотеке, заметках, задачах и истории совпадений нет.'}if(/^запомни\s+/i.test(s)){const body=s.replace(/^запомни\s+/i,'');state.notes.unshift({id:uid(),title:body.slice(0,55),body,date:now()});save();renderAll();return'Сохранено в заметках. Запись доступна в разделе «Задачи и заметки».'}if(/^создай задачу\s+/i.test(s)){const title=s.replace(/^создай задачу\s+/i,'');state.tasks.unshift({id:uid(),title,desc:'Создано из чата',priority:'Обычный',done:false,date:now()});save();renderAll();return'Задача добавлена в список.'}if(/анализируй изображение|что на картинке|опиши изображение/.test(l))return api.key?'Изображение не прикреплено. Добавь его кнопкой «＋» и отправь запрос повторно.':'Для смыслового анализа изображения нужна подключённая мультимодальная модель. Без неё доступен только просмотр и локальная информация о файле.';return'Я работаю без подключённой языковой модели. Этот запрос требует полноценного ИИ или поиска во внешних источниках. Подключи совместимый API в настройках — тогда я смогу вести диалог с помощью выбранной модели. Сейчас доступны только ограниченные локальные функции: простые вычисления, поиск по твоим данным, заметки и задачи.'}
 $('sendButton').onclick=sendChat;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.ctrlKey&&!e.metaKey){e.preventDefault();sendChat()}});function clearConversation(){if(state.messages.length&&!confirm('Очистить текущую переписку?'))return;$('messages').innerHTML='<div class="welcome" id="welcomeMessage"><img id="welcomeLogo2" alt="Archangel" src="'+LOGO+'"><h2>Начни разговор</h2><p>Новый диалог. Сформулируй задачу.</p></div>';state.messages=[];save();toast('Диалог очищен')}$('clearChat').onclick=clearConversation;
-$('attachButton').onclick=()=>$('chatFilePicker').click();$('chatFilePicker').addEventListener('change',e=>{for(const f of [...e.target.files]){if(f.type.startsWith('image/')){if(f.size>8*1024*1024){toast('Изображение больше 8 МБ');continue}const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,data:r.result,kind:'image'});renderAttach()};r.readAsDataURL(f)}else if(/\.(txt|md|csv|json|py|js|ts|html|css|xml|ya?ml)$/i.test(f.name)){const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,text:String(r.result).slice(0,70000),kind:'text'});renderAttach()};r.readAsText(f)}else{pendingFiles.push({name:f.name,type:f.type,kind:'file'});renderAttach()}}e.target.value=''});function renderAttach(){$('attachRow').innerHTML=pendingFiles.map((f,i)=>`<div class="attach-preview">${f.kind==='image'?`<img src="${f.data}">`:'▤'}<span>${esc(f.name)}</span><button class="tiny-btn" data-remove-attach="${i}">×</button></div>`).join('');$('attachRow').querySelectorAll('[data-remove-attach]').forEach(b=>b.onclick=()=>{pendingFiles.splice(+b.dataset.removeAttach,1);renderAttach()})}
+$('attachButton').onclick=()=>$('chatFilePicker').click();$('chatFilePicker').addEventListener('change',e=>{for(const f of [...e.target.files]){if(f.type.startsWith('image/')){if(f.size>8*1024*1024){toast('Изображение больше 8 МБ');continue}const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,data:r.result,kind:'image'});renderAttach()};r.readAsDataURL(f)}else if(/\.(txt|md|csv|json|py|js|ts|html|css|xml|ya?ml)$/i.test(f.name)){const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,text:String(r.result).slice(0,70000),kind:'text'});renderAttach()};r.readAsText(f)}else{pendingFiles.push({name:f.name,type:f.type,kind:'file'});renderAttach()}}e.target.value=''});function renderAttach(){$('attachRow').innerHTML=pendingFiles.map((f,i)=>`<div class="attach-preview">${f.kind==='image'?`<img src="${f.data}">`:f.kind==='audio'?'♫':'▤'}<span>${esc(f.name)}</span><button class="tiny-btn" data-remove-attach="${i}">×</button></div>`).join('');$('attachRow').querySelectorAll('[data-remove-attach]').forEach(b=>b.onclick=()=>{pendingFiles.splice(+b.dataset.removeAttach,1);renderAttach()})}
 function showThinking(){const el=document.createElement('div');el.className='thinking-indicator';el.id='thinkingIndicator';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.innerHTML='<span class="thinking-dots"><i></i><i></i><i></i></span><span>Архангел анализирует запрос…</span>';$('messages').appendChild(el);$('messages').scrollTop=$('messages').scrollHeight;return el}
 async function sendChat(){const q=$('chatInput').value.trim();if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;const files=[...pendingFiles];$('chatInput').value='';pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённый файл.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=true;const thinking=showThinking();try{let answer;if(api.key){answer=await modelRequest(q,files)}else{answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nФайл прикреплён. Локально я могу показать изображение, но не способен надёжно определить его смысл без мультимодальной модели.'}thinking.remove();addMessage('assistant',answer);if(voiceActive||state.prefs.autoSpeak)speak(answer)}catch(e){thinking.remove();addMessage('assistant','Ошибка подключения к модели: '+e.message+'\n\nПроверь endpoint, ключ, название модели и разрешение CORS. Локальные инструменты продолжают работать.')}finally{$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('chatInput').focus()}}
 function restoreChat(){const root=$('messages');if(!root)return;root.innerHTML='';if(!state.messages.length){const welcome=document.createElement('div');welcome.className='welcome';welcome.id='welcome';const logo=document.createElement('img');logo.alt='Эмблема ARCHANGEL';logo.src=LOGO;const heading=document.createElement('h2');heading.textContent='Начни разговор';const p=document.createElement('p');p.textContent='Напиши сообщение ниже. Чтобы получить полноценные ответы ИИ, сначала подключи модель в настройках.';welcome.append(logo,heading,p);root.append(welcome);return;}for(const m of state.messages.slice(-50)){const el=document.createElement('div');el.className='message '+(m.role==='user'?'user':'assistant');const meta=document.createElement('div');meta.className='meta';meta.textContent=m.role==='user'?'ВЫ':'АРХАНГЕЛ';const body=document.createElement('div');if(m.role==='assistant')renderAssistantBody(body,String(m.text||''));else body.textContent=String(m.text||'');el.append(meta,body);root.appendChild(el);}root.scrollTop=root.scrollHeight;}
@@ -1291,6 +1291,27 @@ async function extractDocument(file){
  return result.text||'';
 }
 function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)});}
+async function optimizeVisionImage(file){
+ const raw=await fileToDataURL(file);
+ if(file.size<=1600000||!('createImageBitmap' in window))return raw;
+ let bitmap;
+ try{
+  bitmap=await createImageBitmap(file);
+  const scale=Math.min(1,2600/Math.max(bitmap.width,bitmap.height));
+  if(scale===1&&file.size<=2900000)return raw;
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d',{alpha:false});
+  if(!ctx)return raw;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  const compact=canvas.toDataURL('image/jpeg',.9);
+  canvas.width=canvas.height=0;
+  return compact.length<raw.length?compact:raw;
+ }catch{return raw;}finally{bitmap?.close?.();}
+}
+
 // One attachment pipeline for picker and drag/drop. It validates files and reports progress.
 async function addChatFiles(fileList){
  const files=[...fileList];if(!files.length)return;
@@ -1304,7 +1325,12 @@ async function addChatFiles(fileList){
    const imageExt=['png','jpg','jpeg','webp','gif'];
    const textExt=['txt','md','csv','json','py','js','ts','html','css','xml','yaml','yml','log'];
    if(file.type.startsWith('image/')||imageExt.includes(ext)){
-    const data=await fileToDataURL(file);if(imageBytes+data.length>11*1024*1024)throw Error('Общий размер изображений не должен превышать 11 МБ.');imageBytes+=data.length;pendingFiles.push({name:file.name,type:file.type||'image/'+(ext==='jpg'?'jpeg':ext),data,kind:'image'});
+    const data=await optimizeVisionImage(file);if(imageBytes+data.length>11*1024*1024)throw Error('Общий размер изображений не должен превышать 11 МБ.');imageBytes+=data.length;pendingFiles.push({name:file.name,type:file.type||'image/'+(ext==='jpg'?'jpeg':ext),data,kind:'image'});
+   }else if(['mp3','wav','m4a','ogg','webm','flac','aac'].includes(ext)){
+    if(file.size>5*1024*1024)throw Error('Для аудиодорожки доступно не более 5 МБ за раз.');
+    if(pendingFiles.some(f=>f.kind==='audio'))throw Error('Добавляй по одной аудиодорожке на запрос.');
+    const data=await fileToDataURL(file);
+    pendingFiles.push({name:file.name,type:file.type||'audio/'+ext,data,format:ext,kind:'audio'});
    }else if(['pdf','docx'].includes(ext)){
     const text=await extractDocument(file);pendingFiles.push({name:file.name,type:file.type,text:text||'Текст не извлечён; оригинал недоступен в запросе.',kind:'text'});
    }else if(textExt.includes(ext)){
@@ -1402,12 +1428,26 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
  const history=state.messages.slice(0,-1).slice(-18).filter(m=>m.role==='user'||m.role==='assistant');
  const prompt=[];if(q)prompt.push(q);
  for(const f of files){if(f.kind==='text')prompt.push(`Содержимое файла «${f.name}»:\n${f.text||'(текст не извлечён)'}`);}
- const promptText=prompt.join('\n\n')||'Проанализируй приложенное изображение.';
+ const promptText=prompt.join('\n\n')||(files.some(f=>f.kind==='audio')?'Расшифруй и проанализируй прикреплённую аудиодорожку. Если слова неразборчивы, скажи об этом.':'Рассмотри приложенные изображения и внимательно прочитай видимый текст, математические символы и формулы.');
  const imageBytes=files.filter(f=>f.kind==='image'&&f.data).reduce((sum,f)=>sum+f.data.length,0);if(imageBytes>11*1024*1024)throw Error('Суммарный размер изображений превышает 11 МБ. Отправь меньше изображений или уменьши их размер.');
- const content=[{type:'text',text:promptText}];for(const f of files)if(f.kind==='image'&&f.data)content.push({type:'image_url',image_url:{url:f.data}});
+ if(files.some(f=>f.kind==='audio')&&api.provider!=='openrouter'){
+  throw Error('Анализ аудиодорожек сейчас доступен через OpenRouter при выборе модели с поддержкой аудиовхода.');
+ }
+ const content=[{type:'text',text:promptText}];
+ for(const f of files){
+  if(f.kind==='image'&&f.data)content.push({type:'image_url',image_url:{url:f.data}});
+  if(f.kind==='audio'&&f.data){
+   const encoded=String(f.data).split(',',2)[1];
+   if(!encoded||!['mp3','wav','m4a','ogg','webm','flac','aac'].includes(f.format))throw Error('Неподдерживаемый аудиоформат.');
+   content.push({type:'input_audio',input_audio:{data:encoded,format:f.format}});
+  }
+ }
+
  const messages=[{role:'system',content:systemPrompt()},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
+ const requestBody=JSON.stringify({messages,temperature:.25});
+ if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
- let response;try{response=await fetch('/api/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,temperature:.35}),signal:controller.signal});}catch(e){if(e.name==='AbortError')throw e;throw Error('Не удалось связаться с локальным шлюзом. Проверь, что окно сервера открыто: '+e.message)}
+ let response;try{response=await fetch('/api/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:requestBody,signal:controller.signal});}catch(e){if(e.name==='AbortError')throw e;throw Error('Не удалось связаться с локальным шлюзом. Проверь, что окно сервера открыто: '+e.message)}
  if(!response.ok){let data={};try{data=await response.json()}catch{}throw Error(data.error||`Шлюз вернул HTTP ${response.status}`)}
  const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',answer='',finished=false;
  while(!finished){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const lines=buffer.split('\n');buffer=lines.pop()||'';for(const line of lines){if(!line.startsWith('data:'))continue;let event;try{event=JSON.parse(line.slice(5).trim())}catch{continue;}if(event.error)throw Error(event.error);if(event.delta){answer+=event.delta;onDelta(answer);}if(event.done)finished=true;}}
@@ -1422,7 +1462,7 @@ sendChat=async function(){
    thinking.remove();const el=document.createElement('div');el.className='message assistant';const meta=document.createElement('div');meta.className='meta';meta.textContent='АРХАНГЕЛ';body=document.createElement('div');body.textContent='';el.append(meta,body);$('messages').appendChild(el);
    answer=await modelRequest(q,files,value=>{body.textContent=value;$('messages').scrollTop=$('messages').scrollHeight;});
   }else{
-   thinking.remove();answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nИзображение приложено, но для смыслового анализа подключи vision-модель.';addMessage('assistant',answer);
+   thinking.remove();answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nИзображение приложено, но для смыслового анализа подключи vision-модель.';if(files.some(f=>f.kind==='audio'))answer+='\n\nАудиодорожка приложена, но анализ звука требует подключённой модели OpenRouter с поддержкой аудиовхода.';addMessage('assistant',answer);
   }
   if(body){renderAssistantBody(body,answer);state.messages.push({role:'assistant',text:answer,time:Date.now()});state.messages=state.messages.slice(-80);save();}
   if(voiceActive||state.prefs.autoSpeak)speak(answer);
@@ -1445,7 +1485,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.14 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.15 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
