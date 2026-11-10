@@ -684,7 +684,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.13</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.14</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -715,7 +715,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.13</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.14</div>
   </div>
 </aside>
 <main class="main">
@@ -831,9 +831,9 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
     </div>
     <div class="voice-comparison-note">Мужской и женский профили доступны на русском, английском и испанском. Если отдельного системного голоса нет, профиль использует доступный голос нужного языка с изменением высоты тона. Это не замена настоящему мужскому или женскому голосу — установленные голоса можно выбрать ниже.</div>
     <div class="voice-panel-grid">
-     <div class="voice-control-card"><h4>РУССКИЙ ГОЛОС</h4><label class="label" for="voiceRuSelect">Доступный голос устройства</label><select class="select" id="voiceRuSelect"><option value="">Автовыбор русского голоса</option></select><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateRuVal">0.97×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.97" id="voiceRateRu" style="width:100%"><div class="small muted">Тембр <b id="voicePitchRuVal">0.96</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.96" id="voicePitchRu" style="width:100%"></div>
-     <div class="voice-control-card"><h4>АНГЛИЙСКИЙ ГОЛОС</h4><label class="label" for="voiceEnSelect">Голос устройства</label><select class="select" id="voiceEnSelect"><option value="">Автоматический выбор</option></select><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEnVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEn" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEnVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEn" style="width:100%"></div>
-     <div class="voice-control-card"><h4>ИСПАНСКИЙ ГОЛОС</h4><label class="label" for="voiceEsSelect">Голос устройства</label><select class="select" id="voiceEsSelect"><option value="">Автоматический выбор</option></select><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEsVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEs" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEsVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEs" style="width:100%"></div>
+     <div class="voice-control-card"><h4>РУССКИЙ ГОЛОС</h4><label class="label" for="voiceRuSelect">Доступный голос устройства</label><select class="select" id="voiceRuSelect"><option value="">Автовыбор русского голоса</option></select><button class="btn secondary" id="testVoiceRu" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateRuVal">0.97×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.97" id="voiceRateRu" style="width:100%"><div class="small muted">Тембр <b id="voicePitchRuVal">0.96</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.96" id="voicePitchRu" style="width:100%"></div>
+     <div class="voice-control-card"><h4>АНГЛИЙСКИЙ ГОЛОС</h4><label class="label" for="voiceEnSelect">Голос устройства</label><select class="select" id="voiceEnSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEn" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEnVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEn" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEnVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEn" style="width:100%"></div>
+     <div class="voice-control-card"><h4>ИСПАНСКИЙ ГОЛОС</h4><label class="label" for="voiceEsSelect">Голос устройства</label><select class="select" id="voiceEsSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEs" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEsVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEs" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEsVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEs" style="width:100%"></div>
     </div>
     <div class="voice-status-line" id="voiceCatalogStatus">Загрузка голосов, доступных в браузере…</div>
     <div class="voice-actions voice-actions-enhanced"><button type="button" class="btn secondary" id="refreshVoices">↻ Обновить голоса</button><button type="button" class="btn ghost" id="stopSpeaking">■ Остановить озвучку</button><label class="autovoice-toggle" for="autoSpeak"><input id="autoSpeak" type="checkbox" class="toggle"><span>Автоматически озвучивать ответы ИИ</span></label></div>
@@ -846,7 +846,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.13.0</span></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.14.0</span></div>
    <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.13.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
@@ -1355,7 +1355,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.13 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.14 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
@@ -1371,7 +1371,7 @@ function findGenderVoice(locale,gender){
  return exact.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;
 }
 function voiceProfilePitch(locale,gender,base){return base;}
-function actualProfileNote(locale,gender,v){return v?v.name+' · '+v.lang:'Не найден голос этого профиля на устройстве';}
+function actualProfileNote(locale,gender,v){if(v)return v.name+' · '+v.lang;const k=localeKey(locale),count=speechVoices().filter(x=>String(x.lang||'').toLowerCase().startsWith(VOICE_LANGS[k].prefix)).length;return count?'Пол голоса не распознан — выбери из списка ниже':'Нет голосов этого языка в браузере';}
 function populateVoiceSelect(id,prefix,selected){const el=$(id);if(!el)return;const current=selected||el.value;const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(prefix));el.innerHTML='';const o=document.createElement('option');o.value='';o.textContent=prefix==='ru'?'Автовыбор русского голоса':prefix==='es'?'Selección automática':'Auto-select English voice';el.append(o);list.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name)).forEach(v=>{const x=document.createElement('option');x.value=v.voiceURI||v.name;x.textContent=`${v.name} · ${v.lang}${v.localService?'':' · online'}`;el.append(x)});if(current&&[...el.options].some(x=>x.value===current))el.value=current;}
 function updateVoiceChoiceUI(){
  for(const [key,locale,labelMale,labelFemale] of [['ru','ru-RU','мужской','женский'],['en','en-US','male','female'],['es','es-ES','masculino','femenino']]){
@@ -1408,6 +1408,22 @@ function voiceSample(locale){const k=localeKey(locale);return k==='ru'?'Здра
 function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice){toast('Такой голос не найден автоматически. Выбери доступный вариант в списке вручную.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice.voiceURI||voice.name;const select=$(cfg.select);if(select)select.value=voice.voiceURI||voice.name;save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);}
 for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice){toast('Голос этого типа не найден в системе. Выбери доступный голос вручную ниже.');return;}stopVoicePlayback();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
 for(const b of document.querySelectorAll('[data-voice-use]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voiceUse.split(':');applyVoiceGender(VOICE_LANGS[key].locale,gender);});
+for(const key of ['ru','en','es']){
+ const c=VOICE_LANGS[key],cap=key==='ru'?'Ru':key==='en'?'En':'Es';
+ document.getElementById('testVoice'+cap)?.addEventListener('click',()=>{
+  if(!('speechSynthesis' in window)){toast('Этот браузер не поддерживает озвучку.');return;}
+  const list=speechVoices().filter(v=>String(v.lang||'').toLowerCase().startsWith(c.prefix));
+  const selected=document.getElementById(c.select)?.value;
+  const voice=list.find(v=>(v.voiceURI||v.name)===selected)||list[0];
+  if(!voice){toast('Нет доступного '+(key==='en'?'английского':key==='es'?'испанского':'русского')+' голоса. Добавь голос в настройках Windows или используй другой браузер.');return;}
+  stopVoicePlayback();
+  const u=new SpeechSynthesisUtterance(voiceSample(c.locale));
+  u.lang=c.locale;u.voice=voice;u.rate=Number(document.getElementById(c.rate)?.value)||.98;u.pitch=Number(document.getElementById(c.pitch)?.value)||.97;
+  u.onerror=()=>toast('Не удалось воспроизвести системный голос: проверь настройки озвучивания браузера.');
+  speechSynthesis.speak(u);
+  const status=document.getElementById('voiceCatalogStatus');if(status)status.textContent='Пробное воспроизведение: '+voice.name+' · '+voice.lang+'. Название голоса не всегда позволяет определить мужской/женский тип.';
+ });
+}
 
 let voicePlaybackEpoch=0;
 function stopVoicePlayback(){voicePlaybackEpoch++;voiceSpeaking=false;if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch{};}
