@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090909"><meta name="color-scheme" content="dark"><meta name="description" content="ARCHANGEL AI — персональный ИИ-помощник CZERNEBOG">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
+<meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<title>ARCHANGEL AI — Web Edition 4.1 | Czernebog</title>
+<link rel="preload" as="image" href="assets/archangel-user-cover.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpath fill=%22white%22 d=%22M50 8 96 92H76L50 42 24 92H4Z%22/%3E%3Cpath stroke=%22black%22 stroke-width=%229%22 d=%22M31 68h38%22/%3E%3C/svg%3E">
+
+<style>
+:root{--bg:#050505;--panel:#0d0d0d;--panel2:#141414;--panel3:#1b1b1b;--line:#292929;--line2:#3a3a3a;--text:#f4f4f4;--muted:#a3a3a3;--soft:#747474;--white:#fff;--black:#000;--good:#d8d8d8;--danger:#fff;--radius:17px;--shadow:0 16px 50px rgba(0,0,0,.42)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}body{overflow:hidden}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit}.app{height:100dvh;display:grid;grid-template-columns:248px minmax(0,1fr);background:var(--bg)}
+.sidebar{border-right:1px solid var(--line);background:#080808;display:flex;flex-direction:column;padding:17px 13px;min-width:0}.brand{border:1px solid var(--line);border-radius:15px;padding:10px;background:#000;display:flex;justify-content:center;align-items:center;margin-bottom:21px;min-height:112px}.brand img{width:100%;max-width:210px;height:auto;display:block;object-fit:contain}.nav-label{font-size:10px;letter-spacing:1.65px;color:#666;padding:8px 10px 7px;text-transform:uppercase}.nav{display:grid;gap:4px}.nav button{background:transparent;border:1px solid transparent;color:#bdbdbd;text-align:left;padding:11px 12px;border-radius:11px;display:flex;gap:11px;align-items:center;font-size:13px;transition:.15s}.nav button:hover{background:#151515;color:#fff;border-color:#252525}.nav button.active{background:#f3f3f3;color:#050505;font-weight:700}.ico{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:16px}.side-bottom{margin-top:auto;display:grid;gap:9px}.status-card{border:1px solid var(--line);background:#101010;border-radius:13px;padding:12px}.status-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#aaa}.status-dot{width:7px;height:7px;border-radius:50%;background:#eee;display:inline-block;margin-right:6px;box-shadow:0 0 9px #fff}.side-foot{font-size:10px;color:#5f5f5f;text-align:center;letter-spacing:.5px}
+.main{min-width:0;display:flex;flex-direction:column;height:100dvh}.topbar{height:67px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 25px;background:rgba(8,8,8,.96)}.top-title{font-size:14px;font-weight:700;letter-spacing:.7px}.top-sub{font-size:11px;color:#777;margin-top:4px}.top-actions{display:flex;gap:9px;align-items:center}.pill{border:1px solid var(--line2);border-radius:999px;padding:8px 11px;font-size:11px;color:#bdbdbd;background:#111;display:flex;gap:7px;align-items:center}.icon-btn{height:35px;min-width:36px;padding:0 9px;border-radius:10px;border:1px solid var(--line2);background:#111;color:#eee;font-size:14px}.icon-btn:hover,.btn:hover{border-color:#888;background:#222}.content{padding:24px 26px 30px;overflow:auto;min-height:0;flex:1}.page{display:none;max-width:1440px;margin:0 auto}.page.active{display:block}.page-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:21px}.eyebrow{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:#888}.h1{font-size:26px;letter-spacing:-.8px;margin:5px 0 7px;font-weight:750}.lead{font-size:13px;color:#969696;line-height:1.6;max-width:760px}.btn{border:1px solid #555;background:#f2f2f2;color:#050505;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;transition:.15s}.btn.secondary{background:#131313;color:#eee;border-color:#383838}.btn.ghost{background:transparent;color:#ccc;border-color:#303030}.btn.danger{background:#171717;color:#fff;border-color:#555}.btn:disabled{opacity:.45;cursor:not-allowed}.grid{display:grid;gap:14px}.grid.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}.card{border:1px solid var(--line);background:linear-gradient(155deg,#111,#090909);border-radius:var(--radius);padding:17px;min-width:0}.stat .k{font-size:11px;color:#888}.stat .v{font-size:26px;font-weight:750;margin:9px 0 4px;letter-spacing:-.7px}.stat .hint{font-size:10px;color:#707070}.home-grid{grid-template-columns:minmax(0,1.55fr) minmax(260px,.85fr)}.hero{min-height:255px;display:flex;flex-direction:column;justify-content:space-between;background:#050505;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 75% 30%,rgba(255,255,255,.08),transparent 45%);pointer-events:none}.hero-brand{display:flex;align-items:center;gap:16px;z-index:1}.hero-brand img{width:210px;max-width:42%;border:1px solid #222;border-radius:12px}.hero-brand h2{font-size:20px;margin:0 0 7px;letter-spacing:1.3px}.hero-brand p{font-size:12px;color:#888;margin:0}.hero-bottom{z-index:1;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:25px}.hero-motto{font-size:18px;font-weight:650;line-height:1.35}.mono{font-family:Consolas,monospace;color:#888;font-size:10px;letter-spacing:1px}.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:13px}.quick{border:1px solid var(--line);background:#0d0d0d;border-radius:13px;padding:14px;text-align:left;color:#ddd;display:flex;gap:12px;align-items:center}.quick:hover{background:#181818;border-color:#666}.quick b{font-size:12px;display:block}.quick small{display:block;color:#777;margin-top:4px;font-size:10px}.section-title{font-size:13px;font-weight:700;margin:0 0 12px}.muted{color:#888}.small{font-size:11px}.row{display:flex;align-items:center;gap:9px}.between{display:flex;align-items:center;justify-content:space-between;gap:10px}.stack{display:grid;gap:10px}.divider{height:1px;background:var(--line);margin:13px 0}.badge{border:1px solid #3a3a3a;background:#171717;color:#ddd;padding:5px 8px;border-radius:999px;font-size:10px;white-space:nowrap}.badge.ok{background:#eee;color:#090909;border-color:#eee}.badge.off{color:#858585}.chat-layout{display:grid;grid-template-columns:minmax(0,1fr) 255px;gap:15px;min-height:calc(100dvh - 143px)}.chat-card{display:flex;flex-direction:column;min-height:520px;padding:0;overflow:hidden}.chat-top{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.messages{padding:20px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:15px;min-height:320px}.welcome{text-align:center;margin:auto;max-width:470px;color:#999}.welcome img{width:190px;max-width:60%;background:#000;border:1px solid #222;border-radius:12px;padding:8px;margin-bottom:15px}.welcome h2{color:#eee;font-size:19px;letter-spacing:1px;margin:0 0 7px}.welcome p{font-size:12px;line-height:1.6}.message{max-width:min(790px,90%);padding:13px 15px;border:1px solid #2c2c2c;border-radius:14px;background:#101010;line-height:1.6;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.message.user{align-self:flex-end;background:#e9e9e9;color:#080808;border-color:#e9e9e9}.message.assistant{align-self:flex-start}.message .meta{font-size:9px;opacity:.55;margin-bottom:5px;letter-spacing:.7px;text-transform:uppercase}.message img.attach-preview{max-width:250px;max-height:180px;display:block;border-radius:8px;margin:8px 0;object-fit:contain;background:#050505}.chat-input-wrap{padding:13px;border-top:1px solid var(--line);background:#090909}.attach-row{display:flex;gap:7px;align-items:center;margin-bottom:8px;flex-wrap:wrap}.attach-preview{border:1px solid #303030;border-radius:8px;padding:6px;font-size:10px;color:#aaa;display:flex;align-items:center;gap:7px}.attach-preview img{width:34px;height:34px;object-fit:cover;border-radius:5px}.composer{display:flex;gap:9px;align-items:flex-end}.composer textarea{flex:1;resize:vertical;min-height:48px;max-height:180px;background:#141414;border:1px solid #383838;border-radius:12px;padding:13px;color:#eee;outline:none;font-size:13px;line-height:1.5}.composer textarea:focus,input:focus,select:focus{border-color:#aaa;outline:none}.compose-tools{display:flex;gap:6px}.send{height:48px;min-width:48px;border:1px solid #eee;background:#eee;color:#050505;border-radius:12px;font-size:17px}.chat-aside .card{margin-bottom:12px}.voice-btn{width:100%;padding:12px;border:1px solid #444;background:#eee;color:#000;border-radius:10px;font-size:12px;font-weight:700}.voice-btn.listening{background:#181818;color:#fff;border-color:#eee}.input,.select,.textarea{width:100%;background:#111;border:1px solid #393939;color:#eee;border-radius:10px;padding:10px 12px;font-size:12px}.textarea{min-height:110px;resize:vertical;line-height:1.5}.label{font-size:10px;color:#999;display:block;margin:0 0 6px}.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.form-field{min-width:0}.list{display:grid;gap:8px}.item{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);background:#0e0e0e;border-radius:12px;padding:12px;min-width:0}.item-body{min-width:0;flex:1}.item-title{font-size:12px;font-weight:650;overflow-wrap:anywhere}.item-desc{font-size:11px;color:#888;line-height:1.5;margin-top:4px;overflow-wrap:anywhere}.item-actions{display:flex;gap:5px}.tiny-btn{height:29px;min-width:29px;border:1px solid #353535;background:#151515;color:#bbb;border-radius:8px}.tiny-btn:hover{color:#fff;border-color:#aaa}.empty{border:1px dashed #343434;border-radius:13px;padding:28px;text-align:center;color:#777;font-size:12px}.searchbar{display:flex;gap:8px}.searchbar input{flex:1}.table{width:100%;border-collapse:collapse;font-size:11px}.table th,.table td{padding:10px 9px;border-bottom:1px solid #252525;text-align:left}.table th{color:#777;font-weight:600}.table td{color:#ddd}.codearea{font-family:Consolas,monospace;min-height:240px;white-space:pre;tab-size:4}.result{border:1px solid #343434;background:#090909;border-radius:11px;padding:14px;font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;line-height:1.6;overflow:auto}.toast{position:fixed;bottom:20px;right:22px;background:#eee;color:#050505;border-radius:10px;padding:11px 15px;font-size:12px;font-weight:650;box-shadow:var(--shadow);z-index:99;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.76);display:none;align-items:center;justify-content:center;padding:20px;z-index:90}.modal.open{display:flex}.modal-panel{width:min(680px,100%);max-height:90dvh;overflow:auto;background:#0d0d0d;border:1px solid #444;border-radius:18px;padding:20px;box-shadow:var(--shadow)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modal-head h3{margin:0;font-size:16px}.footnote{color:#686868;font-size:10px;line-height:1.5}.toggle{appearance:none;width:35px;height:19px;border-radius:99px;background:#383838;position:relative;cursor:pointer;vertical-align:middle}.toggle:after{content:"";width:13px;height:13px;border-radius:50%;position:absolute;top:3px;left:3px;background:#bbb;transition:.18s}.toggle:checked{background:#ddd}.toggle:checked:after{left:19px;background:#000}.progress{height:5px;background:#252525;border-radius:9px;overflow:hidden}.progress span{display:block;height:100%;width:0;background:#eee}.mobile-menu{display:none}
+@media(max-width:1050px){.chat-layout{grid-template-columns:minmax(0,1fr)}.chat-aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.chat-aside .card{margin:0}.grid.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){body{overflow:auto}.app{display:block;height:auto;min-height:100dvh}.sidebar{position:fixed;z-index:70;left:0;top:0;bottom:0;width:265px;transform:translateX(-102%);transition:.2s;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}.main{height:100dvh;min-height:650px}.topbar{padding:0 13px;height:60px}.mobile-menu{display:inline-flex}.content{padding:16px 12px 25px}.home-grid{grid-template-columns:1fr}.grid.stats{gap:8px}.stat{padding:12px}.stat .v{font-size:22px}.page-head{margin-bottom:15px}.h1{font-size:22px}.chat-layout{min-height:0}.chat-card{min-height:500px}.chat-aside{grid-template-columns:1fr 1fr}.hero-brand img{max-width:44%}.hero-motto{font-size:16px}.form-row{grid-template-columns:1fr}.quick-grid{gap:8px}.top-sub{display:none}}
+
+/* ARCHANGEL 1.1 — interface refinement */
+input[type="range"]{accent-color:#eeeeee;color-scheme:dark}input[type="checkbox"]{accent-color:#eeeeee;color-scheme:dark}select,input,textarea{color-scheme:dark}
+:root{--line:#303030;--line2:#4a4a4a;--panel:#101010;--panel2:#171717;--radius:18px;--shadow:0 18px 60px rgba(0,0,0,.48)}
+html{scroll-behavior:smooth}body{background:radial-gradient(ellipse at 55% -20%,#171717 0%,#080808 43%,#030303 100%)}
+.sidebar{background:linear-gradient(180deg,#090909,#050505);padding:18px 14px}.brand{min-height:122px;border-color:#333;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 10px 30px rgba(0,0,0,.25)}
+.brand img{max-width:216px;max-height:108px;object-fit:contain}.nav{gap:5px}.nav button{min-height:42px;border-radius:12px;font-weight:550}.nav button.active{box-shadow:0 4px 16px rgba(255,255,255,.08)}
+.topbar{position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);background:rgba(7,7,7,.88);box-shadow:0 1px 0 rgba(255,255,255,.015)}.top-title{letter-spacing:1.05px}.content{scrollbar-color:#454545 #090909;scrollbar-width:thin}
+.card{background:linear-gradient(155deg,rgba(22,22,22,.96),rgba(8,8,8,.98));border-color:#2d2d2d;box-shadow:0 8px 28px rgba(0,0,0,.16);transition:border-color .18s,transform .18s,box-shadow .18s}.card:hover{border-color:#414141;box-shadow:0 12px 34px rgba(0,0,0,.22)}
+.btn,.icon-btn,.tiny-btn,.quick,.voice-btn{transition:background .16s,border-color .16s,transform .16s,box-shadow .16s}.btn:active,.icon-btn:active,.tiny-btn:active,.quick:active{transform:translateY(1px)}
+.btn:focus-visible,.icon-btn:focus-visible,.tiny-btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid #f5f5f5;outline-offset:2px}
+.input,.select,.textarea,.composer textarea{background:#0c0c0c;border-color:#414141;transition:border-color .16s,box-shadow .16s}.input:focus,.select:focus,.textarea:focus,.composer textarea:focus{border-color:#cfcfcf;box-shadow:0 0 0 3px rgba(255,255,255,.07)}
+.page-head{align-items:center}.h1{font-size:clamp(23px,2vw,30px);letter-spacing:-1px}.eyebrow{letter-spacing:2.1px}.lead{max-width:800px}.stat .v{letter-spacing:-1.2px}.hero{border-color:#363636}.hero:after{background:radial-gradient(ellipse at 76% 26%,rgba(255,255,255,.1),transparent 48%),linear-gradient(120deg,transparent 40%,rgba(255,255,255,.025),transparent 70%)}
+.message{box-shadow:0 5px 18px rgba(0,0,0,.12)}.message.assistant{border-color:#353535;background:linear-gradient(145deg,#141414,#0b0b0b)}.message.user{background:#f2f2f2;color:#080808}.messages{scrollbar-width:thin;scrollbar-color:#444 #0a0a0a}
+.item{transition:border-color .16s,background .16s}.item:hover{border-color:#4b4b4b;background:#121212}.badge{letter-spacing:.15px}.status-card{background:linear-gradient(145deg,#151515,#0b0b0b)}
+.settings-grid{grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr)!important;align-items:start}.settings-grid>.card:first-child{grid-row:span 2}.api-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.api-mark{display:inline-flex;align-items:center;gap:7px;border:1px solid #424242;background:#171717;padding:6px 9px;border-radius:999px;font-size:10px;color:#ddd}.api-steps{display:grid;gap:8px}.api-step{display:grid;grid-template-columns:25px 1fr;gap:9px;align-items:start;border:1px solid #292929;background:#0b0b0b;border-radius:11px;padding:10px}.api-step .num{width:23px;height:23px;display:grid;place-items:center;border:1px solid #555;border-radius:7px;font-size:10px;color:#fff}.api-step b{display:block;font-size:11px;margin-bottom:3px}.api-step span{font-size:10px;line-height:1.5;color:#999}.api-step a{color:#eee;text-decoration:underline;text-underline-offset:3px}.api-warning{border:1px solid #575757;background:#151515;border-radius:11px;padding:11px 12px;font-size:10px;line-height:1.55;color:#c7c7c7}.api-state{display:flex;align-items:center;gap:8px;border:1px solid #303030;border-radius:10px;background:#090909;padding:10px 11px;font-size:11px;color:#aaa}.api-state .state-light{width:8px;height:8px;border-radius:50%;background:#777;box-shadow:0 0 0 3px rgba(255,255,255,.04)}.api-state.connected .state-light{background:#fff;box-shadow:0 0 10px rgba(255,255,255,.65)}.api-actions{display:flex;flex-wrap:wrap;gap:8px}.api-actions .btn{min-width:112px}.inline-key{display:flex;gap:7px}.inline-key .input{min-width:0;flex:1}.toggle-key{flex:none;width:42px;border:1px solid #3e3e3e;background:#151515;color:#ddd;border-radius:10px}.mini-help{font-size:10px;line-height:1.5;color:#888}.section-divider{height:1px;background:linear-gradient(90deg,#555,transparent);margin:16px 0}
+@media(max-width:900px){.settings-grid{grid-template-columns:1fr!important}.settings-grid>.card:first-child{grid-row:auto}}
+@media(max-width:760px){.sidebar{z-index:100}.topbar{z-index:30}.page-head{align-items:flex-start}.api-head{display:block}.api-mark{margin-top:10px}.api-actions .btn{flex:1}.content{overscroll-behavior:contain}}
+
+
+/* Legacy 1.2 voice refinements retained in 1.3 */
+:root{color-scheme:dark}
+input[type="range"]{accent-color:#f1f1f1;cursor:pointer}
+input[type="checkbox"]{accent-color:#f1f1f1}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #eee;outline-offset:2px}
+.card{transition:border-color .18s ease,transform .18s ease}
+.card:hover{border-color:#444}
+.voice-panel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.voice-control-card{border:1px solid #292929;background:#0b0b0b;border-radius:12px;padding:12px;min-width:0}
+.voice-control-card h4{font-size:11px;letter-spacing:.5px;margin:0 0 9px;color:#eee}
+.voice-actions{display:flex;gap:8px;flex-wrap:wrap}
+.voice-actions .btn{flex:1;min-width:115px}
+.voice-catalog-note{border:1px solid #303030;background:#090909;border-radius:10px;padding:10px 12px;color:#999;font-size:10px;line-height:1.55}
+.voice-status-line{display:flex;align-items:center;gap:8px;font-size:10px;color:#aaa}
+.voice-status-line::before{content:"";width:7px;height:7px;border-radius:50%;background:#ddd;box-shadow:0 0 8px #aaa;flex:none}
+.api-warning{line-height:1.65}
+.settings-grid .card{min-width:0}
+@media(max-width:1000px){.voice-panel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.voice-panel-grid{grid-template-columns:1fr}.voice-actions .btn{min-width:100px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* ARCHANGEL 1.3 — minimalist workspace */
+:root{--bg:#080808;--panel:#0e0e0e;--panel2:#141414;--line:#252525;--line2:#373737;--radius:14px;--shadow:0 12px 36px rgba(0,0,0,.32)}
+body{background:#080808}
+.app{grid-template-columns:218px minmax(0,1fr)}
+.sidebar{padding:16px 12px;background:#070707}
+.brand{min-height:94px;padding:8px;border:1px solid #252525;background:#000;margin-bottom:18px;box-shadow:none}
+.brand img{max-width:185px;max-height:78px}
+.nav{gap:3px}
+.nav-label{padding:9px 10px 6px;font-size:9px;letter-spacing:1.35px;color:#686868}
+.nav button,.nav-settings>button{min-height:38px;padding:9px 10px;border-radius:9px;font-size:12px;color:#a9a9a9}
+.nav button.active,.nav-settings>button.active{background:#efefef;color:#080808;box-shadow:none}
+.nav button:hover,.nav-settings>button:hover{background:#151515;border-color:#252525}
+.nav-more{margin-top:2px;border:1px solid transparent;border-radius:10px;overflow:hidden}
+.nav-more[open]{background:#0d0d0d;border-color:#242424}
+.nav-more summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;color:#aaa;font-size:12px;user-select:none}
+.nav-more summary::-webkit-details-marker{display:none}
+.nav-more summary:hover{background:#141414;color:#fff}
+.nav-chevron{margin-left:auto;color:#777;transition:transform .16s}
+.nav-more[open] .nav-chevron{transform:rotate(180deg)}
+.nav-submenu{display:grid;gap:2px;padding:0 5px 6px 12px}
+.nav-submenu button{min-height:34px;font-size:11px;padding:7px 9px}
+.nav-settings{margin-top:auto;border-top:1px solid #202020;padding-top:10px}
+.side-bottom{margin-top:12px;gap:7px}.status-card{padding:10px;border-radius:10px;box-shadow:none}.side-foot{font-size:9px}
+.topbar{height:60px;padding:0 22px;background:#090909;backdrop-filter:none;box-shadow:none}
+.top-title{font-size:12px;letter-spacing:.9px}.top-sub{font-size:10px;color:#707070}
+.content{padding:22px 24px 28px}
+.page{max-width:1280px}
+.h1{font-size:25px;letter-spacing:-.85px}.lead{font-size:12px;line-height:1.55;color:#8a8a8a}
+.card{background:#0e0e0e;border-color:#262626;box-shadow:none;transition:border-color .15s ease}
+.card:hover{border-color:#393939;box-shadow:none;transform:none}
+.hero{background:#050505;min-height:0;gap:12px}.hero:after{display:none}.hero-cover{display:block;box-sizing:border-box;width:100%;height:clamp(150px,34vh,270px);max-width:100%;max-height:270px;flex:0 0 auto;object-fit:contain;object-position:center;background:#050505;border-radius:8px;padding:8px}.hero-bottom{margin-top:2px}
+.hero-brand img{border:0;background:#000;border-radius:8px}
+.hero-motto{font-size:17px}.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.quick{background:#0b0b0b;border-color:#242424;border-radius:10px;padding:12px}.quick:hover{background:#141414;border-color:#555}
+.stat .v{font-size:23px}.grid.stats{gap:10px}.item{background:#0b0b0b;border-color:#242424;border-radius:10px}
+.chat-layout{grid-template-columns:minmax(0,1fr) 235px;gap:12px}.chat-card{border-radius:13px}.chat-top{padding:13px 15px}.messages{padding:17px;gap:12px}.message{font-size:12px;padding:11px 13px;border-radius:12px;box-shadow:none}
+.chat-input-wrap{padding:11px}.composer textarea{min-height:46px;background:#101010;border-radius:10px}.send{height:46px;min-width:46px;border-radius:10px}.compose-tools .icon-btn{height:46px;width:42px}
+.chat-aside .card{padding:13px}.section-title{font-size:12px;margin-bottom:10px}
+.btn{padding:9px 12px;border-radius:9px;font-size:11px}.btn.secondary,.btn.ghost,.btn.danger{box-shadow:none}
+.input,.select,.textarea{border-radius:9px;padding:9px 11px;font-size:11px}
+.tiny-btn,.icon-btn{border-radius:8px}
+.badge,.pill{font-size:9px}.pill{padding:7px 10px}
+#newChat,#quickSettings{display:none!important}
+@media(max-width:1050px){.chat-layout{grid-template-columns:1fr}.chat-aside{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.app{display:block}.sidebar{width:250px}.topbar{padding:0 12px}.content{padding:15px 12px 22px}.chat-aside{grid-template-columns:1fr}.page-head{align-items:flex-start}.hero{min-height:210px}.hero-brand img{max-width:38%}}
+
+
+/* ARCHANGEL 1.4 — organized control center and voice audition lab */
+.settings-jumpbar{position:sticky;top:-22px;z-index:5;display:flex;gap:7px;flex-wrap:wrap;padding:10px 0 13px;margin:0 0 12px;background:linear-gradient(#080808 78%,rgba(8,8,8,0));}
+.settings-jumpbar button{border:1px solid #303030;background:#101010;color:#bdbdbd;border-radius:999px;padding:8px 12px;font-size:11px;transition:.15s}
+.settings-jumpbar button:hover,.settings-jumpbar button:focus-visible{border-color:#aaa;color:#fff;outline:none}
+.settings-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:14px}
+.settings-grid>.settings-api-card,.settings-grid>.settings-voice-card{grid-column:1/-1}
+.settings-grid>.card{scroll-margin-top:65px}
+.settings-api-card{background:linear-gradient(150deg,#121212,#0b0b0b)}
+.settings-voice-card{background:#0c0c0c}
+.settings-voice-card .voice-panel-grid{margin-top:12px}
+.voice-audition-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.voice-audition-card{background:#090909;border:1px solid #2c2c2c;border-radius:13px;padding:13px;min-width:0}
+.voice-audition-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:11px}
+.voice-audition-head h4{margin:0;font-size:11px;letter-spacing:.5px}
+.voice-audition-head p{margin:5px 0 0;color:#777;font-size:10px}
+.voice-choice-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.voice-choice{min-width:0;display:flex;align-items:center;gap:8px;padding:10px;background:#111;border:1px solid #303030;border-radius:10px;color:#eee;text-align:left}
+.voice-choice:hover{border-color:#8a8a8a;background:#171717}
+.voice-choice-mark{width:27px;height:27px;display:grid;place-items:center;border-radius:8px;background:#eee;color:#050505;font-size:11px;font-weight:800;flex:none}
+.voice-choice>span:nth-child(2){min-width:0;display:grid;gap:4px;flex:1}
+.voice-choice b{font-size:11px}.voice-choice small{font-size:9px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px}
+.voice-choice-play{color:#aaa;font-size:11px}
+.voice-choice-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.voice-choice-actions .btn{flex:1;min-width:105px;padding:8px 10px}
+.voice-choice.is-selected{border-color:#eee;background:#1b1b1b}
+.voice-choice.is-selected .voice-choice-mark{background:#fff}
+.settings-api-card .api-warning{max-width:1000px}
+.settings-jumpbar button.active{background:#eee;color:#050505;border-color:#eee;font-weight:700}
+input[type=range]{accent-color:#eee}
+@media(max-width:900px){.settings-grid{grid-template-columns:1fr}.settings-grid>.settings-api-card,.settings-grid>.settings-voice-card{grid-column:auto}}
+@media(max-width:650px){.voice-audition-grid{grid-template-columns:1fr}.voice-choice small{max-width:none}.settings-jumpbar{top:-15px;overflow-x:auto;flex-wrap:nowrap}.settings-jumpbar button{white-space:nowrap}}
+
+
+/* ARCHANGEL 3.0 runtime polish */
+.version-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #555;padding:4px 8px;border-radius:999px;color:#ddd;font:10px ui-monospace,monospace;letter-spacing:.08em}
+.chat-card.drag-over{outline:1px dashed #ddd;outline-offset:-7px;background:#101010}
+#sendButton.is-stop{background:#e8e8e8;color:#111}
+.api-state.connected .state-light{background:#e8e8e8;box-shadow:0 0 9px #aaa}
+.attach-preview{max-width:160px;overflow:hidden;text-overflow:ellipsis}
+.voice-comparison-note{border:1px solid #303030;background:#090909;border-radius:10px;padding:10px 12px;color:#999;font-size:10px;line-height:1.55}
+
+/* ARCHANGEL 3.6.0 — alignment and voice laboratory */
+.nav-label{white-space:nowrap;letter-spacing:1px;font-size:9px;padding:11px 10px 9px;line-height:1.2}
+.system-health-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:13px;min-height:34px}
+.system-health-head .section-title{margin:3px 0 0;font-size:13px;line-height:1.25}
+.system-health-kicker{font:9px/1.2 ui-monospace,Consolas,monospace;letter-spacing:1.5px;color:#777}
+.system-health-pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:none;padding:7px 11px;border:1px solid #555;border-radius:999px;background:#171717;color:#f1f1f1;font-size:10px;font-weight:750;letter-spacing:.6px;white-space:nowrap}
+.system-health-pill i{width:7px;height:7px;border-radius:50%;background:#eee;box-shadow:0 0 8px #fff;display:block}
+.voice-audition-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.voice-audition-grid-three .voice-choice-row{grid-template-columns:1fr 1fr}
+.voice-audition-grid-three .voice-choice{padding:9px 7px;gap:6px}
+.voice-audition-grid-three .voice-choice-mark{width:23px;height:23px}
+.voice-audition-grid-three .voice-choice-actions .btn{min-width:0;font-size:10px;padding:8px 6px}
+.voice-control-card{min-width:0}
+@media(max-width:1050px){.voice-audition-grid-three{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.voice-audition-grid-three{grid-template-columns:1fr}.system-health-head{align-items:center}}
+
+
+/* 3.6.0 voice comparison: one horizontal row on desktop, scrollable rather than stacked on compact screens. */
+.voice-audition-grid-three{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.voice-audition-grid-three .voice-audition-card{min-width:0}
+.voice-audition-grid-three .voice-choice{min-width:0}
+.voice-audition-grid-three .voice-choice small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:125px}
+@media(max-width:1050px){.voice-audition-grid-three{grid-template-columns:repeat(3,minmax(225px,1fr));overflow-x:auto;padding-bottom:7px;scroll-snap-type:x proximity}.voice-audition-grid-three .voice-audition-card{scroll-snap-align:start}}
+@media(max-width:720px){.voice-audition-grid-three{grid-template-columns:repeat(3,minmax(225px,1fr))}}
+</style>
+
+<style>
+/* ARCHANGEL 2.0 — startup, loading and provider controls */
+.boot-screen{position:fixed;inset:0;z-index:999;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:opacity .35s ease,visibility .35s ease}
+.boot-screen.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+.boot-mark{width:62px;height:62px;border:1px solid #777;border-radius:19px;display:grid;place-items:center;text-align:center;font-size:32px;font-weight:800;letter-spacing:0;line-height:1;background:linear-gradient(145deg,#171717,#050505);box-shadow:0 0 45px #ffffff12}
+.boot-mark .boot-letter{display:block;color:#f4f4f4;font-size:34px;font-weight:800;line-height:1;letter-spacing:0;margin:0;padding:0;transform:none}.boot-name{font-size:14px;letter-spacing:5px;font-weight:750;margin-top:8px}.boot-caption{font-size:9px;letter-spacing:1.5px;color:#777;text-align:center;padding:0 16px}
+.boot-track{width:min(210px,55vw);height:3px;background:#222;border-radius:9px;overflow:hidden;margin-top:10px}.boot-track i{display:block;width:42%;height:100%;background:#eee;animation:bootLoad 1.05s ease-in-out infinite alternate}
+.boot-version{font-size:9px;letter-spacing:1.4px;color:#555;margin-top:10px}
+@keyframes bootLoad{from{transform:translateX(-5%)}to{transform:translateX(145%)}}
+.thinking-indicator{align-self:flex-start;display:flex;align-items:center;gap:11px;padding:13px 16px;border:1px solid #303030;border-radius:14px;background:#101010;color:#aaa;font-size:11px;max-width:90%;animation:thinkIn .18s ease-out}
+.thinking-dots{display:flex;gap:4px}.thinking-dots i{width:5px;height:5px;border-radius:50%;background:#eee;opacity:.35;animation:thinkPulse 1s infinite ease-in-out}.thinking-dots i:nth-child(2){animation-delay:.15s}.thinking-dots i:nth-child(3){animation-delay:.3s}
+@keyframes thinkPulse{0%,70%,100%{opacity:.28;transform:translateY(0)}35%{opacity:1;transform:translateY(-4px)}}@keyframes thinkIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#sendButton:disabled{opacity:.6;cursor:progress;filter:grayscale(1)}.provider-note{border:1px solid #303030;border-radius:10px;padding:10px;background:#0a0a0a;color:#999;font-size:10px;line-height:1.55}
+@media(prefers-reduced-motion:reduce){.boot-track i,.thinking-dots i{animation:none}.boot-screen{transition:none}}
+</style>
+<style>
+.voice-reference-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.voice-reference-grid audio{margin-top:6px}.voice-reference-grid .voice-control-card{min-width:0}.settings-voice-card audio{color-scheme:dark}@media(max-width:760px){.voice-reference-grid{grid-template-columns:1fr}}
+</style>
+
+<style id="archangel-320-polish">
+:root{color-scheme:dark;--line:#292929;--muted:#929292;--panel:#101010;--panel2:#151515;--white:#f3f3f3}
+.boot-screen{background:radial-gradient(ellipse at 50% 42%,#151515 0,#090909 38%,#030303 78%);gap:14px}
+.boot-mark{width:82px;height:82px;border:1px solid #ffffff24;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,#202020,#080808);box-shadow:0 0 0 8px #ffffff06,0 16px 60px #ffffff0b;transition:width .48s cubic-bezier(.2,.8,.2,1),height .48s cubic-bezier(.2,.8,.2,1),border-radius .48s ease,box-shadow .48s ease}
+.boot-mark img{display:block;width:100%;height:100%;object-fit:contain;padding:5px;filter:drop-shadow(0 0 18px #fff2)}
+.boot-name{letter-spacing:.34em;padding-left:.34em;font-size:13px;font-weight:750}
+.boot-caption{min-height:15px;color:#a6a6a6;letter-spacing:.13em;font-size:9px;max-width:85vw;text-align:center}
+.boot-track{width:min(220px,60vw);height:2px;background:#2b2b2b;border-radius:20px;overflow:hidden;margin-top:8px;transition:opacity .22s,max-height .22s,margin .22s}
+.boot-track i{width:36%;background:linear-gradient(90deg,#777,#fff);box-shadow:0 0 14px #fff8}
+.boot-version{letter-spacing:.16em}
+.boot-screen.is-ready .boot-mark{width:142px;height:142px;border-radius:38px;box-shadow:0 0 0 12px #ffffff08,0 0 90px #ffffff16}
+.boot-screen.is-ready .boot-track{opacity:0;max-height:0;margin:0}
+.boot-screen.is-ready .boot-caption{color:#eee;letter-spacing:.2em}
+#bootRetry{margin-top:8px}
+#brandLogo{width:44px;height:44px;object-fit:contain;padding:2px}
+.hero-brand img{width:88px;height:88px;object-fit:contain;padding:0;filter:drop-shadow(0 0 22px #fff2)}
+.welcome{max-width:560px;margin:auto;text-align:center;padding:28px 20px 36px}
+.welcome img{display:block;width:116px;height:116px;margin:0 auto 18px;object-fit:contain;filter:drop-shadow(0 0 30px #fff3)}
+.welcome h2{letter-spacing:.19em;font-size:15px}
+.welcome p{max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7}
+.page-head{gap:20px}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{border-color:#242424;background:linear-gradient(145deg,#111,#0b0b0b)}
+.card:focus-within{border-color:#777}
+.btn,.send,.icon-btn,.tiny-btn,.quick,.voice-btn{transition:background .16s ease,border-color .16s ease,transform .16s ease,opacity .16s ease}
+.btn:focus-visible,.send:focus-visible,.icon-btn:focus-visible,.tiny-btn:focus-visible,.quick:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #bbb;outline-offset:2px}
+.nav button.active{background:#ededed;color:#090909}
+.nav button.active .ico{color:#090909}
+.file-upload-status{margin-top:12px;padding:12px 14px;border:1px solid #363636;border-radius:12px;background:#101010;color:#d9d9d9;font-size:11px}
+.file-progress-track{height:4px;border-radius:12px;background:#292929;overflow:hidden;margin-top:9px}
+.file-progress-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#777,#fff);border-radius:12px;transition:width .18s ease}
+#page-library.file-drag-active .card:first-of-type{border-color:#eee;background:#181818;box-shadow:0 0 0 3px #fff1}
+#page-library.file-drag-active:after{content:'ОТПУСТИ ФАЙЛЫ ДЛЯ ЗАГРУЗКИ';position:fixed;z-index:50;inset:12px;border:1px dashed #ddd;border-radius:18px;background:#050505d9;color:#fff;display:grid;place-items:center;font-size:13px;letter-spacing:.16em;pointer-events:none}
+#navigation [data-page="math"],#navigation [data-page="code"],#navigation [data-page="plugins"]{display:none!important}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-brand img{width:68px;height:68px}.welcome img{width:96px;height:96px}}
+@media(prefers-reduced-motion:reduce){.boot-mark,.boot-track,.file-progress-track i{transition:none}.boot-track i{animation:none}}
+</style>
+
+
+<style id="archangel-32-quality">
+.api-actions .btn:disabled{opacity:.5;cursor:wait}.file-upload-status[hidden]{display:none!important}.file-upload-status{position:relative}.file-progress-track i{will-change:width}.boot-screen.is-hidden{pointer-events:none}.boot-screen .boot-mark img{object-position:center center}.brand{display:grid;place-items:center}.brand #brandLogo{display:block;object-position:center center}.hero-brand{align-items:center}.hero-brand img{flex:0 0 auto}.chat-card.drag-over{outline:1px dashed #aaa;outline-offset:5px}.message .attach-preview{max-width:min(100%,420px);max-height:320px;object-fit:contain;border-radius:12px;margin:8px 0}.api-state{overflow-wrap:anywhere}
+</style>
+
+<style id="archangel-350-light-web">
+/* Lightweight web polish: no frameworks, no remote assets, no extra runtime. */
+:root{
+ --bg:#080808;--panel:#101010;--panel2:#151515;--panel3:#1c1c1c;
+ --line:#2b2b2b;--line2:#414141;--text:#f5f5f5;--muted:#a8a8a8;
+ --soft:#777;--radius:15px;--shadow:0 18px 48px rgba(0,0,0,.34)
+}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{background:radial-gradient(900px 500px at 82% -12%,rgba(255,255,255,.055),transparent 60%),var(--bg)}
+.app{background:radial-gradient(1000px 700px at 100% 0%,rgba(255,255,255,.025),transparent 65%),var(--bg)}
+.sidebar{background:linear-gradient(180deg,#0b0b0b 0%,#080808 100%)}
+.brand{background:linear-gradient(145deg,#101010,#050505);border-color:#303030}
+.topbar{background:rgba(9,9,9,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.nav button{min-height:40px}
+.nav button.active{box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.card,.status-card,.quick,.item,.voice-audition-card,.voice-control-card{transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
+.card:hover{border-color:#393939}
+.quick:hover{box-shadow:0 8px 26px rgba(0,0,0,.2);transform:translateY(-1px)}
+.btn,.icon-btn,.tiny-btn,.send,.voice-btn{transition:background .16s ease,border-color .16s ease,transform .16s ease,opacity .16s ease}
+.btn:active,.icon-btn:active,.tiny-btn:active,.send:active,.voice-btn:active{transform:translateY(1px)}
+.btn:focus-visible,.icon-btn:focus-visible,.tiny-btn:focus-visible,.send:focus-visible,.quick:focus-visible,.voice-btn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #d8d8d8;outline-offset:2px}
+.input:focus,.select:focus,.textarea:focus,.composer textarea:focus{border-color:#a8a8a8;box-shadow:0 0 0 3px rgba(255,255,255,.055)}
+.content{scrollbar-gutter:stable;overscroll-behavior:contain}
+.messages{scrollbar-gutter:stable}
+.hero{background:linear-gradient(145deg,#111 0%,#070707 70%);border-color:#343434}
+.hero:after{background:radial-gradient(ellipse at 78% 20%,rgba(255,255,255,.09),transparent 48%)}
+.hero-motto{letter-spacing:-.25px}
+.system-health-pill{box-shadow:0 0 0 1px rgba(255,255,255,.035),0 5px 18px rgba(0,0,0,.2)}
+.composer textarea{min-height:50px}
+.message{box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.voice-audition-card,.voice-control-card{background:linear-gradient(155deg,#141414,#0b0b0b)}
+.voice-choice:hover{border-color:#858585}
+.toast{box-shadow:0 12px 32px rgba(0,0,0,.45)}
+::selection{background:#ededed;color:#080808}
+@media(max-width:1050px){.content{padding-left:20px;padding-right:20px}.topbar{padding-left:20px;padding-right:20px}}
+@media(max-width:760px){
+ .content{padding:15px 12px calc(24px + env(safe-area-inset-bottom))}
+ .chat-input-wrap{padding-bottom:calc(13px + env(safe-area-inset-bottom))}
+ .topbar{padding-left:12px;padding-right:12px}
+ .top-actions .pill{padding:6px 8px;font-size:10px}
+ .hero-brand{gap:12px;align-items:flex-start}
+ .hero-brand h2{font-size:17px}
+ .card{border-radius:14px}
+ .chat-card{min-height:440px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+
+<style id="archangel-328-deeper-charcoal">
+/* Balanced monochrome: softened charcoal surfaces with crisp white accents. */
+:root{color-scheme:dark;--bg:#090909;--panel:#111111;--panel2:#181818;--panel3:#202020;--line:#303030;--line2:#484848;--text:#f5f5f5;--muted:#c4c4c4;--soft:#a5a5a5;--white:#fff;--black:#111;--good:#fff;--danger:#fff;--shadow:0 16px 50px rgba(0,0,0,.28)}
+html,body,.app,.main,.content,.page{background:#090909!important;color:#f5f5f5!important}
+.sidebar{background:#070707!important;border-color:#343434!important}
+.topbar{background:#111111!important;border-color:#383838!important}
+.card,.chat-card,.chat-top,.status-card,.item,.quick,.modal-panel,.result,.provider-note,.file-upload-status{background:#111111!important;color:#f5f5f5!important;border-color:#343434!important}
+.hero{background:#111111!important;border-color:#414141!important}
+.messages,.chat-input-wrap{background:#101010!important;color:#f5f5f5!important}
+.input,.select,.textarea,.composer textarea{background:#191919!important;color:#fff!important;border-color:#4a4a4a!important}
+.pill,.badge,.nav button,.nav-more summary,.tiny-btn,.icon-btn,.settings-jumpbar button,.voice-choice{background:#191919!important;color:#eee!important;border-color:#444!important}
+.nav button:hover,.nav-more summary:hover,.quick:hover,.icon-btn:hover,.tiny-btn:hover{background:#303030!important;border-color:#777!important;color:#fff!important}
+.nav button.active,.nav-settings>button.active{background:#fff!important;color:#0d0d0d!important;border-color:#fff!important}
+.btn,.send,.voice-btn{background:#fff!important;color:#0d0d0d!important;border-color:#fff!important}
+.btn.secondary,.btn.ghost,.btn.danger,.voice-btn.listening{background:#191919!important;color:#fff!important;border-color:#555!important}
+.message,.thinking-indicator{background:#191919!important;color:#f5f5f5!important;border-color:#444!important}
+.message.user{background:#fff!important;color:#0d0d0d!important;border-color:#fff!important}
+.badge.ok{background:#fff!important;color:#0d0d0d!important;border-color:#fff!important}
+.brand{background:#141414!important;border:1px solid #444!important;border-radius:12px!important;min-height:104px;padding:8px!important}
+.brand #brandLogo{display:block;width:100%;height:88px;max-width:100%;object-fit:contain;padding:0!important;border:0!important;border-radius:0!important}
+#page-overview .hero{min-height:245px;justify-content:center;gap:22px;background:#111111!important;border:1px solid #414141}
+#page-overview .hero-bottom{width:100%;margin:0;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+#page-overview .hero-motto{color:#fff;font-size:clamp(20px,2.4vw,28px);line-height:1.3;letter-spacing:-.3px}
+#page-overview .mono{color:#c4c4c4!important}
+/* Loader keeps the single white A without a ring or tile. */
+#bootScreen{background:#090909!important}
+#bootScreen .boot-mark,#bootScreen.is-ready .boot-mark{width:104px;height:104px;border:0!important;border-radius:0!important;padding:0!important;background:transparent!important;box-shadow:none!important}
+#bootScreen .boot-mark img{width:100%;height:100%;padding:0;object-fit:contain;filter:none!important}
+#bootScreen .boot-caption,#bootScreen .boot-version{color:#f5f5f5!important}
+#bootScreen .boot-track{background:#3c3c3c!important;border-radius:20px!important}
+#bootScreen .boot-track i{background:#fff!important;border:0;box-shadow:0 0 12px #ffffff35}
+#bootScreen.is-ready .boot-mark{width:124px;height:124px}
+.status-dot{background:#fff!important;box-shadow:0 0 8px #ffffff55}
+*,*::before,*::after{scrollbar-color:#484848 #101010}
+::selection{background:#fff;color:#111}
+@media(max-width:760px){.brand{min-height:78px!important}.brand #brandLogo{height:64px!important}#page-overview .hero{min-height:210px;padding:18px!important}#page-overview .hero-bottom{align-items:flex-start}}
+</style>
+<style id="archangel-40-polish">
+:root{--radius:16px;--line:#303030;--line2:#4c4c4c}
+button,textarea,input,select{touch-action:manipulation}button{min-height:40px}
+.sidebar{border-right-color:#242424}.nav button{font-size:13px;letter-spacing:.1px}
+.content{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.topbar{padding-top:env(safe-area-inset-top);height:calc(67px + env(safe-area-inset-top))}
+.chat-card{border-radius:20px}.composer{border-radius:14px}
+.chat-input-wrap{padding-bottom:max(14px,env(safe-area-inset-bottom))}
+.message{font-size:14px;line-height:1.7}.message.assistant{border-color:#3b3b3b}
+button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:760px){
+ html,body,.app,.main{height:100dvh;min-height:0!important}
+ .topbar{height:calc(60px + env(safe-area-inset-top))}
+ .content{padding:13px 11px max(16px,env(safe-area-inset-bottom))}
+ .chat-layout{display:flex;flex-direction:column;min-height:0}
+ .chat-card{min-height:min(620px,calc(100dvh - 126px));border-radius:15px}
+ .messages{min-height:180px;padding:13px;gap:10px}
+ .chat-aside{display:none}
+ .message{max-width:96%;font-size:14px}
+ .grid.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero-brand img{max-width:40%}
+ .sidebar{padding-top:max(16px,env(safe-area-inset-top))}
+ .top-actions .pill{max-width:140px;overflow:hidden;text-overflow:ellipsis}
+ .composer textarea{font-size:16px}
+}
+@media(max-width:380px){.top-title{font-size:12px}.top-actions .pill{max-width:104px}.quick-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+<style id="archangel-41-release">
+/* ARCHANGEL AI 4.1 — responsive installed-app polish */
+:root{--radius:17px;--line:#343434;--line2:#484848}
+.topbar{box-shadow:0 1px 0 #ffffff07}
+.top-actions{flex-shrink:0}
+#installApp{font-size:22px;line-height:1;font-weight:700;min-width:41px}
+#installApp:hover{background:#fff!important;color:#0a0a0a!important}
+.connectivity-notice{padding:10px 14px;margin:0 0 14px;background:#171717;border:1px solid #777;border-radius:12px;color:#f5f5f5;font-size:12px}
+.connectivity-notice[hidden]{display:none}
+#page-overview .hero-motto{font-size:clamp(22px,3.4vw,38px)!important;letter-spacing:-.045em;line-height:1.15}
+.nav button,.nav-settings button{min-height:44px}
+.chat-card{min-height:0}
+.messages{scrollbar-width:thin;overscroll-behavior:contain}
+.message{line-height:1.65;letter-spacing:.005em}
+.composer textarea{resize:none;min-height:49px;font-size:16px}
+.composer textarea::placeholder{color:#999}
+#bootScreen{background:#080808!important}
+#bootScreen .boot-name{font-size:15px;letter-spacing:.35em}
+#bootScreen .boot-caption{font-size:10px;letter-spacing:.13em}
+#bootScreen .boot-track{width:min(250px,68vw)}
+#bootScreen .boot-mark img{width:100%;height:100%;object-fit:contain}
+@media(min-width:761px){.content{padding:28px clamp(18px,3vw,56px) 34px}.page{max-width:1380px}}
+@media(max-width:760px){
+ .topbar{gap:7px;padding-left:10px;padding-right:10px}
+ .top-title{font-size:12px;letter-spacing:.03em}
+ .top-actions .pill{display:none}
+ .content{padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+ #page-chat>.page-head{margin-bottom:8px}
+ #page-chat>.page-head .lead{display:none}
+ #page-chat>.page-head .h1{font-size:18px;margin:1px 0 3px}
+ .chat-card{height:calc(100dvh - 189px - env(safe-area-inset-top) - env(safe-area-inset-bottom));min-height:360px;max-height:none}
+ .messages{flex:1;min-height:0;padding:13px}
+ .message{max-width:94%;font-size:14px;padding:12px 13px}
+ .chat-input-wrap{padding:10px}
+ .composer{gap:6px}
+ .send{min-width:46px}
+ .nav-settings button{min-height:48px}
+ .toast{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));text-align:center}
+}
+@media(max-height:650px) and (max-width:760px){.chat-card{min-height:280px;height:calc(100dvh - 155px)}.page-head .eyebrow{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
+ <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" alt="Эмблема ARCHANGEL AI"></div><div class="boot-name">ARCHANGEL</div>
+ <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.1</div>
+ <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
+</div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><img id="brandLogo" src="assets/archangel-user-cover.jpg" alt="Оригинальная эмблема ARCHANGEL AI"></div>
+  <div class="nav-label">Рабочее пространство</div>
+  <nav class="nav" id="navigation">
+    <button class="active" data-page="overview"><span class="ico">⌂</span>Обзор</button>
+    <button data-page="chat"><span class="ico">◉</span>Ассистент</button>
+    <button data-page="library"><span class="ico">▤</span>Библиотека</button>
+    <button data-page="tasks"><span class="ico">☷</span>Задачи и заметки</button>
+    <details class="nav-more" id="toolsNav">
+      <summary aria-label="Показать дополнительные инструменты"><span class="ico">⌘</span><span>Инструменты</span><span class="nav-chevron">⌄</span></summary>
+      <div class="nav-submenu">
+        <button data-page="search"><span class="ico">⌕</span>Поиск</button>
+        <button data-page="history"><span class="ico">◷</span>История</button>
+      </div>
+    </details>
+  </nav>
+  <div class="nav-settings"><button data-page="settings" aria-label="Открыть настройки системы" title="Центр настроек"><span class="ico">⚙</span>Настройки</button></div>
+  <div class="side-bottom">
+    <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.1</div>
+  </div>
+</aside>
+<main class="main">
+<header class="topbar"><div class="row"><button class="icon-btn mobile-menu" id="mobileMenu" aria-label="Меню">☰</button><div><div class="top-title" id="topTitle">ОБЗОР СИСТЕМЫ</div><div class="top-sub">Ctrl+K — поиск · Ctrl+Enter — отправить</div></div></div><div class="top-actions"><button class="icon-btn" id="installApp" type="button" title="Установить ARCHANGEL как приложение" aria-label="Установить ARCHANGEL">⇩</button><div class="pill"><i class="status-dot"></i><span id="modelStatus">Локальный режим</span></div></div></header>
+<div class="content">
+<div id="connectivityNotice" class="connectivity-notice" role="status" hidden>Нет подключения к интернету. Локальные функции доступны; ответы ИИ могут быть недоступны.</div>
+<section class="page active" id="page-overview">
+ <div class="page-head"><div><div class="eyebrow">Главная панель</div><h1 class="h1">Система готова к работе.</h1><div class="lead">Архангел — персональный рабочий помощник. Локальные инструменты доступны сразу; подключение языковой модели расширяет диалог, исследование и анализ изображений.</div></div><span class="badge ok">ЯДРО АКТИВНО</span></div>
+ <div class="grid stats"><div class="card stat"><div class="k">Запросы в истории</div><div class="v" id="statHistory">0</div><div class="hint">Локально сохранённые события</div></div><div class="card stat"><div class="k">Файлы библиотеки</div><div class="v" id="statFiles">0</div><div class="hint">Твои документы и материалы</div></div><div class="card stat"><div class="k">Активные задачи</div><div class="v" id="statTasks">0</div><div class="hint">Текущие пункты работы</div></div></div>
+ <div class="grid home-grid"><div class="card hero"><div class="hero-bottom"><div><div class="hero-motto">Меньше лишнего.<br>Больше результата.</div><div class="mono" style="margin-top:10px">FOCUSED · DIRECT · METHODICAL</div></div><button class="btn" data-go="chat">Открыть ассистента</button></div></div>
+ <div class="card"><div class="between"><h3 class="section-title">Быстрый запуск</h3><span class="badge">Инструменты</span></div><div class="grid quick-grid"><button class="quick" data-go="chat"><span class="ico">◉</span><span><b>Новый запрос</b><small>Перейти к диалогу</small></span></button><button class="quick" data-go="library"><span class="ico">▤</span><span><b>Добавить материал</b><small>Файлы и документы</small></span></button></div></div></div>
+ <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:14px"><div class="card"><div class="between"><h3 class="section-title">Последняя активность</h3><button class="btn ghost" data-go="history">Вся история</button></div><div id="overviewRecent" class="list"><div class="empty">Пока нет активности. Начни с диалога или локального поиска.</div></div></div><div class="card"><div class="system-health-head"><div><div class="system-health-kicker">SYSTEM HEALTH</div><h3 class="section-title">Состояние системы</h3></div><span class="system-health-pill"><i></i>НОРМА</span></div><div class="list"><div class="item"><span class="ico">✓</span><div class="item-body"><div class="item-title">Локальное хранилище</div><div class="item-desc">История, задачи и настройки сохраняются в браузере этого устройства.</div></div><span class="badge ok">OK</span></div><div class="item"><span class="ico">◉</span><div class="item-body"><div class="item-title">Языковая модель</div><div class="item-desc" id="overviewModel">Не подключена. Локальные функции доступны.</div></div><span class="badge" id="overviewModelBadge">LOCAL</span></div><div class="item"><span class="ico">⌁</span><div class="item-body"><div class="item-title">Голосовой интерфейс</div><div class="item-desc">Зависит от браузера и разрешения на микрофон.</div></div><span class="badge" id="voiceSupportBadge">ПРОВЕРКА</span></div></div></div></div>
+</section>
+<section class="page" id="page-chat">
+ <div class="page-head"><div><div class="eyebrow">Центральный интеллект</div><h1 class="h1">ИИ-ассистент</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Диалог с Архангелом</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">LOCAL CORE</span><button class="tiny-btn" id="clearChat" title="Очистить текущий диалог" aria-label="Очистить текущий диалог">×</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>АРХАНГЕЛ АКТИВЕН</h2><p>Подключи модель в настройках для полноценного диалога. Без неё доступны только локальные функции.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Анализ содержимого изображений требует подключённой мультимодальной модели.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" title="Прикрепить изображение или файл">＋</button></div><textarea id="chatInput" placeholder="Опиши задачу… (Enter — отправить, Shift+Enter — новая строка)"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Проверяй важные результаты. API-ключ не сохраняется на диск.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted" id="voiceState" style="margin-bottom:12px">Микрофон выключен</div><button class="voice-btn" id="voiceStart">Включить ожидание ключевой фразы</button><button class="btn ghost" id="voiceStop" style="width:100%;margin-top:7px">Полностью выключить микрофон</button><p class="footnote" style="margin-top:10px">Фразы: «Активировать» / «Деактивировать» или “Activate” / “Deactivate”. Выбери язык распознавания в настройках: браузер обычно слушает один язык за раз. Распознавание может передавать аудио выбранному браузерному сервису.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">FOCUSED</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
+</section>
+<section class="page" id="page-search">
+ <div class="page-head"><div><div class="eyebrow">Универсальный индекс</div><h1 class="h1">Поиск</h1><div class="lead">Поиск по сохранённым документам, заметкам, задачам и истории запросов. Результаты ранжируются по совпадениям, заголовкам и близости слов.</div></div></div>
+ <div class="card"><div class="searchbar"><input id="searchQuery" class="input" placeholder="Найти в моих файлах, истории и заметках…"/><button class="btn" id="runSearch">Найти</button></div><div class="row" style="margin-top:11px;flex-wrap:wrap"><label class="small muted"><input type="checkbox" id="searchDocs" checked> Документы</label><label class="small muted"><input type="checkbox" id="searchHistory" checked> История</label><label class="small muted"><input type="checkbox" id="searchNotes" checked> Заметки</label><label class="small muted"><input type="checkbox" id="searchTasks" checked> Задачи</label></div></div>
+ <div class="between" style="margin:18px 0 10px"><h3 class="section-title" style="margin:0">Результаты</h3><span class="small muted" id="searchCount">Введите запрос для поиска</span></div><div id="searchResults" class="list"><div class="empty">Поиск выполняется по данным, сохранённым на этом устройстве.</div></div>
+</section>
+<section class="page" id="page-library">
+ <div class="page-head"><div><div class="eyebrow">Локальная база материалов</div><h1 class="h1">Библиотека</h1><div class="lead">Добавляй текстовые файлы, исходный код, изображения и документы. Текст поддерживаемых форматов индексируется для поиска. Оригиналы хранятся в IndexedDB браузера; текстовые форматы индексируются для поиска.</div></div><button class="btn" id="importFiles">＋ Добавить файлы</button></div>
+ <div class="card"><div class="between"><div><b style="font-size:12px">Файлы и документы</b><div class="small muted" style="margin-top:4px">TXT · MD · CSV · JSON · PY · JS · HTML · PDF · DOCX · изображения</div></div><input id="libraryFilter" class="input" style="max-width:270px" placeholder="Фильтр библиотеки"></div></div>
+ <div class="file-upload-status" id="fileUploadStatus" hidden aria-live="polite"><div class="between"><span id="fileUploadText">Подготовка файлов…</span><b id="fileUploadPercent">0%</b></div><div class="file-progress-track"><i id="fileUploadBar"></i></div></div>
+ <div id="libraryList" class="list" style="margin-top:13px"><div class="empty">Библиотека пуста. Добавь файлы для локального поиска.</div></div>
+</section>
+<section class="page" id="page-history">
+ <div class="page-head"><div><div class="eyebrow">Журнал действий</div><h1 class="h1">История</h1><div class="lead">Поиски, запросы и вычисления сохраняются локально. Можно открыть результат повторно или удалить отдельную запись.</div></div><button class="btn danger" id="clearHistory">Очистить всю историю</button></div><div class="between" style="margin-bottom:10px"><span class="small muted" id="historyCount">0 записей</span><input class="input" style="max-width:260px" id="historyFilter" placeholder="Поиск по истории"></div><div id="historyList" class="list"><div class="empty">История пока пуста.</div></div>
+</section>
+<section class="page" id="page-tasks">
+ <div class="page-head"><div><div class="eyebrow">Личная организация</div><h1 class="h1">Задачи и заметки</h1><div class="lead">Фиксируй действия и знания. Данные остаются в локальном хранилище браузера.</div></div></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><h3 class="section-title">Новая задача</h3><div class="stack"><input id="taskTitle" class="input" placeholder="Название задачи"><textarea id="taskDesc" class="textarea" style="min-height:70px" placeholder="Описание или критерий готовности"></textarea><div class="row"><select id="taskPriority" class="select"><option value="Обычный">Обычный приоритет</option><option value="Высокий">Высокий приоритет</option><option value="Критический">Критический приоритет</option></select><button class="btn" id="addTask">Добавить</button></div></div><div class="divider"></div><h3 class="section-title">Активные задачи</h3><div id="taskList" class="list"><div class="empty">Нет задач.</div></div></div><div class="card"><h3 class="section-title">Новая заметка</h3><div class="stack"><input id="noteTitle" class="input" placeholder="Заголовок заметки"><textarea id="noteBody" class="textarea" placeholder="Текст заметки"></textarea><button class="btn" id="addNote">Сохранить заметку</button></div><div class="divider"></div><h3 class="section-title">Сохранённые заметки</h3><div id="noteList" class="list"><div class="empty">Заметок пока нет.</div></div></div></div>
+</section>
+<section class="page" id="page-math">
+ <div class="page-head"><div><div class="eyebrow">Точный вычислительный модуль</div><h1 class="h1">Математика</h1><div class="lead">Безопасный парсер выражений — математические выражения разбираются по грамматике, без выполнения произвольного JavaScript.</div></div><span class="badge ok">LOCAL ENGINE</span></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><h3 class="section-title">Научный калькулятор</h3><label class="label">Выражение</label><input class="input" id="mathInput" placeholder="sqrt(81) + 2^5 - sin(pi/2)" value="sqrt(81) + 2^5 - sin(pi/2)"><div class="row" style="margin-top:10px"><button class="btn" id="mathCalculate">Вычислить</button><button class="btn secondary" id="mathCopy">Копировать</button></div><div class="divider"></div><div class="small muted">Результат</div><div class="result" id="mathResult">Ожидается вычисление…</div><p class="footnote">Поддерживаются + − × ÷ %, степень ^, скобки, pi, e, sqrt, abs, sin, cos, tan, asin, acos, atan, log, ln, exp, floor, ceil, round, min, max, факториал !.</p></div><div class="card"><h3 class="section-title">Статистический анализ</h3><label class="label">Числа через запятую или пробел</label><textarea id="statsInput" class="textarea" placeholder="12, 15, 17, 18, 22, 24"></textarea><button class="btn" id="statsCalculate" style="margin-top:9px">Рассчитать статистику</button><div class="result" id="statsResult" style="margin-top:12px">Среднее, медиана, стандартное отклонение, минимум и максимум.</div><p class="footnote">Стандартное отклонение рассчитывается для всей введённой выборки (population).</p></div></div>
+</section>
+<section class="page" id="page-code">
+ <div class="page-head"><div><div class="eyebrow">Инженерный модуль</div><h1 class="h1">Анализ кода</h1><div class="lead">Статическая проверка Python, JavaScript, TypeScript, HTML и CSS: баланс скобок, подозрительные конструкции, потенциальные секреты и базовые структурные проблемы. Код не запускается.</div></div><span class="badge ok">SAFE ANALYSIS</span></div><div class="card"><div class="between"><h3 class="section-title">Исходный код</h3><div class="row"><select id="codeLanguage" class="select" style="width:140px"><option>Python</option><option>JavaScript</option><option>TypeScript</option><option>HTML</option><option>CSS</option></select><button class="btn secondary" id="loadExample">Пример</button></div></div><textarea id="codeInput" class="textarea codearea" spellcheck="false" placeholder="Вставь исходный код…"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="analyzeCode">Проверить код</button><button class="btn secondary" id="copyCode">Копировать</button><span class="small muted" id="codeMeta"></span></div><div class="divider"></div><h3 class="section-title">Отчёт анализа</h3><div class="result" id="codeResult">Отчёт появится здесь. Помни: статический анализ не заменяет полноценные тесты и ревью.</div></div>
+</section>
+<section class="page" id="page-plugins">
+ <div class="page-head"><div><div class="eyebrow">Архитектура возможностей</div><h1 class="h1">Модули</h1><div class="lead">Управляй встроенными возможностями. Отключение модуля скрывает его из локального маршрутизатора, но не удаляет данные.</div></div></div><div id="pluginList" class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
+</section>
+<section class="page" id="page-settings">
+ <div class="page-head"><div><div class="eyebrow">Конфигурация</div><h1 class="h1">Центр управления</h1><div class="lead">Пять разделов вместо длинного списка: подключение модели, поведение помощника, голосовая лаборатория, данные и информация о приложении.</div></div><span class="badge ok">CONTROL CENTER</span></div>
+ <div class="settings-jumpbar" aria-label="Разделы настроек">
+  <button type="button" data-settings-jump="settings-api">ИИ и API</button>
+  <button type="button" data-settings-jump="settings-style">Стиль</button>
+  <button type="button" data-settings-jump="settings-voice">Голоса</button>
+  <button type="button" data-settings-jump="settings-data">Данные</button>
+  <button type="button" data-settings-jump="settings-about">О программе</button>
+ </div>
+ <div class="grid settings-grid">
+  <div class="card settings-api-card" id="settings-api">
+   <div class="api-head"><div><div class="eyebrow">AI CONNECTION</div><h3 class="section-title" style="font-size:15px;margin-top:6px">Подключение языковой модели · локальный защищённый шлюз 3.2</h3><p class="mini-help" style="margin:0">Укажи реальный endpoint и точное имя модели, доступной проекту. Архангел не подставляет вымышленные названия моделей.</p></div><span class="api-mark">◉ API SETUP</span></div>
+   <div class="stack" style="margin-top:15px">
+    <div class="form-field"><label class="label" for="apiProvider">Провайдер модели</label><select class="select" id="apiProvider"><option value="custom">Свой OpenAI-совместимый API</option><option value="gemini">Google Gemini API · бесплатный уровень</option><option value="groq">Groq API · бесплатные лимиты</option><option value="openrouter">OpenRouter · бесплатные модели</option><option value="ollama">Ollama · локальная модель</option><option value="openai">OpenAI API</option></select><div class="mini-help" id="providerHint" style="margin-top:6px">Выбери провайдера: Архангел подставит endpoint и подходящий протокол. Название модели можно изменить вручную.</div></div>
+    <div class="form-field"><label class="label" for="apiModel">Название модели</label><input class="input" id="apiModel" value="" placeholder="Точный ID модели из панели провайдера"></div>
+    <div><label class="label" for="apiEndpoint">Адрес API endpoint</label><input class="input" id="apiEndpoint" value="https://api.openai.com/v1/chat/completions" placeholder="https://.../v1/chat/completions" spellcheck="false"><div class="mini-help" style="margin-top:5px">Используется единый совместимый протокол Chat Completions. Выбор провайдера автоматически подставляет endpoint.</div></div>
+    <div><label class="label" for="apiKey">Секретный API-ключ</label><div class="inline-key"><input class="input" id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="Ключ из панели API-провайдера"><button class="toggle-key" id="toggleApiKey" type="button" aria-label="Показать или скрыть ключ" title="Показать / скрыть">◉</button></div><div class="mini-help" style="margin-top:5px">Ключ передаётся серверу по HTTPS и хранится только в оперативной памяти отдельной браузерной сессии. Он не записывается в HTML, историю или резервные копии. Переписка и заметки сохраняются в браузере этого устройства; запросы для ответа передаются выбранному AI-провайдеру.</div></div>
+    <div class="api-actions"><button class="btn" id="saveApi">Подключить</button><button class="btn secondary" id="testApi">Проверить соединение</button><button class="btn ghost" id="disconnectApi">Отключить</button></div>
+    <div class="api-state" id="apiState"><i class="state-light"></i><span id="apiStatus">Модель не подключена · локальные инструменты доступны</span></div>
+   </div>
+   <div class="section-divider"></div>
+   <h4 class="section-title">Каталог провайдеров</h4>
+   <div class="api-steps">
+    <div class="api-step"><b class="num">01</b><div><b>Google AI Studio · Gemini</b><span><a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Официальный сайт и создание Gemini API key</a>. Есть бесплатный уровень с ограничениями; модели и квоты меняются.</span></div></div>
+    <div class="api-step"><b class="num">02</b><div><b>GroqCloud</b><span><a href="https://console.groq.com/" target="_blank" rel="noopener noreferrer">Официальная консоль Groq</a>. Доступен бесплатный уровень с лимитами по моделям и запросам.</span></div></div>
+    <div class="api-step"><b class="num">03</b><div><b>OpenRouter</b><span><a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">Официальный сайт OpenRouter</a>. Есть бесплатные модели; для free-вариантов действуют лимиты запросов.</span></div></div>
+    <div class="api-step"><b class="num">04</b><div><b>OpenAI</b><span><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">Управление API-ключами OpenAI</a>. API оплачивается отдельно от подписки ChatGPT.</span></div></div>
+    <div class="api-step"><b class="num">02</b><div><b>Создай ключ и выбери модель</b><span>Ключ создаётся в аккаунте API владельцем проекта. Не присылай его в чат, сообщения или скриншоты. Если тебе нет 18 лет, настройку аккаунта и оплату должен выполнять родитель или опекун с твоего разрешения.</span></div></div>
+    <div class="api-step"><b class="num">03</b><div><b>Заполни поля вверху</b><span>Выбери провайдера в списке. Архангел подставит endpoint и протокол; сверь точное имя модели в панели провайдера, введи ключ и нажми «Подключить».</span></div></div>
+    <div class="api-step"><b class="num">04</b><div><b>Проверь соединение</b><span>Нажми «Проверить соединение». Если тест успешен, перейди в «ИИ-ассистент» и отправь запрос.</span></div></div>
+   </div>
+   <div class="api-warning" style="margin-top:13px"><b>Важно: безопасность и расходы.</b> Веб-версия использует сервер ARCHANGEL по HTTPS. API-ключ хранится только в оперативной памяти отдельной браузерной сессии и очищается при перезапуске сервера. Не публикуй ключ и не используй чужой аккаунт. Проверь возрастные требования, доступность API и стоимость у провайдера; несовершеннолетним настройку аккаунтов и оплату следует проводить с родителем/опекуном, если это требуется условиями.</div>
+   <p class="footnote" style="margin-top:10px">Для работы API запускай приложение через START-ARCHANGEL.cmd. Локальный шлюз снимает зависимость от CORS и не отдаёт ключ браузерному JavaScript. Не открывай HTML двойным щелчком.</p>
+  </div>
+  <div class="card" id="settings-style">
+   <div class="between"><h3 class="section-title">Характер и ответы</h3><span class="badge">PERSONALITY</span></div>
+   <div class="stack">
+    <div><label class="label" for="interfaceLanguage">Язык интерфейса</label><select class="select" id="interfaceLanguage"><option value="ru">Русский</option><option value="en">English</option><option value="es">Español</option></select></div>
+    <div><label class="label" for="tone">Тон</label><select class="select" id="tone"><option value="focused">Жёсткий и сосредоточенный</option><option value="neutral">Нейтральный профессиональный</option><option value="supportive">Спокойный и поддерживающий</option></select></div>
+    <div><label class="label" for="detail">Подробность</label><select class="select" id="detail"><option value="concise">Кратко</option><option value="balanced" selected>Сбалансированно</option><option value="detailed">Подробно</option></select></div>
+    <div><label class="label" for="language">Язык ответа</label><select class="select" id="language"><option value="ru">Русский</option><option value="en">English</option><option value="es">Español</option><option value="auto">Как в запросе</option></select></div>
+    <label class="small muted"><input type="checkbox" id="confirmHighRisk" checked> Требовать подтверждение перед внешними/необратимыми действиями</label>
+    <button class="btn" id="savePrefs">Сохранить настройки</button>
+   </div>
+  </div>
+  <div class="card settings-voice-card" id="settings-voice">
+   <div class="between"><div><h3 class="section-title">Голосовая лаборатория</h3><div class="mini-help">Сравни мужские и женские варианты на одной и той же фразе. Выбор зависит от голосов, установленных в системе.</div></div><span class="badge">RU / EN / ES</span></div>
+   <div class="stack">
+    <div class="form-row">
+     <div><label class="label" for="voiceLanguage">Язык распознавания</label><select class="select" id="voiceLanguage"><option value="ru-RU">Русский · Россия</option><option value="en-US">English · US</option><option value="en-GB">English · UK</option><option value="es-ES">Español · España</option></select></div>
+     <div><label class="label" for="voiceOutputLanguage">Язык озвучивания</label><select class="select" id="voiceOutputLanguage"><option value="auto">Авто по тексту ответа</option><option value="ru-RU">Всегда русский</option><option value="en-US">Always English</option><option value="es-ES">Siempre español</option></select></div>
+    </div>
+    <div class="voice-audition-grid voice-audition-grid-three">
+     <div class="voice-audition-card">
+      <div class="voice-audition-head"><div><h4>РУССКИЙ · СРАВНЕНИЕ</h4><p>Одна фраза — два тембра</p></div><span class="badge" id="voiceRuChosenBadge">Профиль: мужской</span></div>
+      <div class="voice-choice-row"><button type="button" class="voice-choice" data-voice-preview="ru:male"><span class="voice-choice-mark">М</span><span><b>Мужской</b><small id="voiceRuMaleName">Поиск голоса…</small></span><span class="voice-choice-play">▶</span></button><button type="button" class="voice-choice" data-voice-preview="ru:female"><span class="voice-choice-mark">Ж</span><span><b>Женский</b><small id="voiceRuFemaleName">Поиск голоса…</small></span><span class="voice-choice-play">▶</span></button></div>
+      <div class="voice-choice-actions"><button type="button" class="btn secondary" data-voice-use="ru:male">Выбрать мужской</button><button type="button" class="btn secondary" data-voice-use="ru:female">Выбрать женский</button></div>
+     </div>
+     <div class="voice-audition-card">
+      <div class="voice-audition-head"><div><h4>ENGLISH · VOICE TEST</h4><p>Listen to both voice profiles</p></div><span class="badge" id="voiceEnChosenBadge">Profile: male</span></div>
+      <div class="voice-choice-row"><button type="button" class="voice-choice" data-voice-preview="en:male"><span class="voice-choice-mark">M</span><span><b>Male</b><small id="voiceEnMaleName">Searching voices…</small></span><span class="voice-choice-play">▶</span></button><button type="button" class="voice-choice" data-voice-preview="en:female"><span class="voice-choice-mark">F</span><span><b>Female</b><small id="voiceEnFemaleName">Searching voices…</small></span><span class="voice-choice-play">▶</span></button></div>
+      <div class="voice-choice-actions"><button type="button" class="btn secondary" data-voice-use="en:male">Use male</button><button type="button" class="btn secondary" data-voice-use="en:female">Use female</button></div>
+     </div>
+     <div class="voice-audition-card">
+      <div class="voice-audition-head"><div><h4>ESPAÑOL · PRUEBA DE VOZ</h4><p>Escucha los dos perfiles de voz</p></div><span class="badge" id="voiceEsChosenBadge">Perfil: masculino</span></div>
+      <div class="voice-choice-row"><button type="button" class="voice-choice" data-voice-preview="es:male"><span class="voice-choice-mark">M</span><span><b>Masculina</b><small id="voiceEsMaleName">Buscando voces…</small></span><span class="voice-choice-play">▶</span></button><button type="button" class="voice-choice" data-voice-preview="es:female"><span class="voice-choice-mark">F</span><span><b>Femenina</b><small id="voiceEsFemaleName">Buscando voces…</small></span><span class="voice-choice-play">▶</span></button></div>
+      <div class="voice-choice-actions"><button type="button" class="btn secondary" data-voice-use="es:male">Usar masculina</button><button type="button" class="btn secondary" data-voice-use="es:female">Usar femenina</button></div>
+     </div>
+    </div>
+    <div class="voice-comparison-note">Прослушай мужской и женский варианты на одинаковой фразе для каждого языка. Кнопка выбора закрепляет найденный системный голос. Если браузер не предоставляет голос нужного языка или пола, выбери любой доступный голос вручную ниже — это зависит от Windows и браузера.</div>
+    <div class="voice-panel-grid">
+     <div class="voice-control-card"><h4>РУССКИЙ ГОЛОС</h4><label class="label" for="voiceRuSelect">Доступный голос устройства</label><select class="select" id="voiceRuSelect"><option value="">Автовыбор русского голоса</option></select><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateRuVal">0.97×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.97" id="voiceRateRu" style="width:100%"><div class="small muted">Тембр <b id="voicePitchRuVal">0.96</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.96" id="voicePitchRu" style="width:100%"></div>
+     <div class="voice-control-card"><h4>ENGLISH VOICE</h4><label class="label" for="voiceEnSelect">Available device voice</label><select class="select" id="voiceEnSelect"><option value="">Auto-select English voice</option></select><div class="small muted" style="margin-top:8px">Speed <b id="voiceRateEnVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEn" style="width:100%"><div class="small muted">Tone <b id="voicePitchEnVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEn" style="width:100%"></div>
+     <div class="voice-control-card"><h4>ESPAÑOL · VOZ</h4><label class="label" for="voiceEsSelect">Voz disponible del dispositivo</label><select class="select" id="voiceEsSelect"><option value="">Selección automática</option></select><div class="small muted" style="margin-top:8px">Velocidad <b id="voiceRateEsVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEs" style="width:100%"><div class="small muted">Timbre <b id="voicePitchEsVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEs" style="width:100%"></div>
+    </div>
+    <div class="voice-status-line" id="voiceCatalogStatus">Загрузка голосов, доступных в браузере…</div>
+    <div class="voice-actions"><button class="btn ghost" id="refreshVoices">Обновить список голосов</button></div>
+   </div>
+   <p class="footnote">Два MP3 выше — эталонные образцы, предоставленные тобой. Браузер не умеет обучать по короткой записи полноценный голос для произвольного текста: для длинной озвучки используются установленные голоса Windows/Opera. Выбирай Natural / Neural, если они доступны. Скорость и тембр регулируются отдельно для русского, английского и испанского. Распознавание микрофона работает на одном выбранном языке за раз.</p>
+  </div>
+  <div class="card" id="settings-data">
+   <div class="between"><h3 class="section-title">Данные и резервная копия</h3><span class="badge">LOCAL DATA</span></div>
+   <div class="row" style="flex-wrap:wrap"><button class="btn secondary" id="exportBackup">Экспорт JSON</button><button class="btn secondary" id="importBackup">Импорт JSON</button><button class="btn danger" id="wipeData">Удалить все данные</button></div>
+   <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
+  </div>
+  <div class="card" id="settings-about">
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.1.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.1.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
+  </div>
+ </div>
+</section>
+</div></main></div>
+<div class="toast" id="toast"></div><input type="file" id="filePicker" multiple hidden accept=".txt,.md,.csv,.json,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.gif"><input type="file" id="chatFilePicker" multiple hidden accept=".txt,.md,.csv,.json,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.gif">
+<div class="modal" id="modal"><div class="modal-panel"><div class="modal-head"><h3 id="modalTitle">Просмотр</h3><button class="icon-btn" id="closeModal">✕</button></div><div id="modalBody"></div></div></div>
+<script>
+'use strict';
+const LOGO='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320"><text x="160" y="258" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="286" font-weight="700" fill="#fff">A</text></svg>`);
+['bootEmblem','heroLogo','welcomeLogo'].forEach(id=>{const img=document.getElementById(id);if(img)img.src=LOGO;});
+const sidebarBrandImage=document.getElementById('brandLogo');if(sidebarBrandImage)sidebarBrandImage.src='assets/archangel-user-cover.jpg';
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function reportBootError(error){
+ const boot=$('bootScreen');
+ const message=String(error&&error.message||error||'Неизвестная ошибка').slice(0,260);
+ const caption=boot?.querySelector('.boot-caption');
+ if(boot&&!boot.classList.contains('is-hidden')){
+  if(caption)caption.textContent='НЕ УДАЛОСЬ ЗАПУСТИТЬ: '+message;
+  const track=$('bootTrack');if(track)track.hidden=true;
+  const retry=$('bootRetry');if(retry)retry.hidden=false;
+ }else if(typeof toast==='function')toast('Ошибка приложения: '+message);
+ console.error('ARCHANGEL runtime error:',error);
+}
+window.addEventListener('error',event=>{if(event.target&&event.target!==window)return;reportBootError(event.error||event.message);});
+window.addEventListener('unhandledrejection',event=>reportBootError(event.reason));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8), now=()=>new Date().toLocaleString('ru-RU');
+const DBKEY='archangel_onefile_v1';const volatileStore=new Map();function storageGet(k){try{return localStorage.getItem(k)??volatileStore.get(k)??null}catch(e){return volatileStore.get(k)??null}}function storageSet(k,v){try{localStorage.setItem(k,v);volatileStore.delete(k);return true}catch(e){volatileStore.set(k,String(v));return false}}function storageRemove(k){try{localStorage.removeItem(k)}catch(e){}volatileStore.delete(k)}
+let state={history:[],notes:[],tasks:[],library:[],messages:[],plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};
+let api={protocol:'chat',endpoint:'https://api.openai.com/v1/chat/completions',model:'',key:''}, pendingFiles=[], recognition=null, voiceWake=false, voiceActive=false, lastMath='';
+function load(){
+ try{
+  const d=JSON.parse(storageGet(DBKEY)||'{}');
+  if(!d||typeof d!=='object'||Array.isArray(d))throw Error('Неверный формат профиля');
+  const savedPrefs=d.prefs&&typeof d.prefs==='object'&&!Array.isArray(d.prefs)?d.prefs:{};
+  const savedPlugins=d.plugins&&typeof d.plugins==='object'&&!Array.isArray(d.plugins)?d.plugins:{};
+  const validPrefs={...state.prefs};
+  for(const [key,value] of Object.entries(savedPrefs))if(Object.prototype.hasOwnProperty.call(validPrefs,key)&&typeof value===typeof validPrefs[key]&&(typeof value!=='number'||Number.isFinite(value))&&(typeof value!=='string'||value.length<300))validPrefs[key]=value;
+  const validPlugins={...state.plugins};
+  for(const [key,value] of Object.entries(savedPlugins))if(Object.prototype.hasOwnProperty.call(validPlugins,key)&&typeof value==='boolean')validPlugins[key]=value;
+  state={...state,...d,prefs:validPrefs,plugins:validPlugins};
+ }catch(e){state={...state,history:[],notes:[],tasks:[],library:[],messages:[]};toast('Сохранённый профиль повреждён. Используются настройки по умолчанию.');}
+ for(const key of ['history','notes','tasks','library','messages'])if(!Array.isArray(state[key]))state[key]=[];
+ state.history=state.history.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,240).map(x=>({...x,id:String(x.id||uid()),type:String(x.type||'activity').slice(0,30),title:String(x.title||'').slice(0,500),content:String(x.content||'').slice(0,5000),date:String(x.date||''),time:Number.isFinite(x.time)?x.time:Date.now()}));
+ state.notes=state.notes.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,100).map(x=>({...x,id:String(x.id||uid()),title:String(x.title||'').slice(0,300),body:String(x.body||'').slice(0,8000),date:String(x.date||'')}));
+ state.tasks=state.tasks.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,200).map(x=>({...x,id:String(x.id||uid()),title:String(x.title||'').slice(0,400),desc:String(x.desc||'').slice(0,2000),priority:String(x.priority||'Обычный').slice(0,30),done:!!x.done,date:String(x.date||'')}));
+ state.library=state.library.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,80).map(x=>({...x,id:String(x.id||uid()),name:String(x.name||'file').slice(0,240),type:String(x.type||'document').slice(0,30),ext:String(x.ext||'').slice(0,12),size:Number.isFinite(x.size)?Math.max(0,x.size):0,date:String(x.date||''),text:String(x.text||'').slice(0,16000)}));
+ state.messages=state.messages.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)&&['user','assistant'].includes(x.role)).slice(-60).map(x=>({role:x.role,text:String(x.text||'').slice(0,9000),time:Number.isFinite(x.time)?x.time:Date.now()}));
+}
+let storageWarningShown=false;
+function save(){
+ try{
+  state.history=state.history.slice(0,240).map(x=>({...x,title:String(x.title||'').slice(0,500),content:String(x.content||'').slice(0,3000)}));
+  state.messages=state.messages.slice(-60).map(x=>({...x,text:String(x.text||'').slice(0,9000)}));
+  state.library=state.library.slice(0,80).map(x=>({...x,text:String(x.text||'').slice(0,16000)}));
+  state.notes=state.notes.slice(0,100).map(x=>({...x,title:String(x.title||'').slice(0,300),body:String(x.body||'').slice(0,8000)}));
+  state.tasks=state.tasks.slice(0,200).map(x=>({...x,title:String(x.title||'').slice(0,400),desc:String(x.desc||'').slice(0,2000)}));
+  const durable=storageSet(DBKEY,JSON.stringify(state));
+  if(!durable&&!storageWarningShown){storageWarningShown=true;toast('Браузер не разрешил постоянное хранение. Данные доступны до закрытия вкладки; экспортируй резервную копию.');}
+  return durable;
+ }catch(e){if(!storageWarningShown){storageWarningShown=true;toast('Не удалось сохранить профиль: '+(e.message||'недостаточно места'));}return false}
+}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
+function record(type,title,content=''){const h={id:uid(),type,title:String(title).slice(0,500),content:String(content).slice(0,5000),time:Date.now(),date:now()};state.history.unshift(h);state.history=state.history.slice(0,300);save();renderAll();return h}
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+page).classList.add('active');document.querySelectorAll('#navigation button[data-page],.nav-settings button[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const secondary=['search','history'];$('toolsNav').open=secondary.includes(page);const labels={overview:'ОБЗОР СИСТЕМЫ',chat:'ИИ-АССИСТЕНТ',search:'ПОИСК',library:'БИБЛИОТЕКА',history:'ИСТОРИЯ',tasks:'ЗАДАЧИ И ЗАМЕТКИ',math:'МАТЕМАТИКА',code:'АНАЛИЗ КОДА',plugins:'МОДУЛИ',settings:'НАСТРОЙКИ'};$('topTitle').textContent=labels[page]||'ARCHANGEL';$('sidebar').classList.remove('open');if(page==='chat')setTimeout(()=>$('chatInput').focus(),50);renderAll()}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+document.querySelectorAll('[data-settings-jump]').forEach(b=>b.addEventListener('click',()=>{const target=$(b.dataset.settingsJump);if(target){target.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('[data-settings-jump]').forEach(x=>x.classList.toggle('active',x===b));}}));$('mobileMenu').onclick=()=>$('sidebar').classList.toggle('open');
+function renderAll(){renderStats();renderHistory();renderLibrary();renderTasks();renderNotes();renderPlugins();renderRecent();$('modelStatus').textContent=api.key?'Модель подключена':'ИИ не подключён';$('sideMode').textContent=api.key?'API + LOCAL':'OFFLINE TOOLS';$('chatModelBadge').textContent=api.key?'CONNECTED MODEL':'NO MODEL';$('chatModeLine').textContent=api.key?'Ответы формирует подключённая языковая модель':'Офлайн-режим: только простые локальные функции, не полноценная языковая модель';$('apiAsideStatus').textContent=api.key?`Подключено: ${api.model}`:'Модель не подключена';$('overviewModel').textContent=api.key?`Подключена модель ${api.model}.`:'ИИ-модель не подключена. Доступны только локальные функции.';$('overviewModelBadge').textContent=api.key?'API':'LOCAL';$('voiceSupportBadge').textContent=('SpeechRecognition'in window||'webkitSpeechRecognition'in window)?'ДОСТУПЕН':'НЕТ API';}
+function renderStats(){$('statHistory').textContent=state.history.length;$('statFiles').textContent=state.library.length;$('statTasks').textContent=state.tasks.filter(t=>!t.done).length}
+function renderRecent(){const el=$('overviewRecent');if(!state.history.length){el.innerHTML='<div class="empty">Пока нет активности. Начни с диалога или локального поиска.</div>';return}el.innerHTML=state.history.slice(0,4).map(h=>`<div class="item"><span class="ico">${h.type==='search'?'⌕':h.type==='math'?'∑':'◷'}</span><div class="item-body"><div class="item-title">${esc(h.title)}</div><div class="item-desc">${esc(h.date)} · ${esc(h.type)}</div></div></div>`).join('')}
+function renderHistory(){const q=($('historyFilter')?.value||'').toLowerCase();const rows=state.history.filter(h=>(h.title+' '+h.content+' '+h.type).toLowerCase().includes(q));$('historyCount').textContent=`${rows.length} / ${state.history.length} записей`;const el=$('historyList');if(!rows.length){el.innerHTML='<div class="empty">Нет записей истории.</div>';return}el.innerHTML=rows.map(h=>`<div class="item"><span class="ico">${h.type==='search'?'⌕':h.type==='math'?'∑':h.type==='chat'?'◉':'◷'}</span><div class="item-body"><div class="item-title">${esc(h.title)}</div><div class="item-desc">${esc(h.date)} · ${esc(h.type)}${h.content?' · '+esc(h.content.slice(0,180)):''}</div></div><div class="item-actions"><button class="tiny-btn" title="Повторить" data-repeat="${h.id}">↻</button><button class="tiny-btn" title="Удалить запись" data-del-history="${h.id}">×</button></div></div>`).join('');el.querySelectorAll('[data-del-history]').forEach(b=>b.onclick=()=>{state.history=state.history.filter(x=>x.id!==b.dataset.delHistory);save();renderAll()});el.querySelectorAll('[data-repeat]').forEach(b=>b.onclick=()=>{const h=state.history.find(x=>x.id===b.dataset.repeat);if(h){$('searchQuery').value=h.title;go(h.type==='search'?'search':'chat');$('chatInput').value=h.title}})}
+$('historyFilter').addEventListener('input',renderHistory);$('clearHistory').onclick=()=>{if(confirm('Удалить всю историю запросов? Это действие нельзя отменить.')){state.history=[];save();renderAll();toast('История очищена')}};
+function renderLibrary(){const q=($('libraryFilter')?.value||'').toLowerCase();const rows=state.library.filter(f=>(f.name+' '+f.type+' '+(f.text||'')).toLowerCase().includes(q));const el=$('libraryList');if(!rows.length){el.innerHTML='<div class="empty">Нет файлов. Добавь документы в библиотеку.</div>';return}el.innerHTML=rows.map(f=>`<div class="item"><span class="ico">${f.type==='image'?'▧':f.type==='pdf'?'▤':'▣'}</span><div class="item-body"><div class="item-title">${esc(f.name)}</div><div class="item-desc">${esc(f.type.toUpperCase())} · ${Math.max(1,Math.round((f.size||0)/1024))} КБ · ${esc(f.date)}<br>${f.text?esc(f.text.slice(0,150)):'Файл сохранён. Текстовый индекс недоступен для этого формата.'}</div></div><div class="item-actions"><button class="tiny-btn" title="${f.originalMissing?'Оригинал не вошёл в JSON-резервную копию':'Скачать оригинал'}" data-download-file="${f.id}">↓</button><button class="tiny-btn" title="Открыть индекс" data-open-file="${f.id}">↗</button><button class="tiny-btn" title="Удалить" data-del-file="${f.id}">×</button></div></div>`).join('');el.querySelectorAll('[data-del-file]').forEach(b=>b.onclick=async()=>{await deleteLibraryAsset(b.dataset.delFile);state.library=state.library.filter(f=>f.id!==b.dataset.delFile);save();renderAll();toast('Файл удалён из библиотеки')});el.querySelectorAll('[data-download-file]').forEach(b=>b.onclick=async()=>{try{const f=await getLibraryAsset(b.dataset.downloadFile);if(!f)return toast('Оригинальный файл не найден. В JSON-резервной копии хранятся только текст и метаданные.');downloadBlob(f.blob,f.name)}catch(e){toast('Не удалось получить оригинальный файл')}});el.querySelectorAll('[data-open-file]').forEach(b=>b.onclick=()=>{const f=state.library.find(x=>x.id===b.dataset.openFile);showModal(f.name,`<div class="result">${esc(f.text||'Предпросмотр текста недоступен для этого формата. Файл зарегистрирован в библиотеке.')}</div>`)})}
+$('libraryFilter').addEventListener('input',renderLibrary);$('importFiles').onclick=()=>$('filePicker').click();
+let assetDBPromise;function openAssetDB(){if(assetDBPromise)return assetDBPromise;assetDBPromise=new Promise((resolve,reject)=>{if(!('indexedDB'in window))return reject(Error('IndexedDB недоступен'));const req=indexedDB.open('archangel_assets_v1',1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||Error('Не удалось открыть файловое хранилище'));req.onblocked=()=>reject(Error('Файловое хранилище занято другой вкладкой. Закрой старые вкладки ARCHANGEL и повтори попытку.'));}).catch(e=>{assetDBPromise=null;throw e});return assetDBPromise}
+function readDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)})}
+async function putLibraryAsset(id,file){try{const db=await openAssetDB();await new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put({id,name:file.name,type:file.type,blob:file});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||Error('Ошибка записи файла'))});return}catch(e){if(file.size>900000)throw Error('Браузер не разрешил IndexedDB. Для этого браузера локальный резерв ограничен 900 КБ на файл.');const data=await readDataURL(file);try{storageSet('archangel_asset_'+id,data)}catch(err){throw Error('Недостаточно локального места для файла')}}}
+async function getLibraryAsset(id){try{const db=await openAssetDB();const found=await new Promise((resolve,reject)=>{const req=db.transaction('files','readonly').objectStore('files').get(id);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error)});if(found)return found}catch(e){}const data=storageGet('archangel_asset_'+id);if(!data)return null;const parts=data.split(','),mime=(parts[0].match(/:(.*?);/)||[])[1]||'application/octet-stream',bin=atob(parts[1]),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);const meta=state.library.find(x=>x.id===id);return{id,name:meta?.name||'file',blob:new Blob([bytes],{type:mime})}}
+async function deleteLibraryAsset(id){try{const db=await openAssetDB();await new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}catch(e){}storageRemove('archangel_asset_'+id)}
+async function clearLibraryAssets(){
+ try{const db=await openAssetDB();await new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').clear();tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||Error('Не удалось очистить библиотеку файлов'));});db.close();assetDBPromise=null;}catch(e){}
+ try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key&&key.startsWith('archangel_asset_'))localStorage.removeItem(key);}}catch(e){}
+ for(const key of [...volatileStore.keys()])if(key.startsWith('archangel_asset_'))volatileStore.delete(key);
+}
+
+async function handleFiles(files){let added=0;for(const file of files){const ext=(file.name.split('.').pop()||'').toLowerCase();let type=['png','jpg','jpeg','webp','gif'].includes(ext)?'image':ext==='pdf'?'pdf':ext==='docx'?'docx':'document';let text='';const textExt=['txt','md','csv','json','py','js','ts','html','css','xml','yaml','yml','log'];if(textExt.includes(ext)){try{text=(await file.text()).slice(0,180000)}catch(e){}}if(file.size>4*1024*1024){toast(`${file.name}: превышен лимит 4 МБ на файл`);continue}const f={id:uid(),name:file.name,type,ext,size:file.size,date:now(),text};try{await putLibraryAsset(f.id,file)}catch(e){toast(`Не удалось сохранить ${file.name}: ${e.message}`);continue}state.library.unshift(f);added++;if(text)record('library',`Импорт: ${file.name}`,text.slice(0,200))}save();renderAll();toast(`В библиотеку добавлено файлов: ${added}. Оригиналы хранятся локально в браузере.`)}
+$('filePicker').onchange=e=>{handleFiles([...e.target.files]);e.target.value=''};
+function renderTasks(){const el=$('taskList'),rows=state.tasks;el.innerHTML=rows.length?rows.map(t=>`<div class="item"><input type="checkbox" ${t.done?'checked':''} data-task-check="${t.id}" style="margin-top:3px"><div class="item-body"><div class="item-title" style="${t.done?'text-decoration:line-through;color:#777':''}">${esc(t.title)}</div><div class="item-desc">${esc(t.priority)} · ${esc(t.date)}${t.desc?' · '+esc(t.desc):''}</div></div><button class="tiny-btn" data-del-task="${t.id}" title="Удалить">×</button></div>`).join(''):'<div class="empty">Нет задач. Добавь первую задачу.</div>';el.querySelectorAll('[data-task-check]').forEach(b=>b.onchange=()=>{const t=state.tasks.find(x=>x.id===b.dataset.taskCheck);if(t)t.done=b.checked;save();renderAll()});el.querySelectorAll('[data-del-task]').forEach(b=>b.onclick=()=>{state.tasks=state.tasks.filter(x=>x.id!==b.dataset.delTask);save();renderAll()})}
+function renderNotes(){const el=$('noteList');el.innerHTML=state.notes.length?state.notes.map(n=>`<div class="item"><span class="ico">▤</span><div class="item-body"><div class="item-title">${esc(n.title)}</div><div class="item-desc">${esc(n.body.slice(0,190))}<br>${esc(n.date)}</div></div><button class="tiny-btn" data-del-note="${n.id}" title="Удалить">×</button></div>`).join(''):'<div class="empty">Заметок пока нет.</div>';el.querySelectorAll('[data-del-note]').forEach(b=>b.onclick=()=>{state.notes=state.notes.filter(x=>x.id!==b.dataset.delNote);save();renderAll()})}
+$('addTask').onclick=()=>{const title=$('taskTitle').value.trim();if(!title){toast('Введи название задачи');return}state.tasks.unshift({id:uid(),title,desc:$('taskDesc').value.trim(),priority:$('taskPriority').value,done:false,date:now()});$('taskTitle').value='';$('taskDesc').value='';save();renderAll();toast('Задача добавлена')};$('addNote').onclick=()=>{const title=$('noteTitle').value.trim(),body=$('noteBody').value.trim();if(!title||!body){toast('Заполни заголовок и текст заметки');return}state.notes.unshift({id:uid(),title,body,date:now()});$('noteTitle').value='';$('noteBody').value='';save();renderAll();toast('Заметка сохранена')};
+const pluginInfo=[['search','Поисковый индекс','Локальный поиск по истории, заметкам, задачам и документам. Это не поиск в интернете.'],['math','Математическое ядро','Безопасный вычислитель выражений и базовый статистический анализ.'],['code','Анализатор кода','Статические проверки структуры и подозрительных шаблонов.'],['library','Библиотека','Хранение метаданных и текста файлов в локальном профиле браузера.'],['voice','Голосовой интерфейс','Распознавание ключевых фраз и озвучивание ответов, если браузер поддерживает API.'],['vision','Vision-интерфейс','Передача изображений совместимой мультимодальной модели при подключённом API.']];
+function renderPlugins(){const el=$('pluginList');if(!el)return;el.innerHTML=pluginInfo.map(([id,name,desc])=>`<div class="card"><div class="between"><div class="row"><span class="ico">${({search:'⌕',math:'∑',code:'⌘',library:'▤',voice:'♫',vision:'▧'})[id]}</span><b style="font-size:13px">${name}</b></div><input class="toggle" type="checkbox" data-plugin="${id}" ${state.plugins[id]?'checked':''}></div><div class="item-desc" style="margin-top:12px">${desc}</div><div class="between" style="margin-top:13px"><span class="small muted">${state.plugins[id]?'Модуль включён':'Модуль отключён'}</span><span class="badge ${state.plugins[id]?'ok':'off'}">${state.plugins[id]?'ACTIVE':'OFF'}</span></div></div>`).join('');el.querySelectorAll('[data-plugin]').forEach(b=>b.onchange=()=>{state.plugins[b.dataset.plugin]=b.checked;save();renderAll()})}
+// Search: token relevance, title boost and exact phrase bonus.
+function tokens(s){return String(s||'').toLowerCase().replace(/ё/g,'е').match(/[\p{L}\p{N}_-]{2,}/gu)||[]}
+function localSearch(q,opts={}){const qt=tokens(q);if(!qt.length)return[];let docs=[];if(opts.docs!==false)state.library.forEach(x=>docs.push({kind:'Документ',id:x.id,title:x.name,text:x.text||'',target:'library'}));if(opts.notes!==false)state.notes.forEach(x=>docs.push({kind:'Заметка',id:x.id,title:x.title,text:x.body,target:'tasks'}));if(opts.tasks!==false)state.tasks.forEach(x=>docs.push({kind:'Задача',id:x.id,title:x.title,text:x.desc,target:'tasks'}));if(opts.history!==false)state.history.forEach(x=>docs.push({kind:'История',id:x.id,title:x.title,text:x.content,target:'history'}));return docs.map(d=>{const title=tokens(d.title),body=tokens(d.text),all=[...title,...body];let score=0;for(const t of qt){const tc=title.filter(x=>x===t).length,bc=body.filter(x=>x===t).length;score+=tc*5+bc*1.4;if(all.some(x=>x.startsWith(t)||t.startsWith(x)&&x.length>3))score+=.55}if(d.title.toLowerCase().includes(q.toLowerCase()))score+=8;return{...d,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,50)}
+function performSearch(){const q=$('searchQuery').value.trim();if(!q)return toast('Введи поисковый запрос');const rows=localSearch(q,{docs:$('searchDocs').checked,history:$('searchHistory').checked,notes:$('searchNotes').checked,tasks:$('searchTasks').checked});record('search',q,`Найдено результатов: ${rows.length}`);$('searchCount').textContent=`Найдено результатов: ${rows.length}`;const el=$('searchResults');el.innerHTML=rows.length?rows.map(r=>`<div class="item"><span class="ico">⌕</span><div class="item-body"><div class="item-title">${esc(r.title)} <span class="badge">${r.kind}</span></div><div class="item-desc">Релевантность: ${r.score.toFixed(1)} · ${esc((r.text||'').slice(0,220))}</div></div><button class="tiny-btn" data-search-open="${r.id}" data-target="${r.target}" title="Открыть">↗</button></div>`).join(''):'<div class="empty">Совпадений нет. Попробуй изменить формулировку.</div>';el.querySelectorAll('[data-search-open]').forEach(b=>b.onclick=()=>{go(b.dataset.target);if(b.dataset.target==='library')$('libraryFilter').value='';if(b.dataset.target==='history')$('historyFilter').value='';renderAll()})}
+$('runSearch').onclick=performSearch;$('searchQuery').onkeydown=e=>{if(e.key==='Enter')performSearch()};
+// Safe math parser — recursive descent, no eval / Function.
+function mathEval(src){let s=src.replace(/[×]/g,'*').replace(/[÷]/g,'/').replace(/[−]/g,'-').replace(/π/g,'pi');const re=/\s*(?:(\d+(?:\.\d*)?|\.\d+)(?:([eE][+-]?\d+))?|([a-zA-Z_][a-zA-Z_0-9]*)|(.))/gy;let ts=[],m;while((m=re.exec(s))){if(m[1])ts.push({t:'n',v:Number(m[1]+(m[2]||''))});else if(m[3])ts.push({t:'id',v:m[3].toLowerCase()});else if('+-*/%^!(),'.includes(m[4]))ts.push({t:m[4],v:m[4]});else throw Error('Недопустимый символ: '+m[4])}let p=0;const peek=()=>ts[p]?.t, pop=()=>ts[p++], expect=t=>{if(peek()!==t)throw Error('Ожидался символ '+t);p++};function expr(){let x=term();while(peek()==='+'||peek()==='-'){let op=pop().t,y=term();x=op==='+'?x+y:x-y}return x}function term(){let x=unary();while(['*','/','%'].includes(peek())){let op=pop().t,y=unary();if((op==='/'||op==='%')&&y===0)throw Error('Деление на ноль');x=op==='*'?x*y:op==='/'?x/y:x%y}return x}function unary(){if(peek()==='+'){pop();return unary()}if(peek()==='-'){pop();return-unary()}return power()}function power(){let x=postfix();if(peek()==='^'){pop();x=Math.pow(x,unary())}return x}function postfix(){let x=primary();while(peek()==='!'){pop();if(!Number.isInteger(x)||x<0||x>170)throw Error('Факториал определён для целых 0…170');let y=1;for(let i=2;i<=x;i++)y*=i;x=y}return x}function primary(){let t=pop();if(!t)throw Error('Неожиданный конец выражения');if(t.t==='n')return t.v;if(t.t==='('){let x=expr();expect(')');return x}if(t.t==='id'){if(t.v==='pi')return Math.PI;if(t.v==='e')return Math.E;if(peek()!=='(')throw Error('Неизвестная константа: '+t.v);pop();let args=[];if(peek()!==')'){args.push(expr());while(peek()===','){pop();args.push(expr())}}expect(')');const f={sqrt:x=>Math.sqrt(x),abs:x=>Math.abs(x),sin:x=>Math.sin(x),cos:x=>Math.cos(x),tan:x=>Math.tan(x),asin:x=>Math.asin(x),acos:x=>Math.acos(x),atan:x=>Math.atan(x),ln:x=>Math.log(x),log:x=>args.length>1?Math.log(x)/Math.log(args[1]):Math.log10(x),exp:x=>Math.exp(x),floor:x=>Math.floor(x),ceil:x=>Math.ceil(x),round:x=>Math.round(x),min:(...x)=>Math.min(...x),max:(...x)=>Math.max(...x)}[t.v];if(!f)throw Error('Неизвестная функция: '+t.v);const n=f(...args);return n}throw Error('Неожиданный элемент: '+t.v)}const val=expr();if(p<ts.length)throw Error('Лишний элемент: '+ts[p].v);if(!Number.isFinite(val))throw Error('Результат не является конечным числом');return val}
+function calculateMath(){const q=$('mathInput').value.trim();try{const n=mathEval(q);lastMath=String(n);$('mathResult').textContent=`${q}\n\n= ${n}\n\nТочность JS Number: IEEE-754 double`;record('math',q,String(n))}catch(e){$('mathResult').textContent='Ошибка: '+e.message;toast('Не удалось вычислить выражение')}}
+$('mathCalculate').onclick=calculateMath;$('mathInput').onkeydown=e=>{if(e.key==='Enter')calculateMath()};$('mathCopy').onclick=()=>copyText(lastMath);
+$('statsCalculate').onclick=()=>{const arr=$('statsInput').value.trim().split(/[\s,;]+/).filter(Boolean).map(Number);if(arr.length<1||arr.some(x=>!Number.isFinite(x)))return toast('Введи корректные числа');const a=[...arr].sort((x,y)=>x-y),sum=arr.reduce((x,y)=>x+y,0),mean=sum/arr.length,mid=Math.floor(a.length/2),median=a.length%2?a[mid]:(a[mid-1]+a[mid])/2,variance=arr.reduce((s,x)=>s+(x-mean)**2,0)/arr.length;$('statsResult').textContent=`Количество: ${arr.length}\nСумма: ${sum}\nСреднее: ${mean}\nМедиана: ${median}\nМин.: ${a[0]}\nМакс.: ${a.at(-1)}\nРазмах: ${a.at(-1)-a[0]}\nДисперсия: ${variance}\nСтанд. отклонение: ${Math.sqrt(variance)}`;record('math','Статистический анализ',`n=${arr.length}; mean=${mean}`)};
+// Static code review. Does not execute provided source.
+function analyzeSource(code,lang){let issues=[],lines=code.split(/\r?\n/),trim=code.trim();if(!trim)return'Пустой исходный код.';const add=(sev,msg,line='')=>issues.push({sev,msg,line});let stack=[],quote=null,escape=false,lineNo=1,comment=false;const pairs={')':'(',']':'[','}':'{'};for(let i=0;i<code.length;i++){let c=code[i],n=code[i+1];if(c==='\n'){lineNo++;comment=false;continue}if(lang==='Python'&&c==='#'&&!quote){comment=true}if((lang!=='Python')&&c==='/'&&n==='/'){comment=true}if(comment)continue;if(quote){if(escape){escape=false;continue}if(c==='\\'){escape=true;continue}if(c===quote)quote=null;continue}if(c==='"'||c==="'"||c==='`'){quote=c;continue}if('([{'.includes(c))stack.push({c,line:lineNo});else if(')]}'.includes(c)){const x=stack.pop();if(!x||x.c!==pairs[c])add('error',`Несогласованная закрывающая скобка ${c}`,lineNo)}}if(stack.length)stack.forEach(x=>add('error',`Не закрыта скобка ${x.c}`,x.line));if(quote)add('warning','Возможно, не закрыта строка');lines.forEach((l,i)=>{if(/\b(TODO|FIXME|XXX)\b/.test(l))add('info','Маркер незавершённой работы',i+1);if(/\b(eval|exec)\s*\(/.test(l))add('warning','Опасная динамическая оценка кода',i+1);if(/(api[_-]?key|password|secret|token)\s*[:=]\s*["'][^"']{8,}/i.test(l))add('error','Похоже на жёстко заданный секрет — вынеси его из исходников',i+1);if(/subprocess\.(run|Popen|call)\s*\(/.test(l))add('warning','Вызов внешнего процесса: проверь аргументы и доверие к данным',i+1);if(l.length>120)add('info',`Длинная строка (${l.length} символов)`,i+1)});const opens=(code.match(/\b(def|class|function|async\s+function)\b/g)||[]).length;const result=issues.length?issues.map(x=>`[${x.sev.toUpperCase()}] ${x.line?'Строка '+x.line+': ':''}${x.msg}`).join('\n'):'Явных структурных предупреждений не обнаружено.';return`Язык: ${lang}\nСтрок: ${lines.length}\nСимволов: ${code.length}\nОбъявлений функций/классов: ${opens}\nНайдено замечаний: ${issues.length}\n\n${result}\n\nОграничение: это эвристический статический анализ, не полноценный компилятор или security-аудит.`}
+$('analyzeCode').onclick=()=>{$('codeMeta').textContent=`${$('codeInput').value.split(/\r?\n/).length} строк`;const r=analyzeSource($('codeInput').value,$('codeLanguage').value);$('codeResult').textContent=r;record('code','Статический анализ кода',r.slice(0,1000))};$('loadExample').onclick=()=>{$('codeInput').value=$('codeLanguage').value==='Python'?'import os\n\nAPI_KEY = "sk-example-secret-key"\n\ndef calculate(values):\n    # TODO: validate inputs\n    return eval(" + ".join(map(str, values)))\n':$('codeLanguage').value==='JavaScript'?'const token = "example-secret-token-12345";\nfunction sum(a, b) {\n  return a + b;\n}\nconsole.log(sum(2, 3));\n':'<main>\n  <h1>Hello</h1>\n</main>';};$('copyCode').onclick=()=>copyText($('codeInput').value);
+function copyText(t){if(!t)return toast('Нечего копировать');navigator.clipboard?.writeText(t).then(()=>toast('Скопировано')).catch(()=>toast('Копирование недоступно в этом контексте'))}
+function showModal(title,html){$('modalTitle').textContent=title;$('modalBody').innerHTML=html;$('modal').classList.add('open')}$('closeModal').onclick=()=>$('modal').classList.remove('open');$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').classList.remove('open')};
+// Chat and local command router.
+function addMessage(role,text,attachment){const el=document.createElement('div');el.className='message '+role;const meta=document.createElement('div');meta.className='meta';meta.textContent=role==='user'?'ВЫ':'АРХАНГЕЛ';el.appendChild(meta);if(attachment?.data&&attachment.kind==='image'){const im=document.createElement('img');im.className='attach-preview';im.src=attachment.data;el.appendChild(im)}const body=document.createElement('div');body.textContent=text;el.appendChild(body);$('messages').appendChild(el);$('messages').scrollTop=$('messages').scrollHeight;document.querySelector('.welcome')?.remove();state.messages.push({role,text,time:Date.now()});state.messages=state.messages.slice(-80);save()}
+function localAnswer(q){const s=q.trim(),l=s.toLowerCase();if(/^(привет|здравствуй|добрый день|добрый вечер|hello|hi)\b/.test(l))return'На связи. Сформулируй цель, ограничения и ожидаемый результат. Если можно действовать без уточнений, я выберу разумный вариант по умолчанию.';if(/помощь|что ты умеешь|команды/.test(l))return'Локальные возможности:\n• Математика: напиши «вычисли sqrt(81)+2^5».\n• Поиск: «найди …» — по библиотеке, заметкам, задачам и истории.\n• Задачи: «создай задачу …».\n• Заметки: «запомни …».\n• Изображения: прикрепи файл; для смыслового анализа нужна vision-модель в настройках.\nДля открытого диалога подключи совместимую языковую модель.';if(/который час|текущее время|сегодняшняя дата/.test(l))return`Локальное время устройства: ${new Date().toLocaleString('ru-RU')}.`;if(/^(вычисли|посчитай|сколько будет|calc)\s*/i.test(s)){const expression=s.replace(/^(вычисли|посчитай|сколько будет|calc)\s*/i,'');try{const n=mathEval(expression);record('math',expression,String(n));return`${expression} = ${n}`}catch(e){return'Ошибка вычисления: '+e.message}}if(/^(найди|поиск|найти)\s*/i.test(s)){const query=s.replace(/^(найди|поиск|найти)\s*/i,'');const hits=localSearch(query);record('search',query,`Результатов: ${hits.length}`);return hits.length?`Найдено ${hits.length} совпадений:\n`+hits.slice(0,8).map((x,i)=>`${i+1}. ${x.title} (${x.kind}, релевантность ${x.score.toFixed(1)})\n${(x.text||'').slice(0,180)}`).join('\n\n'):'В локальной библиотеке, заметках, задачах и истории совпадений нет.'}if(/^запомни\s+/i.test(s)){const body=s.replace(/^запомни\s+/i,'');state.notes.unshift({id:uid(),title:body.slice(0,55),body,date:now()});save();renderAll();return'Сохранено в заметках. Запись доступна в разделе «Задачи и заметки».'}if(/^создай задачу\s+/i.test(s)){const title=s.replace(/^создай задачу\s+/i,'');state.tasks.unshift({id:uid(),title,desc:'Создано из чата',priority:'Обычный',done:false,date:now()});save();renderAll();return'Задача добавлена в список.'}if(/анализируй изображение|что на картинке|опиши изображение/.test(l))return api.key?'Изображение не прикреплено. Добавь его кнопкой «＋» и отправь запрос повторно.':'Для смыслового анализа изображения нужна подключённая мультимодальная модель. Без неё доступен только просмотр и локальная информация о файле.';return'Я работаю без подключённой языковой модели. Этот запрос требует полноценного ИИ или поиска во внешних источниках. Подключи совместимый API в настройках — тогда я смогу вести диалог с помощью выбранной модели. Сейчас доступны только ограниченные локальные функции: простые вычисления, поиск по твоим данным, заметки и задачи.'}
+$('sendButton').onclick=sendChat;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.ctrlKey&&!e.metaKey){e.preventDefault();sendChat()}});function clearConversation(){if(state.messages.length&&!confirm('Очистить текущую переписку?'))return;$('messages').innerHTML='<div class="welcome" id="welcomeMessage"><img id="welcomeLogo2" alt="Archangel" src="'+LOGO+'"><h2>АРХАНГЕЛ АКТИВЕН</h2><p>Новый диалог. Сформулируй задачу.</p></div>';state.messages=[];save();toast('Диалог очищен')}$('clearChat').onclick=clearConversation;
+$('attachButton').onclick=()=>$('chatFilePicker').click();$('chatFilePicker').addEventListener('change',e=>{for(const f of [...e.target.files]){if(f.type.startsWith('image/')){if(f.size>8*1024*1024){toast('Изображение больше 8 МБ');continue}const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,data:r.result,kind:'image'});renderAttach()};r.readAsDataURL(f)}else if(/\.(txt|md|csv|json|py|js|ts|html|css|xml|ya?ml)$/i.test(f.name)){const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,text:String(r.result).slice(0,70000),kind:'text'});renderAttach()};r.readAsText(f)}else{pendingFiles.push({name:f.name,type:f.type,kind:'file'});renderAttach()}}e.target.value=''});function renderAttach(){$('attachRow').innerHTML=pendingFiles.map((f,i)=>`<div class="attach-preview">${f.kind==='image'?`<img src="${f.data}">`:'▤'}<span>${esc(f.name)}</span><button class="tiny-btn" data-remove-attach="${i}">×</button></div>`).join('');$('attachRow').querySelectorAll('[data-remove-attach]').forEach(b=>b.onclick=()=>{pendingFiles.splice(+b.dataset.removeAttach,1);renderAttach()})}
+function showThinking(){const el=document.createElement('div');el.className='thinking-indicator';el.id='thinkingIndicator';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.innerHTML='<span class="thinking-dots"><i></i><i></i><i></i></span><span>Архангел анализирует запрос…</span>';$('messages').appendChild(el);$('messages').scrollTop=$('messages').scrollHeight;return el}
+async function sendChat(){const q=$('chatInput').value.trim();if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;const files=[...pendingFiles];$('chatInput').value='';pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённый файл.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=true;const thinking=showThinking();try{let answer;if(api.key){answer=await modelRequest(q,files)}else{answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nФайл прикреплён. Локально я могу показать изображение, но не способен надёжно определить его смысл без мультимодальной модели.'}thinking.remove();addMessage('assistant',answer);if(voiceActive)speak(answer)}catch(e){thinking.remove();addMessage('assistant','Ошибка подключения к модели: '+e.message+'\n\nПроверь endpoint, ключ, название модели и разрешение CORS. Локальные инструменты продолжают работать.')}finally{$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('chatInput').focus()}}
+function restoreChat(){const root=$('messages');if(!root)return;root.innerHTML='';if(!state.messages.length){const welcome=document.createElement('div');welcome.className='welcome';welcome.id='welcome';const logo=document.createElement('img');logo.alt='Эмблема ARCHANGEL';logo.src=LOGO;const heading=document.createElement('h2');heading.textContent='АРХАНГЕЛ АКТИВЕН';const p=document.createElement('p');p.textContent='Сформулируй задачу. Подключи модель в настройках для полноценного диалога.';welcome.append(logo,heading,p);root.append(welcome);return;}for(const m of state.messages.slice(-50)){const el=document.createElement('div');el.className='message '+(m.role==='user'?'user':'assistant');const meta=document.createElement('div');meta.className='meta';meta.textContent=m.role==='user'?'ВЫ':'АРХАНГЕЛ';const body=document.createElement('div');body.textContent=String(m.text||'');el.append(meta,body);root.appendChild(el);}root.scrollTop=root.scrollHeight;}
+function systemPrompt(){
+ const tone=$('tone')?.value||state.prefs.tone||'focused';
+ const detail=$('detail')?.value||state.prefs.detail||'balanced';
+ const answerStyle=$('answerStyle')?.value||state.prefs.answerStyle||'balanced';
+ const language=$('language')?.value||'auto';
+ const languageRule=language==='en'?'Answer in English unless the user explicitly requests another language.':language==='es'?'Responde en español, salvo que el usuario solicite otro idioma.':language==='ru'?'Отвечай на русском, если пользователь явно не попросил другой язык.':'Отвечай на языке последнего сообщения пользователя и сохраняй язык диалога.';
+ const toneRule=tone==='focused'?'Тон собранный, прямой и деловой.':tone==='neutral'?'Тон нейтральный и профессиональный.':'Тон спокойный, доброжелательный и поддерживающий.';
+ const detailRule=detail==='concise'?'Давай только необходимое.':detail==='detailed'?'Раскрывай ход решения, важные детали и ограничения.':'Давай достаточно подробностей без повторов.';
+ const styleRule=answerStyle==='concise'?'Предпочитай короткий ответ и не добавляй необязательные разделы.':answerStyle==='detailed'?'Структурируй сложные ответы с пояснениями и примерами.':'Подбирай длину и структуру ответа под задачу.';
+ return `Ты — ARCHANGEL AI, персональный ИИ-помощник. ${toneRule} ${detailRule} ${styleRule} ${languageRule}
+Правила качества: не выдумывай факты, источники, результаты проверок, доступ к файлам или выполненные действия. Явно отделяй проверенное от предположений. Если сведения могут устареть, укажи это и попроси проверить актуальный источник, если у тебя нет веб-доступа. Не повторяй вопросы, на которые уже есть ответ в контексте. Если можешь действовать с разумными безопасными допущениями — действуй, а не тормози задачу лишними уточнениями. Для вычислений показывай корректные единицы и проверяй результат. Для кода учитывай крайние случаи, ошибки и безопасность. Не сообщай, что выполнил действие, если на самом деле только объяснил, как его выполнить. Если инструмент или функция недоступны, ясно обозначь ограничение и предложи ближайший рабочий вариант.`;
+}
+async function modelRequest(q,files){
+ const history=state.messages.slice(0,-1).slice(-16).filter(m=>m.role==='user'||m.role==='assistant');
+ const textParts=[];
+ if(q)textParts.push(q);
+ for(const f of files){
+  if(f.kind==='image')continue;
+  if(f.kind==='text')textParts.push(`Содержимое файла ${f.name}:\n${f.text}`);
+  else textParts.push(`Пользователь прикрепил файл ${f.name}. Текст из этого формата не извлечён.`);
+ }
+ const promptText=textParts.join('\n\n')||'Проанализируй прикреплённое изображение.';
+ let body;
+ if((api.protocol||'responses')==='responses'){
+  const input=[{role:'system',content:[{type:'input_text',text:systemPrompt()}]}];
+  for(const m of history)input.push({role:m.role,content:[{type:'input_text',text:String(m.text||'')}]});
+  const userContent=[{type:'input_text',text:promptText}];
+  for(const f of files)if(f.kind==='image')userContent.push({type:'input_image',image_url:f.data});
+  input.push({role:'user',content:userContent});
+  body={model:api.model,input};
+ }else{
+  const content=[{type:'text',text:promptText}];
+  for(const f of files)if(f.kind==='image')content.push({type:'image_url',image_url:{url:f.data}});
+  const messages=[{role:'system',content:systemPrompt()},...history.map(m=>({role:m.role,content:m.text})),{role:'user',content:files.some(f=>f.kind==='image')?content:promptText}];
+  body={model:api.model,messages,temperature:.35};
+ }
+ let res;
+ try{res=await fetch(api.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+api.key},body:JSON.stringify(body)})}
+ catch(err){throw Error('Не удалось связаться с endpoint. Возможны CORS, отсутствие сети или неверный адрес. Для защиты ключа не отключай браузерную безопасность; используй локальный сервер-посредник. Детали: '+err.message)}
+ if(!res.ok){let detail='';try{detail=(await res.text()).slice(0,450)}catch{};if(res.status===401)throw Error('HTTP 401: ключ недействителен или не имеет доступа. Проверь ключ в панели провайдера. '+detail);if(res.status===403)throw Error('HTTP 403: доступ запрещён. Проверь разрешения проекта и доступность модели. '+detail);if(res.status===404)throw Error('HTTP 404: endpoint или название модели не найдено. Проверь протокол и модель. '+detail);if(res.status===429)throw Error('HTTP 429: превышен лимит запросов или закончился доступный баланс. Проверь лимиты проекта. '+detail);throw Error(`HTTP ${res.status}: ${detail}`)}
+ const data=await res.json();
+ if((api.protocol||'responses')==='responses'){
+  if(typeof data.output_text==='string'&&data.output_text.trim())return data.output_text;
+  const texts=[];for(const item of (data.output||[]))for(const part of (item.content||[]))if(part.type==='output_text'&&part.text)texts.push(part.text);
+  return texts.join('\n').trim()||'Модель вернула пустой ответ.';
+ }
+ const message=data.choices?.[0]?.message?.content;
+ if(typeof message==='string')return message;
+ if(Array.isArray(message))return message.map(x=>x.text||'').filter(Boolean).join('\n')||'Модель вернула пустой ответ.';
+ return 'Модель вернула пустой ответ.';
+}
+// API key is deliberately kept only in JS memory for this tab.
+function setApiProtocol(){return 'chat';}
+$('toggleApiKey').onclick=()=>{const field=$('apiKey');const reveal=field.type==='password';field.type=reveal?'text':'password';$('toggleApiKey').textContent=reveal?'◌':'◉';$('toggleApiKey').title=reveal?'Скрыть ключ':'Показать ключ'};
+function apiStatus(message,connected=false){$('apiStatus').textContent=message;$('apiState').classList.toggle('connected',connected)}
+$('savePrefs').onclick=()=>{state.prefs.tone=$('tone').value;state.prefs.detail=$('detail').value;state.prefs.language=$('language').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;state.prefs.answerStyle=$('answerStyle').value;state.prefs.voiceLanguage=$('voiceLanguage').value;state.prefs.voiceOutputLanguage=$('voiceOutputLanguage').value;state.prefs.voiceRuVoice=$('voiceRuSelect').value;state.prefs.voiceEnVoice=$('voiceEnSelect').value;state.prefs.voiceRateRu=+$('voiceRateRu').value;state.prefs.voicePitchRu=+$('voicePitchRu').value;state.prefs.voiceRateEn=+$('voiceRateEn').value;state.prefs.voicePitchEn=+$('voicePitchEn').value;state.prefs.voiceRate=state.prefs.voiceRateRu;state.prefs.voicePitch=state.prefs.voicePitchRu;save();updateVoiceValueLabels();toast('Настройки сохранены')};function restorePrefs(){for(const k of ['tone','detail','language','answerStyle','voiceLanguage','voiceOutputLanguage','voiceRuVoice','voiceEnVoice','voiceRuGender','voiceEnGender','voiceRateRu','voicePitchRu','voiceRateEn','voicePitchEn','voiceRate','voicePitch','confirmHighRisk'])if(state.prefs[k]!==undefined&&$(k))$(k).type==='checkbox'?$(k).checked=state.prefs[k]:$(k).value=state.prefs[k];if(state.prefs.voiceRateRu===undefined&&state.prefs.voiceRate!==undefined&&$('voiceRateRu'))$('voiceRateRu').value=state.prefs.voiceRate;if(state.prefs.voicePitchRu===undefined&&state.prefs.voicePitch!==undefined&&$('voicePitchRu'))$('voicePitchRu').value=state.prefs.voicePitch;updateVoiceValueLabels()}
+$('exportBackup').onclick=()=>{const snapshot={...state,history:state.history.slice(0,240),notes:state.notes.slice(0,100),tasks:state.tasks.slice(0,200),library:state.library.slice(0,80)};const data={version:'3.6.0',exportedAt:new Date().toISOString(),state:snapshot,notice:'Резервная копия не содержит бинарные оригиналы файлов библиотеки и API-ключи.'};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'archangel-backup-3.6.0.json')};
+$('importBackup').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{try{if(!i.files?.[0])return;const d=JSON.parse(await i.files[0].text()),src=d?.state;if(!src||typeof src!=='object'||Array.isArray(src))throw Error('В резервной копии не найден объект state.');if(!confirm('Заменить текущие заметки, задачи, историю и настройки этой резервной копией? Оригиналы файлов и API-ключи не импортируются.'))return;const arr=(key,limit)=>Array.isArray(src[key])?src[key].filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,limit):[];const prefs=src.prefs&&typeof src.prefs==='object'&&!Array.isArray(src.prefs)?src.prefs:{};const plugins=src.plugins&&typeof src.plugins==='object'&&!Array.isArray(src.plugins)?src.plugins:{};const next={history:arr('history',240),notes:arr('notes',100),tasks:arr('tasks',200),library:arr('library',80).map(x=>({...x,originalMissing:true})),messages:arr('messages',60).filter(x=>['user','assistant'].includes(x.role)),prefs:{...state.prefs},plugins:{...state.plugins}};for(const [k,v] of Object.entries(prefs))if(Object.prototype.hasOwnProperty.call(next.prefs,k)&&typeof v===typeof next.prefs[k]&&(typeof v!=='number'||Number.isFinite(v)))next.prefs[k]=v;for(const [k,v] of Object.entries(plugins))if(Object.prototype.hasOwnProperty.call(next.plugins,k)&&typeof v==='boolean')next.plugins[k]=v;state=next;save();restorePrefs();renderAll();restoreChat();toast('Резервная копия импортирована. Бинарные оригиналы файлов не входят в JSON.')}catch(e){toast('Не удалось импортировать JSON: '+e.message)}finally{i.value=''}};i.click()};
+$('wipeData').onclick=async()=>{if(!confirm('Удалить все данные ARCHANGEL в этом браузере, включая библиотеку файлов и настройки? Это действие необратимо.'))return;await clearLibraryAssets();storageRemove(DBKEY);for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_asset_'))volatileStore.delete(key);state={history:[],notes:[],tasks:[],library:[],messages:[],plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};renderAll();restorePrefs();toast('Все локальные данные и оригиналы файлов удалены.');};
+function downloadBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+// Voice 1.2: separate RU / EN profiles, selectable installed voices and bilingual wake phrases.
+// Declare the voice map before any timers, callbacks or preference restore can run.
+// Using `var` avoids a temporal-dead-zone crash in Chromium/Opera during startup.
+var VOICE_LANGS={ru:{prefix:'ru',select:'voiceRuSelect',rate:'voiceRateRu',pitch:'voicePitchRu',voiceKey:'voiceRuVoice',genderKey:'voiceRuGender',locale:'ru-RU'},en:{prefix:'en',select:'voiceEnSelect',rate:'voiceRateEn',pitch:'voicePitchEn',voiceKey:'voiceEnVoice',genderKey:'voiceEnGender',locale:'en-US'},es:{prefix:'es',select:'voiceEsSelect',rate:'voiceRateEs',pitch:'voicePitchEs',voiceKey:'voiceEsVoice',genderKey:'voiceEsGender',locale:'es-ES'}};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let voiceSpeaking=false;
+function updateVoiceValueLabels(){
+ const pairs=[['voiceRateRu','voiceRateRuVal','×'],['voicePitchRu','voicePitchRuVal',''],['voiceRateEn','voiceRateEnVal','×'],['voicePitchEn','voicePitchEnVal','']];
+ for(const [input,label,suffix] of pairs){if($(input)&&$(label))$(label).textContent=(+$(input).value).toFixed(2)+suffix}
+}
+function speechVoices(){return ('speechSynthesis'in window)?speechSynthesis.getVoices():[]}
+function voiceQualityScore(v){
+ const n=String(v.name||'').toLowerCase();let score=0;
+ if(/neural|natural|premium|enhanced|online/i.test(n))score+=12;
+ if(!v.localService)score+=3;
+ if(/microsoft|google|apple/i.test(n))score+=2;
+ if(/compact|basic|desktop|default/i.test(n))score-=2;
+ return score;
+}
+function classifyVoiceGender(v,locale){
+ const n=String(v.name||'').toLowerCase();
+ const maleRu=/(^|[\s_-])(pavel|pav(el)?|dmitry|dmitriy|maxim|maksim|mikhail|oleg|alexander|sergey|nikolay|nikolai|boris|vladimir|yuri|igor|male|man)([\s_-]|$)/i;
+ const femaleRu=/(^|[\s_-])(irina|alena|elena|olga|svetlana|natalia|natasha|polina|daria|darya|ekaterina|marina|anna|tatyana|tatiana|female|woman)([\s_-]|$)/i;
+ const maleEn=/(^|[\s_-])(david|guy|christopher|ryan|mark|daniel|james|george|thomas|andrew|michael|eric|henry|oliver|brian|arthur|male|man)([\s_-]|$)/i;
+ const femaleEn=/(^|[\s_-])(zira|aria|jenny|sara|samantha|victoria|ava|emma|julia|karen|susan|hazel|libby|natasha|luna|sonia|claire|amy|heather|female|woman)([\s_-]|$)/i;
+ const isRu=String(locale).toLowerCase().startsWith('ru');
+ if((isRu?maleRu:maleEn).test(n))return 'male';
+ if((isRu?femaleRu:femaleEn).test(n))return 'female';
+ return 'unknown';
+}
+function populateVoiceSelect(id,prefix,selected){
+ const el=$(id);if(!el)return;const current=selected||el.value;const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(prefix));
+ el.innerHTML='';const first=document.createElement('option');first.value='';first.textContent=prefix==='ru'?'Автовыбор по профилю':'Auto-select by profile';el.append(first);
+ const sorted=list.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name));
+ for(const voice of sorted){const o=document.createElement('option');o.value=voice.voiceURI||voice.name;const gender=classifyVoiceGender(voice,prefix);const genderText=gender==='male'?(prefix==='ru'?'мужской':'male'):gender==='female'?(prefix==='ru'?'женский':'female'):(prefix==='ru'?'тип не определён':'type unknown');o.textContent=`${voice.name} · ${voice.lang} · ${genderText}${voice.localService?'':' · online'}`;el.append(o)}
+ if(current&&[...el.options].some(o=>o.value===current))el.value=current;
+}
+function findGenderVoice(locale,gender){
+ const prefix=String(locale).toLowerCase().startsWith('ru')?'ru':'en';
+ const candidates=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(prefix)&&classifyVoiceGender(v,locale)===gender);
+ return candidates.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;
+}
+function updateVoiceChoiceUI(){
+ for(const [lang,prefix] of [['ru','ru-RU'],['en','en-US']]){
+  const gender=state.prefs[lang==='ru'?'voiceRuGender':'voiceEnGender']||'male';
+  const badge=$(lang==='ru'?'voiceRuChosenBadge':'voiceEnChosenBadge');
+  if(badge)badge.textContent=lang==='ru'?'Профиль: '+(gender==='female'?'женский':'мужской'):'Profile: '+(gender==='female'?'female':'male');
+  for(const g of ['male','female'])document.querySelectorAll(`[data-voice-preview="${lang}:${g}"]`).forEach(b=>b.classList.toggle('is-selected',g===gender));
+  const suffix=lang==='ru'?'MaleName':'MaleName';
+  const male=findGenderVoice(prefix,'male'),female=findGenderVoice(prefix,'female');
+  const maleEl=$(lang==='ru'?'voiceRuMaleName':'voiceEnMaleName'),femaleEl=$(lang==='ru'?'voiceRuFemaleName':'voiceEnFemaleName');
+  if(maleEl)maleEl.textContent=male?male.name:'Нет распознанного мужского голоса';
+  if(femaleEl)femaleEl.textContent=female?female.name:'Нет распознанного женского голоса';
+ }
+}
+function updateVoiceCatalog(){
+ const voices=speechVoices();populateVoiceSelect('voiceRuSelect','ru',state.prefs.voiceRuVoice||'');populateVoiceSelect('voiceEnSelect','en',state.prefs.voiceEnVoice||'');
+ const ru=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('ru')).length,en=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('en')).length;
+ const status=$('voiceCatalogStatus');if(status)status.textContent=`Голоса устройства: русский — ${ru}, English — ${en}. Сначала сравни варианты, затем нажми «Оставить»; можно выбрать голос вручную ниже.`;
+ updateVoiceChoiceUI();
+}
+if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=updateVoiceCatalog;setTimeout(updateVoiceCatalog,250);setTimeout(updateVoiceCatalog,1200)}
+function outputLocale(text,forced){
+ if(forced)return forced;
+ const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;
+ const value=String(text||'');const ru=(value.match(/[А-Яа-яЁё]/g)||[]).length;const en=(value.match(/[A-Za-z]/g)||[]).length;
+ return ru>=en?'ru-RU':'en-US';
+}
+function chosenVoice(locale){
+ const voices=speechVoices(),isRu=locale.toLowerCase().startsWith('ru'),select=$(isRu?'voiceRuSelect':'voiceEnSelect'),wanted=select?.value;
+ if(wanted){const found=voices.find(v=>(v.voiceURI||v.name)===wanted);if(found)return found}
+ const gender=state.prefs[isRu?'voiceRuGender':'voiceEnGender']||'male';
+ const profiled=findGenderVoice(locale,gender);if(profiled)return profiled;
+ const candidates=voices.filter(v=>(v.lang||'').toLowerCase().startsWith(isRu?'ru':'en'));
+ return candidates.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;
+}
+function voiceSample(locale){return String(locale).toLowerCase().startsWith('ru')?'Здравствуйте. Я Архангел. Я внимательно разберу задачу, проверю детали и предложу точное решение.':'Hello. I am Archangel. I will examine the task carefully, verify the details, and give you a precise solution.'}
+function previewVoiceVariant(locale,gender){
+ if(!('speechSynthesis'in window))return toast('Синтез речи недоступен в этом браузере.');
+ const voice=findGenderVoice(locale,gender);
+ if(!voice){toast(`Не найден явно распознаваемый ${gender==='male'?'мужской':'женский'} голос для ${locale}. Попробуй выбрать любой вариант вручную в списке.`);return}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=String(locale).toLowerCase().startsWith('ru')?.97:.98;u.pitch=.98;u.volume=1;
+ const status=$('voiceCatalogStatus');if(status)status.textContent=`Сравнение: ${voice.name} · ${voice.lang}. Это системный голос устройства; характер и естественность зависят от установленного голосового движка.`;
+ speechSynthesis.speak(u);
+}
+function applyVoiceGender(locale,gender){
+ const isRu=String(locale).toLowerCase().startsWith('ru'),voice=findGenderVoice(locale,gender);
+ if(!voice){toast('Такой тип голоса не найден в системе. Выбери доступный голос в списке вручную.');return}
+ const key=isRu?'voiceRuGender':'voiceEnGender',select=$(isRu?'voiceRuSelect':'voiceEnSelect');
+ state.prefs[key]=gender;state.prefs[isRu?'voiceRuVoice':'voiceEnVoice']=voice.voiceURI||voice.name;
+ if(select)select.value=voice.voiceURI||voice.name;
+ save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);
+}
+// Voice audition handlers are registered once by the three-language laboratory below.
+function setVoiceUI(){
+ const current=$('voiceLanguage')?.value||'ru-RU',en=current.startsWith('en'),es=current.startsWith('es');
+ $('voiceStart').classList.toggle('listening',voiceWake);
+ $('voiceStart').textContent=voiceWake?(voiceActive?(en?'ACTIVE · listening for commands':es?'ACTIVO · escuchando':'АКТИВЕН · ожидание команд'):(en?'WAITING FOR WAKE PHRASE':es?'ESPERANDO LA FRASE CLAVE':'ОЖИДАНИЕ КЛЮЧЕВОЙ ФРАЗЫ')):(en?'Enable wake phrase listening':es?'Activar escucha de palabra clave':'Включить ожидание ключевой фразы');
+ $('voiceState').textContent=!voiceWake?(en?'Microphone is off':es?'Micrófono apagado':'Микрофон выключен'):voiceActive?(en?'Active. Say “Deactivate” to pause.':es?'Activo. Di «Desactivar» para pausar.':'Активный режим. Скажи «Деактивировать» для ожидания.'):(en?'Listening for “Activate”.':es?'Escuchando «Activar».':'Микрофон слушает фразу «Активировать».');
+}
+function startRecognition(){
+ if(!SR){toast('Браузер не поддерживает распознавание речи. Используй актуальный Chrome или Edge.');return}
+ if(recognition)try{recognition.stop()}catch{}
+ recognition=new SR();recognition.lang=$('voiceLanguage')?.value||'ru-RU';recognition.continuous=true;recognition.interimResults=true;recognition.maxAlternatives=1;
+ recognition.onresult=e=>{let final='';for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';const raw=final.trim(),text=raw.toLowerCase();if(!text)return;
+  const deactivate=/деактивировать|остановить прослушивание|\bdeactivate\b|\bstop listening\b|\barchangel,? deactivate\b|\bdesactivar\b|\bdeja de escuchar\b/.test(text);
+  const activate=/активировать|активируй|\bactivate\b|\barchangel,? activate\b|\bactivar\b|\bactiva\b/.test(text);
+  if(deactivate){voiceActive=false;speak(recognition.lang.startsWith('en')?'Voice commands paused. Say Activate to resume.':recognition.lang.startsWith('es')?'Comandos pausados. Di «Activar» para continuar.':'Голосовые команды приостановлены. Скажи «Активировать», чтобы продолжить.',recognition.lang);setVoiceUI();return}
+  if(activate){voiceActive=true;speak(recognition.lang.startsWith('en')?'Archangel activated. I am listening.':recognition.lang.startsWith('es')?'Archangel activado. Te escucho.':'Архангел активирован. Слушаю.',recognition.lang);setVoiceUI();return}
+  if(voiceActive){$('chatInput').value=raw;sendChat()}
+ };
+ recognition.onerror=e=>{if(e.error==='not-allowed'){voiceWake=false;voiceActive=false;setVoiceUI();toast('Нет разрешения на микрофон')}else if(e.error!=='no-speech')$('voiceState').textContent='Ошибка распознавания: '+e.error};
+ recognition.onend=()=>{if(voiceWake&&!voiceSpeaking){setTimeout(()=>{if(voiceWake&&!voiceSpeaking)try{recognition.start()}catch{}},500)}};
+ try{recognition.start();voiceWake=true;voiceActive=false;setVoiceUI()}catch(e){toast('Не удалось запустить распознавание: '+e.message)}
+}
+$('voiceStart').onclick=()=>{if(voiceWake){voiceActive=!voiceActive;setVoiceUI();toast(voiceActive?'Активный режим включён вручную':'Возврат в ожидание ключевой фразы')}else startRecognition()};
+$('voiceStop').onclick=()=>{voiceWake=false;voiceActive=false;if(recognition){recognition.onend=null;try{recognition.stop()}catch{}recognition=null}setVoiceUI();toast('Микрофон выключен')};
+function speak(text,forcedLocale){
+ if(!('speechSynthesis'in window))return;
+ const clean=String(text).replace(/https?:\/\/\S+/g,'ссылка').replace(/```[\s\S]*?```/g,'код пропущен').slice(0,2500);if(!clean.trim())return;
+ const locale=outputLocale(clean,forcedLocale),isRu=locale.toLowerCase().startsWith('ru');
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(clean);u.lang=locale;
+ u.rate=+(isRu?$('voiceRateRu')?.value:$('voiceRateEn')?.value)|| (isRu?.97:.98);
+ u.pitch=+(isRu?$('voicePitchRu')?.value:$('voicePitchEn')?.value)||(isRu?.96:.97);u.volume=1;
+ const voice=chosenVoice(locale);if(voice)u.voice=voice;
+ const voiceName=voice?`${voice.name} (${voice.lang})`:(isRu?'голос системы · русский':'system voice · English');
+ const status=$('voiceCatalogStatus');if(status)status.textContent=`Текущая озвучка: ${voiceName}. Скорость ${u.rate.toFixed(2)}× · тембр ${u.pitch.toFixed(2)}.`;
+ const resume=voiceWake&&!!recognition;
+ if(resume){voiceSpeaking=true;try{recognition.stop()}catch{}}
+ u.onend=()=>{voiceSpeaking=false;if(resume&&voiceWake)setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550)};
+ u.onerror=()=>{voiceSpeaking=false;if(resume&&voiceWake)setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550)};
+ speechSynthesis.speak(u);
+}
+// English output is selected from the language controls; duplicate English audition panel removed.
+$('refreshVoices').onclick=()=>{updateVoiceCatalog();toast('Список системных голосов обновлён')};
+for(const id of ['voiceRateRu','voicePitchRu','voiceRateEn','voicePitchEn'])$(id)?.addEventListener('input',updateVoiceValueLabels);
+for(const [id,key,lang] of [['voiceRuSelect','voiceRuVoice','ru-RU'],['voiceEnSelect','voiceEnVoice','en-US']])$(id)?.addEventListener('change',()=>{state.prefs[key]=$(id).value;const selected=speechVoices().find(v=>(v.voiceURI||v.name)===$(id).value);if(selected){const g=classifyVoiceGender(selected,lang);if(g!=='unknown')state.prefs[lang.startsWith('ru')?'voiceRuGender':'voiceEnGender']=g;}save();updateVoiceChoiceUI();});
+$('voiceLanguage')?.addEventListener('change',()=>{if(voiceWake){if(recognition){recognition.onend=null;try{recognition.stop()}catch{}recognition=null}startRecognition()}else setVoiceUI()});
+
+
+// Keyboard shortcuts: Ctrl/Cmd+K opens local search; Ctrl/Cmd+Enter sends chat; Esc closes overlays.
+window.addEventListener('keydown',e=>{
+ const mod=e.ctrlKey||e.metaKey;
+ if(mod&&e.key.toLowerCase()==='k'){e.preventDefault();go('search');setTimeout(()=>$('searchQuery').focus(),30);}
+ if(mod&&e.key==='Enter'&&$('page-chat').classList.contains('active')){e.preventDefault();sendChat();}
+ if(e.key==='Escape'){
+  const modal=$('modal');if(modal?.classList.contains('show'))$('closeModal').click();
+  if(document.activeElement?.id==='chatInput')document.activeElement.blur();
+ }
+});
+
+// Restore and initialization.
+// App initialization is performed after the 3.1 voice module below.
+window.addEventListener('beforeunload',()=>{if(recognition){voiceWake=false;try{recognition.stop()}catch{}}});
+
+// ===== ARCHANGEL AI 3.0 CORE =====
+const ARCHANGEL_VERSION='4.1.0';
+let activeController=null;
+const localGateway=()=>((location.protocol==='http:'||location.protocol==='https:')&&!!location.hostname);
+async function gatewayJSON(path,payload){
+ const r=await fetch(path,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ let d={};try{d=await r.json()}catch{}
+ if(!r.ok)throw Error(d.error||`HTTP ${r.status}`);return d;
+}
+async function extractDocument(file){
+ if(file.size>10*1024*1024)throw Error('Максимум 10 МБ для извлечения текста.');
+ if(!localGateway())throw Error('Для извлечения PDF/DOCX необходим доступный сервер ARCHANGEL.');
+ const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)});
+ const result=await gatewayJSON('/api/extract',{name:file.name,data});
+ if(result.warning)toast(result.warning);
+ return result.text||'';
+}
+function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)});}
+// One attachment pipeline for picker and drag/drop. It validates files and reports progress.
+async function addChatFiles(fileList){
+ const files=[...fileList];if(!files.length)return;
+ let added=0, imageBytes=pendingFiles.filter(f=>f.kind==='image').reduce((n,f)=>n+(f.data?.length||0),0);
+ if(files.length>12){toast('За один раз можно добавить не более 12 вложений.');return;}
+ for(let i=0;i<files.length;i++){
+  const file=files[i],ext=(file.name.split('.').pop()||'').toLowerCase();
+  $('tokenHint').textContent=`Загрузка вложения ${i+1}/${files.length}: ${file.name}`;
+  try{
+   if(file.size>8*1024*1024)throw Error('Максимальный размер вложения — 8 МБ.');
+   const imageExt=['png','jpg','jpeg','webp','gif'];
+   const textExt=['txt','md','csv','json','py','js','ts','html','css','xml','yaml','yml','log'];
+   if(file.type.startsWith('image/')||imageExt.includes(ext)){
+    const data=await fileToDataURL(file);if(imageBytes+data.length>11*1024*1024)throw Error('Общий размер изображений не должен превышать 11 МБ.');imageBytes+=data.length;pendingFiles.push({name:file.name,type:file.type||'image/'+(ext==='jpg'?'jpeg':ext),data,kind:'image'});
+   }else if(['pdf','docx'].includes(ext)){
+    const text=await extractDocument(file);pendingFiles.push({name:file.name,type:file.type,text:text||'Текст не извлечён; оригинал недоступен в запросе.',kind:'text'});
+   }else if(textExt.includes(ext)){
+    const text=(await file.text()).slice(0,140000);pendingFiles.push({name:file.name,type:file.type,text,kind:'text'});
+   }else throw Error('Формат не поддерживается. Используй TXT, MD, CSV, JSON, код, PDF, DOCX или изображение.');
+   added++;
+  }catch(err){toast(`${file.name}: ${err.message}`)}
+  renderAttach();
+ }
+ $('tokenHint').textContent=added?`Вложений готово: ${added}`:'Готов';
+}
+$('chatFilePicker').addEventListener('change',e=>{e.stopImmediatePropagation();const files=[...e.target.files];e.target.value='';addChatFiles(files)},true);
+const chatDrop=document.querySelector('.chat-card');
+if(chatDrop){
+ chatDrop.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();chatDrop.classList.add('drag-over')}});
+ chatDrop.addEventListener('dragleave',e=>{if(!chatDrop.contains(e.relatedTarget))chatDrop.classList.remove('drag-over')});
+ chatDrop.addEventListener('drop',e=>{if(e.dataTransfer?.files?.length){e.preventDefault();chatDrop.classList.remove('drag-over');addChatFiles(e.dataTransfer.files)}});
+}
+// Extract document text while importing into the persistent local library.
+handleFiles=async function(files){
+ const batch=[...files];if(!batch.length)return;
+ const status=$('fileUploadStatus'),label=$('fileUploadText'),percent=$('fileUploadPercent'),bar=$('fileUploadBar');
+ if(status)status.hidden=false;
+ let added=0,failed=0;
+ const allowedImages=['png','jpg','jpeg','webp','gif'];
+ const allowedText=['txt','md','csv','json','py','js','ts','html','css','xml','yaml','yml','log'];
+ for(let i=0;i<batch.length;i++){
+  const file=batch[i],ext=(file.name.split('.').pop()||'').toLowerCase();
+  const progress=Math.round(i/batch.length*100);
+  if(label)label.textContent=`Обработка ${i+1} из ${batch.length}: ${file.name}`;
+  if(percent)percent.textContent=progress+'%';if(bar)bar.style.width=progress+'%';
+  try{
+   if(file.size>10*1024*1024)throw Error('Максимальный размер файла — 10 МБ.');
+   if(!allowedImages.includes(ext)&&!allowedText.includes(ext)&&!['pdf','docx'].includes(ext))throw Error('Этот формат не поддерживается.');
+   const type=allowedImages.includes(ext)?'image':ext==='pdf'?'pdf':ext==='docx'?'docx':'document';
+   let text='';
+   if(allowedText.includes(ext))text=(await file.text()).slice(0,16000);
+   else if(['pdf','docx'].includes(ext)){
+    try{text=(await extractDocument(file)).slice(0,16000)}
+    catch(e){toast(`${file.name}: ${e.message}`)}
+   }
+   const f={id:uid(),name:file.name,type,ext,size:file.size,date:now(),text};
+   await putLibraryAsset(f.id,file);state.library.unshift(f);added++;
+
+  }catch(e){failed++;toast(`${file.name}: ${e.message}`)}
+  const done=Math.round((i+1)/batch.length*100);if(percent)percent.textContent=done+'%';if(bar)bar.style.width=done+'%';
+ }
+ if(added)record('library',`Импортировано файлов: ${added}`,`Ошибок: ${failed}`);
+ save();renderAll();
+ if(label)label.textContent=`Готово: добавлено ${added}, ошибок ${failed}.`;
+ if(percent)percent.textContent='100%';if(bar)bar.style.width='100%';
+ toast(`Загрузка завершена: добавлено ${added}, ошибок ${failed}.`);
+ if(status&&status.dataset.hideTimer)clearTimeout(Number(status.dataset.hideTimer));
+ if(status)status.dataset.hideTimer=String(setTimeout(()=>{status.hidden=true;if(bar)bar.style.width='0%'},4500));
+};
+const libraryPage=$('page-library');
+if(libraryPage){
+ libraryPage.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();libraryPage.classList.add('file-drag-active')}});
+ libraryPage.addEventListener('dragleave',e=>{if(!libraryPage.contains(e.relatedTarget))libraryPage.classList.remove('file-drag-active')});
+ libraryPage.addEventListener('drop',e=>{if(e.dataTransfer?.files?.length){e.preventDefault();libraryPage.classList.remove('file-drag-active');handleFiles(e.dataTransfer.files)}});
+}
+// Replace legacy provider catalogue with provider IDs that are user-editable.
+let providerPresets={
+ custom:{endpoint:'',protocol:'chat',model:'',hint:'Укажи HTTPS endpoint совместимого Chat Completions API и точный ID модели.'},
+ gemini:{endpoint:'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',protocol:'chat',model:'',hint:'Google Gemini API. Введи актуальный ID модели из Google AI Studio; бесплатная квота зависит от модели и региона.'},
+ groq:{endpoint:'https://api.groq.com/openai/v1/chat/completions',protocol:'chat',model:'',hint:'Groq Cloud. Введи актуальный ID из каталога Groq; модельные лимиты меняются.'},
+ openrouter:{endpoint:'https://openrouter.ai/api/v1/chat/completions',protocol:'chat',model:'',hint:'OpenRouter. openrouter/free выбирает доступную бесплатную модель; доступны также точные ID с суффиксом :free.'},
+ ollama:{endpoint:'http://127.0.0.1:11434/v1/chat/completions',protocol:'chat',model:'',hint:'Локальный Ollama. Запусти Ollama, скачай модель и скопируй точное имя из команды ollama list. API-ключ не нужен.'},
+ openai:{endpoint:'https://api.openai.com/v1/chat/completions',protocol:'chat',model:'',hint:'OpenAI-compatible Chat Completions. API тарифицируется отдельно; укажи модель, доступную твоему API-проекту.'}
+};
+$('apiProvider').addEventListener('change',()=>{const id=$('apiProvider').value;const p=providerPresets[id];if(!p)return;$('apiEndpoint').value=p.endpoint;$('apiModel').value=p.model;$('apiKey').required=id!=='ollama';$('apiKey').placeholder=id==='ollama'?'Для Ollama ключ не нужен':'Ключ из панели API-провайдера';$('providerHint').textContent=p.hint;});
+$('saveApi').onclick=async()=>{
+ if(!localGateway())return toast('Сервер ARCHANGEL недоступен. Обнови страницу или попробуй позже.');
+ const provider=$('apiProvider').value,model=$('apiModel').value.trim(),key=provider==='ollama'?'':$('apiKey').value.trim(),endpoint=$('apiEndpoint').value.trim();
+ if(!model)return toast('Укажи точный ID модели из каталога провайдера.');if(provider!=='ollama'&&!key)return toast('Введи API-ключ провайдера.');if(provider==='custom'&&!/^https:\/\//i.test(endpoint))return toast('Пользовательский endpoint должен начинаться с HTTPS.');if(provider==='ollama'&&location.hostname!== '127.0.0.1'&&location.hostname!=='localhost')return toast('Ollama доступна только при локальном запуске на компьютере.');
+ $('saveApi').disabled=true;
+ try{await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};$('apiKey').value='';$('apiKey').type='password';$('toggleApiKey').textContent='◉';apiStatus(`Шлюз настроен: ${provider} · ${model}. Ключ хранится только в памяти текущей сессии сервера.`,true);renderAll();toast('Провайдер подключён к серверу ARCHANGEL.');}
+ catch(e){apiStatus('Ошибка настройки: '+e.message,false);toast(e.message)}finally{$('saveApi').disabled=false;}
+};
+$('disconnectApi').onclick=async()=>{
+ const button=$('disconnectApi');button.disabled=true;
+ try{
+  const response=await fetch('/api/disconnect',{method:'POST',credentials:'same-origin'});
+  let result={};try{result=await response.json()}catch{}
+  if(!response.ok||!result.ok)throw Error(result.error||`HTTP ${response.status}`);  api={protocol:'chat',endpoint:'/api/chat',model:'',key:'',provider:null};
+  $('apiKey').value='';$('apiModel').value='';
+  apiStatus('Провайдер отключён. Сервер подтвердил удаление ключа из памяти.',false);
+  renderAll();toast('Подключение отключено, ключ удалён из RAM сервера.');
+ }catch(e){apiStatus('Не удалось подтвердить отключение: '+e.message,false);toast('Отключение не подтверждено. Проверь окно сервера ARCHANGEL.');}
+ finally{button.disabled=false;}
+};
+// Build an OpenAI-compatible conversation and consume server-sent token events.
+modelRequest=async function(q,files=[],onDelta=()=>{}){
+ const history=state.messages.slice(0,-1).slice(-18).filter(m=>m.role==='user'||m.role==='assistant');
+ const prompt=[];if(q)prompt.push(q);
+ for(const f of files){if(f.kind==='text')prompt.push(`Содержимое файла «${f.name}»:\n${f.text||'(текст не извлечён)'}`);}
+ const promptText=prompt.join('\n\n')||'Проанализируй приложенное изображение.';
+ const imageBytes=files.filter(f=>f.kind==='image'&&f.data).reduce((sum,f)=>sum+f.data.length,0);if(imageBytes>11*1024*1024)throw Error('Суммарный размер изображений превышает 11 МБ. Отправь меньше изображений или уменьши их размер.');
+ const content=[{type:'text',text:promptText}];for(const f of files)if(f.kind==='image'&&f.data)content.push({type:'image_url',image_url:{url:f.data}});
+ const messages=[{role:'system',content:systemPrompt()},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
+ const controller=activeController||new AbortController();
+ let response;try{response=await fetch('/api/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,temperature:.35}),signal:controller.signal});}catch(e){if(e.name==='AbortError')throw e;throw Error('Не удалось связаться с локальным шлюзом. Проверь, что окно сервера открыто: '+e.message)}
+ if(!response.ok){let data={};try{data=await response.json()}catch{}throw Error(data.error||`Шлюз вернул HTTP ${response.status}`)}
+ const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',answer='',finished=false;
+ while(!finished){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const lines=buffer.split('\n');buffer=lines.pop()||'';for(const line of lines){if(!line.startsWith('data:'))continue;let event;try{event=JSON.parse(line.slice(5).trim())}catch{continue;}if(event.error)throw Error(event.error);if(event.delta){answer+=event.delta;onDelta(answer);}if(event.done)finished=true;}}
+ if(!answer.trim())return 'Модель вернула пустой ответ.';return answer;
+};
+sendChat=async function(){
+ const q=$('chatInput').value.trim();if(activeController){activeController.abort();return;}if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;
+ const files=[...pendingFiles];$('chatInput').value='';pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённые файлы.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=false;$('sendButton').textContent='■';$('sendButton').classList.add('is-stop');$('sendButton').title='Остановить генерацию';
+ const thinking=showThinking();let body=null,answer='';activeController=new AbortController();
+ try{
+  if(api.key==='server-configured'){
+   thinking.remove();const el=document.createElement('div');el.className='message assistant';const meta=document.createElement('div');meta.className='meta';meta.textContent='АРХАНГЕЛ';body=document.createElement('div');body.textContent='';el.append(meta,body);$('messages').appendChild(el);
+   answer=await modelRequest(q,files,value=>{body.textContent=value;$('messages').scrollTop=$('messages').scrollHeight;});
+  }else{
+   thinking.remove();answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nИзображение приложено, но для смыслового анализа подключи vision-модель.';addMessage('assistant',answer);
+  }
+  if(body){body.textContent=answer;state.messages.push({role:'assistant',text:answer,time:Date.now()});state.messages=state.messages.slice(-80);save();}
+  if(voiceActive)speak(answer);
+ }catch(e){thinking.remove();if(e.name==='AbortError'){answer='Генерация остановлена.';}else answer='Ошибка подключения: '+e.message;if(body){body.textContent+=(body.textContent?'\n\n':'')+answer;state.messages.push({role:'assistant',text:body.textContent,time:Date.now()});save();}else addMessage('assistant',answer);}
+ finally{activeController=null;$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('sendButton').textContent='➤';$('sendButton').classList.remove('is-stop');$('sendButton').title='Отправить';$('chatInput').focus();}
+};
+$('sendButton').onclick=sendChat;
+// API test uses a minimal streamed completion; no credential is exposed to the browser after configuration.
+$('testApi').onclick=async()=>{
+ if(api.key!=='server-configured')return toast('Сначала подключи провайдера.');
+ const button=$('testApi'),oldMessages=state.messages;
+ button.disabled=true;button.textContent='Проверка…';
+ try{
+  state.messages=[{role:'user',text:'Ответь одним словом: готов.'}];
+  const ans=await modelRequest('Ответь одним словом: готов.',[]);
+  apiStatus('Соединение работает. Ответ модели: '+ans.slice(0,140),true);toast('Тест API успешен.');
+ }catch(e){apiStatus('Проверка не пройдена: '+e.message,false);toast(e.message)}
+ finally{state.messages=oldMessages;button.disabled=false;button.textContent='Проверить соединение';}
+};
+// Gateway status on startup.
+// Gateway state is restored by initializeArchangel() once, after local profile loading.
+// Version marker in page metadata.
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.1 · CZERNEBOG');
+
+
+// ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
+// VOICE_LANGS is declared near the beginning of the script to prevent TDZ errors.
+
+function localeKey(locale){const l=String(locale||'').toLowerCase();return l.startsWith('ru')?'ru':l.startsWith('es')?'es':'en';}
+function updateVoiceValueLabels(){for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];for(const [id,suffix] of [[c.rate,'×'],[c.pitch,'']]){const el=$(id),label=$(id+'Val');if(el&&label)label.textContent=(+el.value).toFixed(2)+suffix;}}}
+function classifyVoiceGender(v,locale){const n=String(v.name||'').toLowerCase();const key=localeKey(locale);const male=key==='ru'?/(alexei|alexey|aleksei|pavel|dmitry|dmitriy|maxim|maksim|mikhail|oleg|sergey|nikolay|vladimir|igor|male|man)/i.test(n):key==='es'?/(jorge|diego|carlos|miguel|pablo|juan|antonio|male|man|masculin)/i.test(n):/(david|guy|christopher|ryan|mark|daniel|james|george|thomas|andrew|michael|male|man)/i.test(n);const female=key==='ru'?/(daria|darya|irina|alena|elena|olga|svetlana|natalia|polina|ekaterina|marina|anna|female|woman)/i.test(n):key==='es'?/(lucia|lucía|sofia|sofía|carmen|maria|maría|elena|female|woman|femenin)/i.test(n):/(zira|aria|jenny|sara|samantha|victoria|ava|emma|julia|karen|susan|female|woman)/i.test(n);if(male)return'male';if(female)return'female';return'unknown';}
+function findGenderVoice(locale,gender){
+ const key=localeKey(locale),cfg=VOICE_LANGS[key];
+ const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(cfg.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name));
+ const exact=list.filter(v=>classifyVoiceGender(v,locale)===gender);
+ if(exact.length)return exact[0];
+ // Windows often exposes localized voices without gender metadata in their names.
+ // Fall back to available voices instead of incorrectly reporting that no voice exists.
+ if(!list.length)return null;
+ const opposite=list.filter(v=>classifyVoiceGender(v,locale)===(gender==='male'?'female':'male'));
+ const neutral=list.filter(v=>classifyVoiceGender(v,locale)==='unknown');
+ const pool=neutral.length?neutral:list;
+ if(pool.length>1)return gender==='male'?pool[0]:pool[1];
+ return pool[0]||opposite[0]||list[0]||null;
+}
+function voiceProfilePitch(locale,gender,base){
+ const v=findGenderVoice(locale,gender);if(!v)return base;
+ if(classifyVoiceGender(v,locale)!=='unknown')return base;
+ return gender==='male'?Math.max(.65,Math.min(1.1,base*.86)):Math.max(.65,Math.min(1.1,base*1.14));
+}
+function populateVoiceSelect(id,prefix,selected){const el=$(id);if(!el)return;const current=selected||el.value;const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(prefix));el.innerHTML='';const o=document.createElement('option');o.value='';o.textContent=prefix==='ru'?'Автовыбор русского голоса':prefix==='es'?'Selección automática':'Auto-select English voice';el.append(o);list.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name)).forEach(v=>{const x=document.createElement('option');x.value=v.voiceURI||v.name;x.textContent=`${v.name} · ${v.lang}${v.localService?'':' · online'}`;el.append(x)});if(current&&[...el.options].some(x=>x.value===current))el.value=current;}
+function updateVoiceChoiceUI(){for(const [key,locale,labelMale,labelFemale] of [['ru','ru-RU','мужской','женский'],['en','en-US','male','female'],['es','es-ES','masculino','femenino']]){const g=state.prefs[VOICE_LANGS[key].genderKey]||'male';const cap=key==='ru'?'Ru':key==='en'?'En':'Es';const badge=$(`voice${cap}ChosenBadge`);if(badge)badge.textContent=(key==='ru'?'Профиль: ':key==='es'?'Perfil: ':'Profile: ')+(g==='female'?labelFemale:labelMale);for(const x of ['male','female'])document.querySelectorAll(`[data-voice-preview="${key}:${x}"]`).forEach(b=>b.classList.toggle('is-selected',x===g));for(const [suffix,gender] of [['MaleName','male'],['FemaleName','female']]){const v=findGenderVoice(locale,gender),el=$(`voice${cap}${suffix}`);if(el)el.textContent=v?(v.name+(classifyVoiceGender(v,locale)==='unknown'?(gender==='male'?' · низкий тембр':' · высокий тембр'):'')):(key==='ru'?'Нет голоса этого языка в системе':key==='es'?'No hay voces de este idioma instaladas':'No voices for this language installed');}}}
+function updateVoiceCatalog(){for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];populateVoiceSelect(c.select,c.prefix,state.prefs[c.voiceKey]||'');}const counts={};for(const k of Object.keys(VOICE_LANGS)){counts[k]=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(VOICE_LANGS[k].prefix)).length;}const status=$('voiceCatalogStatus');if(status)status.textContent=`Голоса устройства: русский — ${counts.ru}, English — ${counts.en}, español — ${counts.es}. Для длинного текста выбери голос устройства; настройки скорости и тембра сохраняются отдельно.`;updateVoiceChoiceUI();}
+function outputLocale(text,forced){if(forced)return forced;const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;if(state.prefs.language==='es')return'es-ES';if(state.prefs.language==='en')return'en-US';const value=String(text||'').toLowerCase();const ru=(value.match(/[а-яё]/g)||[]).length;const esMarks=(value.match(/[áéíóúüñ¿¡]/g)||[]).length;const esWords=(value.match(/\b(hola|gracias|por favor|buenos|buenas|usted|tarea|solución|analizar|puedes|quieres|sistema|respuesta)\b/g)||[]).length;const en=(value.match(/[a-z]/g)||[]).length;if(ru>Math.max(en,esMarks+esWords*3))return'ru-RU';if(esMarks+esWords*3>0&&esMarks+esWords*3>=en*.12)return'es-ES';return'en-US';}
+function chosenVoice(locale){const key=localeKey(locale),c=VOICE_LANGS[key],voices=speechVoices(),selected=$(c.select)?.value||state.prefs[c.voiceKey];if(selected){const v=voices.find(x=>(x.voiceURI||x.name)===selected);if(v)return v;}const g=state.prefs[c.genderKey]||'male';const profile=findGenderVoice(locale,g);if(profile)return profile;return voices.filter(v=>(v.lang||'').toLowerCase().startsWith(c.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;}
+function voiceSample(locale){const k=localeKey(locale);return k==='ru'?'Здравствуйте. Я Архангел. Я внимательно разберу задачу, проверю детали и предложу точное решение.':k==='es'?'Hola. Soy Archangel. Analizaré la tarea con atención, comprobaré los detalles y te propondré una solución precisa.':'Hello. I am Archangel. I will examine the task carefully, verify the details, and give you a precise solution.';}
+function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice){toast('Такой голос не найден автоматически. Выбери доступный вариант в списке вручную.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice.voiceURI||voice.name;const select=$(cfg.select);if(select)select.value=voice.voiceURI||voice.name;save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);}
+for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice){toast('Голос этого типа не найден в системе. Выбери доступный голос вручную ниже.');return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
+for(const b of document.querySelectorAll('[data-voice-use]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voiceUse.split(':');applyVoiceGender(VOICE_LANGS[key].locale,gender);});
+
+function splitSpeechText(text,max=220){const out=[];let rest=String(text||'').replace(/\s+/g,' ').trim();while(rest.length>max){let cut=-1;for(const re of [/[.!?。！？;:](?=\s)/g,/,\s/g,/\s/g]){let m;while((m=re.exec(rest))!==null)if(m.index>max*.55&&m.index<max)cut=m.index+m[0].length;if(cut>0)break;}if(cut<1)cut=max;out.push(rest.slice(0,cut).trim());rest=rest.slice(cut).trim();}if(rest)out.push(rest);return out;}
+function speak(text,forcedLocale){if(!('speechSynthesis'in window))return;const clean=String(text||'').replace(/https?:\/\/\S+/g,'').replace(/```[\s\S]*?```/g,'').replace(/\n{2,}/g,'. ').replace(/\s+/g,' ').trim();if(!clean)return;speechSynthesis.cancel();const locale=outputLocale(clean,forcedLocale),key=localeKey(locale),cfg=VOICE_LANGS[key],voice=chosenVoice(locale),rate=+$((cfg&&$(cfg.rate))?.value)||.98,pitch=+$((cfg&&$(cfg.pitch))?.value)||.97;const pieces=splitSpeechText(clean);let index=0;const status=$('voiceCatalogStatus');if(status)status.textContent=`Озвучка: ${voice?voice.name+' · '+voice.lang:'системный голос · '+locale}. Фрагмент ${pieces.length} · скорость ${rate.toFixed(2)}×.`;const resume=voiceWake&&!!recognition;if(resume){voiceSpeaking=true;try{recognition.stop()}catch{}}function next(){if(index>=pieces.length){voiceSpeaking=false;if(resume&&voiceWake)setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550);return;}const u=new SpeechSynthesisUtterance(pieces[index++]);u.lang=locale;if(voice)u.voice=voice;u.rate=rate;u.pitch=voiceProfilePitch(locale,state.prefs[cfg.genderKey]||'male',pitch);u.volume=1;u.onend=next;u.onerror=()=>{voiceSpeaking=false;if(resume&&voiceWake&&recognition)setTimeout(()=>{try{recognition.start()}catch{}},550);};speechSynthesis.speak(u);}next();}
+// Persist the selected interface and all three voice profiles.
+const oldRestorePrefs=restorePrefs;restorePrefs=function(){oldRestorePrefs();for(const k of ['interfaceLanguage','voiceEsVoice','voiceEsGender','voiceRateEs','voicePitchEs'])if(state.prefs[k]!==undefined&&$(k))$(k).value=state.prefs[k];if($('interfaceLanguage'))$('interfaceLanguage').value=state.prefs.interfaceLanguage||'ru';if($('voiceEsSelect'))$('voiceEsSelect').value=state.prefs.voiceEsVoice||'';applyInterfaceLanguage();updateVoiceCatalog();updateVoiceValueLabels();};
+$('savePrefs').onclick=()=>{for(const k of ['tone','detail','language','voiceLanguage','voiceOutputLanguage','answerStyle'])state.prefs[k]=$(k).value;state.prefs.interfaceLanguage=$('interfaceLanguage').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];state.prefs[c.voiceKey]=$(c.select)?.value||'';state.prefs[c.rate]=+$(c.rate).value;state.prefs[c.pitch]=+$(c.pitch).value;}for(const [id,key] of [['voiceRateEs','voiceRateEs'],['voicePitchEs','voicePitchEs']])state.prefs[key]=+$(id).value;save();applyInterfaceLanguage();updateVoiceValueLabels();toast(state.prefs.interfaceLanguage==='en'?'Settings saved':state.prefs.interfaceLanguage==='es'?'Ajustes guardados':'Настройки сохранены');};
+for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];$(c.select)?.addEventListener('change',()=>{state.prefs[c.voiceKey]=$(c.select).value;const v=speechVoices().find(x=>(x.voiceURI||x.name)===$(c.select).value);if(v){const g=classifyVoiceGender(v,c.locale);if(g!=='unknown')state.prefs[c.genderKey]=g;}save();});for(const id of [c.rate,c.pitch])$(id)?.addEventListener('input',updateVoiceValueLabels);}
+$('interfaceLanguage')?.addEventListener('change',()=>{state.prefs.interfaceLanguage=$('interfaceLanguage').value;applyInterfaceLanguage();});
+$('refreshVoices').onclick=()=>{updateVoiceCatalog();toast('Список системных голосов обновлён')};
+if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=updateVoiceCatalog;setTimeout(updateVoiceCatalog,300);setTimeout(updateVoiceCatalog,1400);}
+// Translate high-visibility navigation and settings labels in the selected interface language.
+const UI_TEXT={ru:{nav:['Обзор','Ассистент','Библиотека','Задачи и заметки','Поиск','История','Настройки'],top:{overview:'ОБЗОР СИСТЕМЫ',chat:'ИИ-АССИСТЕНТ',search:'ПОИСК',library:'БИБЛИОТЕКА',history:'ИСТОРИЯ',tasks:'ЗАДАЧИ И ЗАМЕТКИ',math:'МАТЕМАТИКА',code:'АНАЛИЗ КОДА',plugins:'МОДУЛИ',settings:'НАСТРОЙКИ'},settings:'Настройки',lang:'Язык ответа',tone:'Тон',detail:'Подробность',save:'Сохранить настройки',voice:'Голосовая лаборатория',recognition:'Язык распознавания',output:'Язык озвучивания',api:'ИИ и API',data:'Данные и резервная копия',about:'О приложении'},en:{nav:['Overview','Assistant','Library','Tasks & Notes','Search','History','Settings'],top:{overview:'SYSTEM OVERVIEW',chat:'AI ASSISTANT',search:'SEARCH',library:'LIBRARY',history:'HISTORY',tasks:'TASKS & NOTES',math:'MATHEMATICS',code:'CODE ANALYSIS',plugins:'MODULES',settings:'SETTINGS'},settings:'Settings',lang:'Response language',tone:'Tone',detail:'Detail level',save:'Save settings',voice:'Voice laboratory',recognition:'Speech recognition language',output:'Speech output language',api:'AI & API',data:'Data & backup',about:'About'},es:{nav:['Resumen','Asistente','Biblioteca','Tareas y notas','Buscar','Historial','Ajustes'],top:{overview:'RESUMEN DEL SISTEMA',chat:'ASISTENTE IA',search:'BÚSQUEDA',library:'BIBLIOTECA',history:'HISTORIAL',tasks:'TAREAS Y NOTAS',math:'MATEMÁTICAS',code:'ANÁLISIS DE CÓDIGO',plugins:'MÓDULOS',settings:'AJUSTES'},settings:'Ajustes',lang:'Idioma de respuesta',tone:'Tono',detail:'Nivel de detalle',save:'Guardar ajustes',voice:'Laboratorio de voz',recognition:'Idioma de reconocimiento',output:'Idioma de voz',api:'IA y API',data:'Datos y copia de seguridad',about:'Acerca de'}};
+function applyInterfaceLanguage(){const l=$('interfaceLanguage')?.value||state.prefs.interfaceLanguage||'ru',d=UI_TEXT[l]||UI_TEXT.ru;document.documentElement.lang=l;document.title=`ARCHANGEL AI · ${l==='ru'?'Помощник':l==='es'?'Asistente':'Assistant'}`;const nav=[...document.querySelectorAll('#navigation button[data-page],.nav-settings button[data-page]')];const order=['overview','chat','library','tasks','search','history','settings'];nav.forEach(b=>{const i=order.indexOf(b.dataset.page);if(i>=0){const icon=b.querySelector('.ico');b.innerHTML='';if(icon)b.append(icon);b.append(document.createTextNode(d.nav[i]));}});const page=document.querySelector('.page.active');if(page?.id==='page-settings')$('topTitle').textContent=d.top.settings;else if(page){const key=page.id.replace('page-','');$('topTitle').textContent=d.top[key]||'ARCHANGEL AI';}const setLabel=(id,v)=>{const x=document.querySelector(`label[for="${id}"]`);if(x)x.textContent=v;};setLabel('interfaceLanguage',l==='ru'?'Язык интерфейса':l==='es'?'Idioma de interfaz':'Interface language');setLabel('language',d.lang);setLabel('tone',d.tone);setLabel('detail',d.detail);setLabel('voiceLanguage',d.recognition);setLabel('voiceOutputLanguage',d.output);const h=document.querySelector('#page-settings .page-head h1');if(h)h.textContent=d.settings;const cards={'settings-style':d.settings,'settings-voice':d.voice,'settings-api':d.api,'settings-data':d.data,'settings-about':d.about};for(const [id,v] of Object.entries(cards)){const h=document.querySelector(`#${id} h3`);if(h)h.textContent=v;}const b=$('savePrefs');if(b)b.textContent=d.save;}
+// Preserve page title localization after navigation changes.
+const originalGo=go;go=function(page){originalGo(page);applyInterfaceLanguage();};
+// 3.2 staged initialization: finish local UI first, probe gateway with a timeout, then reveal the emblem.
+function setBootCaption(text){const el=$('bootCaption');if(el)el.textContent=text;}
+function waitAtMost(promise,ms){return Promise.race([promise,new Promise(resolve=>setTimeout(()=>resolve(null),ms))]);}
+async function initializeArchangel(){
+ const started=performance.now(),boot=$('bootScreen');
+ setBootCaption('ЗАГРУЗКА ЛОКАЛЬНОГО ПРОФИЛЯ');
+ load();
+ setBootCaption('ПОДГОТОВКА ИНТЕРФЕЙСА');
+ restorePrefs();updateVoiceCatalog();renderAll();restoreChat();setVoiceUI();updateVoiceValueLabels();
+ if(!SR&&$('voiceSupportBadge'))$('voiceSupportBadge').textContent='НЕТ API';
+ setBootCaption('ПРОВЕРКА ЛОКАЛЬНОГО ШЛЮЗА');
+ if(localGateway()){
+  try{
+   const status=await waitAtMost(fetch('/api/status',{cache:'no-store',credentials:'same-origin'}).then(r=>r.ok?r.json():null),1800);
+   if(status?.ok){
+    if(status.configured){api={protocol:'chat',endpoint:'/api/chat',model:status.model,key:'server-configured',provider:status.provider};apiStatus(`Шлюз активен: ${status.provider} · ${status.model}.`,true);}
+    else apiStatus('Локальный шлюз активен · подключи модель в настройках.',false);
+    renderAll();
+   }else apiStatus('Сервер ARCHANGEL отвечает с ошибкой. Проверь окно запуска.',false);
+  }catch(e){apiStatus('Локальный шлюз пока недоступен: '+e.message,false);}
+ }else apiStatus('Сервер ARCHANGEL недоступен. Обнови страницу или попробуй позже.',false);
+ const cover=$('heroCover');if(cover){try{await waitAtMost(cover.decode(),1800)}catch(e){}}
+ const remaining=Math.max(0,1100-(performance.now()-started));
+ await new Promise(resolve=>setTimeout(resolve,remaining));
+ setBootCaption('СИСТЕМА ГОТОВА К РАБОТЕ');
+ if(boot){boot.classList.add('is-ready');await new Promise(resolve=>setTimeout(resolve,780));boot.classList.add('is-hidden');setTimeout(()=>boot.remove(),500);}
+ document.body.classList.add('app-ready');
+}
+$('bootRetry')?.addEventListener('click',()=>location.reload());
+initializeArchangel().catch(reportBootError);
+
+</script>
+<script>
+// Progressive Web App: installation on iPhone and supported browsers.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', {scope:'/'}).catch(() => {}));
+}
+</script>
+<script id="archangel-41-install">
+(function(){
+ const button=document.getElementById('installApp');
+ let deferredInstall=null;
+ window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;button.title='Установить ARCHANGEL';});
+ window.addEventListener('appinstalled',()=>{deferredInstall=null;button.title='ARCHANGEL установлен';});
+ function updateConnectivity(){const n=document.getElementById('connectivityNotice');if(n)n.hidden=navigator.onLine;}
+ window.addEventListener('online',updateConnectivity);
+ window.addEventListener('offline',updateConnectivity);
+ updateConnectivity();
+ button?.addEventListener('click',async()=>{
+  if(deferredInstall){const event=deferredInstall;deferredInstall=null;try{await event.prompt()}catch(e){}return;}
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  const message=standalone?'ARCHANGEL уже открыт в режиме приложения.':ios?'Для установки на iPhone: открой ARCHANGEL в Safari → «Поделиться» → «На экран Домой» → «Добавить».':'Для установки: открой меню браузера и выбери «Установить приложение» или «Создать ярлык». Поддержка зависит от браузера.';
+  const overlay=document.createElement('div');overlay.className='modal open';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Установка ARCHANGEL');
+  const panel=document.createElement('div');panel.className='modal-panel';panel.style.maxWidth='430px';
+  const title=document.createElement('h3');title.textContent='УСТАНОВКА ARCHANGEL';title.style.margin='0 0 13px';
+  const p=document.createElement('p');p.textContent=message;p.style.cssText='font-size:14px;line-height:1.7;color:#ddd';
+  const close=document.createElement('button');close.className='btn';close.textContent='Понятно';close.style.marginTop='12px';
+  const dismiss=()=>overlay.remove();close.addEventListener('click',dismiss);overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});
+  panel.append(title,p,close);overlay.append(panel);document.body.append(overlay);close.focus();
+ });
+})();
+</script>
+</body></html>
