@@ -5,8 +5,8 @@
 <meta name="theme-color" content="#090909"><meta name="color-scheme" content="dark"><meta name="description" content="ARCHANGEL AI — персональный ИИ-помощник CZERNEBOG">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
 <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
-<link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
-<title>ARCHANGEL AI — Web Edition 4.10 | Czernebog</title>
+<link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="/icons/icon.svg?v=411">
+<title>ARCHANGEL AI ПОМОЩЬ</title>
 
 
 
@@ -658,7 +658,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.10</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.11</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -689,7 +689,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.10</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.11</div>
   </div>
 </aside>
 <main class="main">
@@ -820,8 +820,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.10.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.10.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.11.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.11.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1329,7 +1329,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.10 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.11 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
