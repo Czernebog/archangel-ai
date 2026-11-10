@@ -18,7 +18,7 @@ def _approved_inline_script_hashes():
         html = (ROOT / 'index.html').read_text(encoding='utf-8')
     except OSError:
         return ''
-    entries = re.findall(r'<script\\b[^>]*>([\\s\\S]*?)</script\\s*>', html, flags=re.IGNORECASE)
+    entries = re.findall(r'<script\b[^>]*>([\s\S]*?)</script\s*>', html, flags=re.IGNORECASE)
     return ' '.join("'sha256-" + base64.b64encode(hashlib.sha256(
         source.encode('utf-8')).digest()).decode('ascii') + "'" for source in entries)
 
