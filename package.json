@@ -34,7 +34,8 @@
           ]
         }
       ],
-      "artifactName": "ARCHANGEL-AI-Setup-${version}.${ext}"
+      "artifactName": "ARCHANGEL-AI-Setup-${version}.${ext}",
+      "icon": "desktop/icon.ico"
     },
     "nsis": {
       "oneClick": false,
