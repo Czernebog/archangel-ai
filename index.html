@@ -1070,7 +1070,7 @@ function renderAssistantBody(target,value){
  target.replaceChildren();
  const text=String(value||'').slice(0,60000);
  function appendInline(parent,line){
-  const tokens=/(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\]|\$[^$\n]{1,220}\$|`[^`\n]+`|\*\*[^*\n]+\*\*)/g;
+  const tokens=/(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\)|\$[^$\n]{1,220}\$|`[^`\n]+`|\*\*[^*\n]+\*\*)/g;
   let cursor=0,match;
   while((match=tokens.exec(line))!==null){
    if(match.index>cursor)parent.append(document.createTextNode(line.slice(cursor,match.index)));
@@ -1091,7 +1091,22 @@ function renderAssistantBody(target,value){
  let i=0,block=null,items=0;
  while(i<lines.length&&items++<800){
   const line=lines[i];
-  if(/^\s*```/.test(line)){
+  const mathOpening=/^\s*(?:\$\$|\\\\\[)/.exec(line);
+  if(mathOpening){
+   const closing=line.trim().startsWith('$')?'$':'\\\\]';
+   const content=[line.trim().slice(mathOpening[0].trim().length)];
+   let ended=content[0].includes(closing);
+   while(!ended&&i+1<lines.length&&content.join('\n').length<3500){
+    const next=lines[++i];content.push(next);
+    if(next.includes(closing))ended=true;
+   }
+   if(ended){
+    const raw=content.join('\n'),tex=raw.slice(0,raw.indexOf(closing)).trim();
+    const math=renderMathExpression(tex,true);
+    if(math){target.append(math);block=null;i++;continue;}
+   }
+  }
+  if(/^\s*\x60\x60\x60/.test(line)){
    const pre=document.createElement('pre'),code=document.createElement('code');i++;
    let raw='';
    while(i<lines.length&&!/^\s*```/.test(lines[i]))raw+=lines[i++]+'\n';
