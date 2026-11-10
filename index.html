@@ -1091,9 +1091,9 @@ function renderAssistantBody(target,value){
  let i=0,block=null,items=0;
  while(i<lines.length&&items++<800){
   const line=lines[i];
-  const mathOpening=/^\s*(?:\$\$|\\\\\[)/.exec(line);
+  const mathOpening=/^\s*(?:\$\$|\\\[)/.exec(line);
   if(mathOpening){
-   const closing=line.trim().startsWith('$')?'$':'\\\\]';
+   const closing=line.trim().startsWith('$$')?'$$':'\\]';
    const content=[line.trim().slice(mathOpening[0].trim().length)];
    let ended=content[0].includes(closing);
    while(!ended&&i+1<lines.length&&content.join('\n').length<3500){
