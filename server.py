@@ -525,7 +525,7 @@ class Handler(SimpleHTTPRequestHandler):
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'text/event-stream, application/json',
-            'User-Agent': 'ARCHANGEL-AI/4.1',
+            'User-Agent': 'ARCHANGEL-AI/4.15',
         }
         if cfg['api_key']:
             headers['Authorization'] = 'Bearer ' + cfg['api_key']
@@ -730,7 +730,7 @@ def main():
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     PORT = int(server.server_address[1])
     url = f'http://{HOST}:{PORT}'
-    print('\nARCHANGEL AI 4.1 | CZERNEBOG', flush=True)
+    print('\nARCHANGEL AI 4.15 | CZERNEBOG', flush=True)
     if TUNNEL_MODE:
         print(f'Локальный шлюз доступен только на {url}; публичный вход идёт через HTTPS-туннель.', flush=True)
         print('Сессии изолированы; переписки на сервере не сохраняются.', flush=True)
