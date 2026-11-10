@@ -1539,7 +1539,7 @@ $('disconnectApi').onclick=async()=>{
 };
 // Build an OpenAI-compatible conversation and consume server-sent token events.
 modelRequest=async function(q,files=[],onDelta=()=>{}){
- const history=state.messages.slice(0,-1).slice(-18).filter(m=>m.role==='user'||m.role==='assistant');
+ const history=state.messages.slice(0,-1).slice(-22).filter(m=>m.role==='user'||m.role==='assistant').map(m=>({role:m.role,text:String(m.text||'').slice(0,6500)}));
  const prompt=[];if(q)prompt.push(q);
  for(const f of files){if(f.kind==='text')prompt.push(`Содержимое файла «${f.name}»:\n${f.text||'(текст не извлечён)'}`);}
  const promptText=prompt.join('\n\n')||(files.some(f=>f.kind==='audio')?'Расшифруй и проанализируй прикреплённую аудиодорожку. Если слова неразборчивы, скажи об этом.':'Рассмотри приложенные изображения и внимательно прочитай видимый текст, математические символы и формулы.');
@@ -1558,13 +1558,43 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
  }
 
  const messages=[{role:'system',content:systemPrompt()},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
- const requestBody=JSON.stringify({messages,temperature:.25});
+ const requestBody=JSON.stringify({messages,temperature:.3});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
  let response;try{response=await fetch('/api/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:requestBody,signal:controller.signal});}catch(e){if(e.name==='AbortError')throw e;throw Error('Не удалось связаться с локальным шлюзом. Проверь, что окно сервера открыто: '+e.message)}
  if(!response.ok){let data={};try{data=await response.json()}catch{}throw Error(data.error||`Шлюз вернул HTTP ${response.status}`)}
- const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',answer='',finished=false;
- while(!finished){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const lines=buffer.split('\n');buffer=lines.pop()||'';for(const line of lines){if(!line.startsWith('data:'))continue;let event;try{event=JSON.parse(line.slice(5).trim())}catch{continue;}if(event.error)throw Error(event.error);if(event.delta){answer+=event.delta;onDelta(answer);}if(event.done)finished=true;}}
+ const reader=response.body?.getReader();if(!reader)throw Error('Ответ сервера не поддерживает потоковую передачу.');
+ const decoder=new TextDecoder();let buffer='',answer='',finished=false,eventLines=[],lastUpdate=0;
+ const emit=()=>{onDelta(answer);lastUpdate=performance.now();};
+ const processEvent=()=>{
+  if(!eventLines.length)return;const raw=eventLines.join('\n').trim();eventLines=[];
+  if(raw==='[DONE]'){finished=true;return;}
+  let event;try{event=JSON.parse(raw)}catch{return;}
+  if(event.error)throw Error(typeof event.error==='string'?event.error:JSON.stringify(event.error));
+  if(typeof event.delta==='string'&&event.delta){answer+=event.delta;if(performance.now()-lastUpdate>70)emit();}
+  if(event.done)finished=true;
+ };
+ const processLine=line=>{
+  if(line.endsWith('\r'))line=line.slice(0,-1);
+  if(line===''){processEvent();return;}
+  if(line.startsWith('data:'))eventLines.push(line.slice(5).trimStart());
+ };
+ try{
+  while(!finished){
+   const {value,done}=await reader.read();
+   if(done)break;
+   buffer+=decoder.decode(value,{stream:true});
+   if(buffer.length>200000)throw Error('Слишком большой ответ сервера.');
+   let pos;while((pos=buffer.indexOf('\n'))>=0){
+    const line=buffer.slice(0,pos);buffer=buffer.slice(pos+1);processLine(line);
+    if(finished)break;
+   }
+  }
+  buffer+=decoder.decode();
+  if(buffer.trim())processLine(buffer);
+  processEvent();
+ }finally{try{await reader.cancel()}catch{}try{reader.releaseLock()}catch{}}
+ if(answer)emit();
  if(!answer.trim())return 'Модель вернула пустой ответ.';return answer;
 };
 sendChat=async function(){
