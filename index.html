@@ -5,9 +5,9 @@
 <meta name="theme-color" content="#090909"><meta name="color-scheme" content="dark"><meta name="description" content="ARCHANGEL AI — персональный ИИ-помощник CZERNEBOG">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
 <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
-<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-<title>ARCHANGEL AI — Web Edition 4.6 | Czernebog</title>
-<link rel="preload" as="image" href="assets/archangel-user-cover.jpg">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<title>ARCHANGEL AI — Web Edition 4.7 | Czernebog</title>
+
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpath fill=%22white%22 d=%22M50 8 96 92H76L50 42 24 92H4Z%22/%3E%3Cpath stroke=%22black%22 stroke-width=%229%22 d=%22M31 68h38%22/%3E%3C/svg%3E">
 
 <style>
@@ -627,12 +627,29 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   .sidebar{width:min(320px,90vw)!important}
 }
 </style>
+
+<style id="archangel-47-boot-fix">
+/* Stable boot emblem: no deferred source, no animated resizing, no unpainted frame. */
+#bootScreen{background:#090909!important;isolation:isolate;min-height:100svh;min-height:100dvh}
+#bootScreen .boot-mark,#bootScreen.is-ready .boot-mark{
+  width:104px!important;height:104px!important;min-width:104px;min-height:104px;
+  padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;
+  border:none!important;border-radius:0!important;transform:none!important;
+  transition:none!important;display:grid;place-items:center
+}
+#bootScreen .boot-mark img{display:block;width:104px!important;height:104px!important;min-width:104px;min-height:104px;object-fit:contain;padding:0!important;filter:none!important}
+#bootScreen.is-ready .boot-mark img{transform:none!important}
+#bootScreen .boot-name{font-size:14px;letter-spacing:.24em;padding-left:.24em;line-height:1.4}
+#bootScreen .boot-caption{min-height:20px;max-width:min(92vw,420px);line-height:1.5;text-align:center}
+#bootScreen.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#bootScreen,#bootScreen *{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
- <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" alt="Эмблема ARCHANGEL AI"></div><div class="boot-name">ARCHANGEL</div>
+ <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Cpath%20d%3D%22M160%2032%20296%20288h-66L160%20151%2090%20288H24Z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.4</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.7</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -663,7 +680,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.6</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.7</div>
   </div>
 </aside>
 <main class="main">
@@ -811,8 +828,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 <div class="modal" id="modal"><div class="modal-panel"><div class="modal-head"><h3 id="modalTitle">Просмотр</h3><button class="icon-btn" id="closeModal">✕</button></div><div id="modalBody"></div></div></div>
 <script>
 'use strict';
-const LOGO='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320"><text x="160" y="258" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="286" font-weight="700" fill="#fff">A</text></svg>`);
-['bootEmblem','heroLogo','welcomeLogo'].forEach(id=>{const img=document.getElementById(id);if(img)img.src=LOGO;});
+const LOGO='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Cpath%20d%3D%22M160%2032%20296%20288h-66L160%20151%2090%20288H24Z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E';
+['heroLogo','welcomeLogo'].forEach(id=>{const img=document.getElementById(id);if(img)img.src=LOGO;});
 const sidebarBrandImage=document.getElementById('brandLogo');if(sidebarBrandImage)sidebarBrandImage.src='data:image/jpeg;base64,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';
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function reportBootError(error){
@@ -1303,7 +1320,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.4 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.7 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
