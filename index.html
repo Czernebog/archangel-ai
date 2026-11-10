@@ -686,6 +686,19 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 #mathExactMode{width:auto;flex:1}
 @media(max-width:760px){#mathExactMode{min-width:100%;max-width:100%!important}.message.assistant math{font-size:1.1em}}
 </style>
+<style id="archangel-416-voice">
+.compose-tools{align-items:center;gap:6px;flex-shrink:0}
+.compose-tools .icon-btn{display:grid;place-items:center;width:42px;min-width:42px;height:46px;border:1px solid #424242;border-radius:10px;background:#111;color:#f6f6f6;transition:background .16s ease,border-color .16s ease}
+.compose-tools .icon-btn:hover{background:#202020;border-color:#999}
+.compose-tools .icon-btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.compose-tools .microphone-toggle.listening{background:#fff;color:#090909;border-color:#fff}
+.compose-tools .microphone-toggle.listening:after{content:"";position:absolute;right:4px;top:4px;width:5px;height:5px;border-radius:50%;background:#080808}
+.compose-tools .microphone-toggle{position:relative}
+.compose-tools .speaker-toggle{width:35px;min-width:35px;height:38px;opacity:.65}
+.compose-tools .speaker-toggle.enabled{opacity:1;border-color:#ddd;background:#292929}
+.voice-status{min-height:30px;line-height:1.5}
+@media(max-width:760px){.composer{gap:7px}.compose-tools{gap:5px}.compose-tools .icon-btn{width:38px;min-width:38px;height:44px}.compose-tools .speaker-toggle{width:32px;min-width:32px;height:36px}.composer textarea{min-width:0}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
@@ -722,7 +735,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.15</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.16</div>
   </div>
 </aside>
 <main class="main">
@@ -738,8 +751,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" title="Прикрепить изображение или файл">＋</button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
- <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted" id="voiceState" style="margin-bottom:12px">Микрофон выключен</div><button class="voice-btn" id="voiceStart">Включить ожидание ключевой фразы</button><button class="btn ghost" id="voiceStop" style="width:100%;margin-top:7px">Полностью выключить микрофон</button><p class="footnote" style="margin-top:10px">Фразы: «Активировать» / «Деактивировать» или “Activate” / “Deactivate”. Выбери язык распознавания в настройках: браузер обычно слушает один язык за раз. Распознавание может передавать аудио выбранному браузерному сервису.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button><button class="icon-btn speaker-toggle" id="voiceSpeakerToggle" type="button" aria-label="Включить озвучивание ответов" aria-pressed="false" title="Включить озвучивание ответов"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted voice-status" id="voiceState" role="status" aria-live="polite">Микрофон выключен</div><p class="footnote" style="margin-top:10px">Нажми значок микрофона рядом с полем сообщения, чтобы включить или выключить распознавание речи. Никакие специальные слова не нужны. Значок динамика управляет озвучкой ответов. Браузер может передавать речь своему сервису распознавания.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
  <div class="page-head"><div><div class="eyebrow">Универсальный индекс</div><h1 class="h1">Поиск</h1><div class="lead">Поиск по сохранённым документам, заметкам, задачам и истории запросов. Результаты ранжируются по совпадениям, заголовкам и близости слов.</div></div></div>
@@ -1059,7 +1072,7 @@ function localAnswer(q){const s=q.trim(),l=s.toLowerCase();if(/^(привет|з
 $('sendButton').onclick=sendChat;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.ctrlKey&&!e.metaKey){e.preventDefault();sendChat()}});function clearConversation(){if(state.messages.length&&!confirm('Очистить текущую переписку?'))return;$('messages').innerHTML='<div class="welcome" id="welcomeMessage"><img id="welcomeLogo2" alt="Archangel" src="'+LOGO+'"><h2>Начни разговор</h2><p>Новый диалог. Сформулируй задачу.</p></div>';state.messages=[];save();toast('Диалог очищен')}$('clearChat').onclick=clearConversation;
 $('attachButton').onclick=()=>$('chatFilePicker').click();$('chatFilePicker').addEventListener('change',e=>{for(const f of [...e.target.files]){if(f.type.startsWith('image/')){if(f.size>8*1024*1024){toast('Изображение больше 8 МБ');continue}const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,data:r.result,kind:'image'});renderAttach()};r.readAsDataURL(f)}else if(/\.(txt|md|csv|json|py|js|ts|html|css|xml|ya?ml)$/i.test(f.name)){const r=new FileReader();r.onload=()=>{pendingFiles.push({name:f.name,type:f.type,text:String(r.result).slice(0,70000),kind:'text'});renderAttach()};r.readAsText(f)}else{pendingFiles.push({name:f.name,type:f.type,kind:'file'});renderAttach()}}e.target.value=''});function renderAttach(){$('attachRow').innerHTML=pendingFiles.map((f,i)=>`<div class="attach-preview">${f.kind==='image'?`<img src="${f.data}">`:f.kind==='audio'?'♫':'▤'}<span>${esc(f.name)}</span><button class="tiny-btn" data-remove-attach="${i}">×</button></div>`).join('');$('attachRow').querySelectorAll('[data-remove-attach]').forEach(b=>b.onclick=()=>{pendingFiles.splice(+b.dataset.removeAttach,1);renderAttach()})}
 function showThinking(){const el=document.createElement('div');el.className='thinking-indicator';el.id='thinkingIndicator';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.innerHTML='<span class="thinking-dots"><i></i><i></i><i></i></span><span>Архангел анализирует запрос…</span>';$('messages').appendChild(el);$('messages').scrollTop=$('messages').scrollHeight;return el}
-async function sendChat(){const q=$('chatInput').value.trim();if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;const files=[...pendingFiles];$('chatInput').value='';pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённый файл.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=true;const thinking=showThinking();try{let answer;if(api.key){answer=await modelRequest(q,files)}else{answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nФайл прикреплён. Локально я могу показать изображение, но не способен надёжно определить его смысл без мультимодальной модели.'}thinking.remove();addMessage('assistant',answer);if(voiceActive||state.prefs.autoSpeak)speak(answer)}catch(e){thinking.remove();addMessage('assistant','Ошибка подключения к модели: '+e.message+'\n\nПроверь endpoint, ключ, название модели и разрешение CORS. Локальные инструменты продолжают работать.')}finally{$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('chatInput').focus()}}
+async function sendChat(){const q=$('chatInput').value.trim();if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;const files=[...pendingFiles];$('chatInput').value='';pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённый файл.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=true;const thinking=showThinking();try{let answer;if(api.key){answer=await modelRequest(q,files)}else{answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nФайл прикреплён. Локально я могу показать изображение, но не способен надёжно определить его смысл без мультимодальной модели.'}thinking.remove();addMessage('assistant',answer);if(state.prefs.autoSpeak)speak(answer)}catch(e){thinking.remove();addMessage('assistant','Ошибка подключения к модели: '+e.message+'\n\nПроверь endpoint, ключ, название модели и разрешение CORS. Локальные инструменты продолжают работать.')}finally{$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('chatInput').focus()}}
 function restoreChat(){const root=$('messages');if(!root)return;root.innerHTML='';if(!state.messages.length){const welcome=document.createElement('div');welcome.className='welcome';welcome.id='welcome';const logo=document.createElement('img');logo.alt='Эмблема ARCHANGEL';logo.src=LOGO;const heading=document.createElement('h2');heading.textContent='Начни разговор';const p=document.createElement('p');p.textContent='Напиши сообщение ниже. Чтобы получить полноценные ответы ИИ, сначала подключи модель в настройках.';welcome.append(logo,heading,p);root.append(welcome);return;}for(const m of state.messages.slice(-50)){const el=document.createElement('div');el.className='message '+(m.role==='user'?'user':'assistant');const meta=document.createElement('div');meta.className='meta';meta.textContent=m.role==='user'?'ВЫ':'АРХАНГЕЛ';const body=document.createElement('div');if(m.role==='assistant')renderAssistantBody(body,String(m.text||''));else body.textContent=String(m.text||'');el.append(meta,body);root.appendChild(el);}root.scrollTop=root.scrollHeight;}
 function systemPrompt(){
  const tone=$('tone')?.value||state.prefs.tone||'focused';
@@ -1214,29 +1227,115 @@ function applyVoiceGender(locale,gender){
  save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);
 }
 // Voice audition handlers are registered once by the three-language laboratory below.
+
+let recognitionRetryTimer=null;
+let recognitionRequestTime=0;
 function setVoiceUI(){
- const current=$('voiceLanguage')?.value||'ru-RU',en=current.startsWith('en'),es=current.startsWith('es');
- $('voiceStart').classList.toggle('listening',voiceWake);
- $('voiceStart').textContent=voiceWake?(voiceActive?(en?'ACTIVE · listening for commands':es?'ACTIVO · escuchando':'АКТИВЕН · ожидание команд'):(en?'WAITING FOR WAKE PHRASE':es?'ESPERANDO LA FRASE CLAVE':'ОЖИДАНИЕ КЛЮЧЕВОЙ ФРАЗЫ')):(en?'Enable wake phrase listening':es?'Activar escucha de palabra clave':'Включить ожидание ключевой фразы');
- $('voiceState').textContent=!voiceWake?(en?'Microphone is off':es?'Micrófono apagado':'Микрофон выключен'):voiceActive?(en?'Active. Say “Deactivate” to pause.':es?'Activo. Di «Desactivar» para pausar.':'Активный режим. Скажи «Деактивировать» для ожидания.'):(en?'Listening for “Activate”.':es?'Escuchando «Activar».':'Микрофон слушает фразу «Активировать».');
+ const mic=$('voiceStart'),status=$('voiceState');
+ if(mic){
+  mic.classList.toggle('listening',!!voiceWake);
+  mic.setAttribute('aria-pressed',String(!!voiceWake));
+  mic.setAttribute('aria-label',voiceWake?'Выключить микрофон':'Включить микрофон');
+  mic.title=voiceWake?'Выключить микрофон':'Включить микрофон';
+ }
+ if(status)status.textContent=voiceWake?(voiceSpeaking?'Микрофон временно приостановлен на время ответа.':'Микрофон включён · говори свободно'):'Микрофон выключен';
+}
+function syncSpeakerButton(){
+ const button=$('voiceSpeakerToggle'),enabled=!!state.prefs.autoSpeak;
+ if(button){
+  button.classList.toggle('enabled',enabled);
+  button.setAttribute('aria-pressed',String(enabled));
+  button.setAttribute('aria-label',enabled?'Выключить озвучивание ответов':'Включить озвучивание ответов');
+  button.title=enabled?'Выключить озвучивание ответов':'Включить озвучивание ответов';
+ }
+ if($('autoSpeak'))$('autoSpeak').checked=enabled;
+}
+function stopRecognition(){
+ voiceWake=false;voiceActive=false;
+ if(recognitionRetryTimer!==null){clearTimeout(recognitionRetryTimer);recognitionRetryTimer=null;}
+ const old=recognition;recognition=null;
+ if(old){old.onend=null;old.onresult=null;old.onerror=null;try{old.abort()}catch{}}
+ setVoiceUI();
 }
 function startRecognition(){
- if(!SR){toast('Браузер не поддерживает распознавание речи. Используй актуальный Chrome или Edge.');return}
- if(recognition)try{recognition.stop()}catch{}
- recognition=new SR();recognition.lang=$('voiceLanguage')?.value||'ru-RU';recognition.continuous=true;recognition.interimResults=true;recognition.maxAlternatives=1;
- recognition.onresult=e=>{let final='';for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';const raw=final.trim(),text=raw.toLowerCase();if(!text)return;
-  const deactivate=/деактивировать|остановить прослушивание|\bdeactivate\b|\bstop listening\b|\barchangel,? deactivate\b|\bdesactivar\b|\bdeja de escuchar\b/.test(text);
-  const activate=/активировать|активируй|\bactivate\b|\barchangel,? activate\b|\bactivar\b|\bactiva\b/.test(text);
-  if(deactivate){voiceActive=false;speak(recognition.lang.startsWith('en')?'Voice commands paused. Say Activate to resume.':recognition.lang.startsWith('es')?'Comandos pausados. Di «Activar» para continuar.':'Голосовые команды приостановлены. Скажи «Активировать», чтобы продолжить.',recognition.lang);setVoiceUI();return}
-  if(activate){voiceActive=true;speak(recognition.lang.startsWith('en')?'Archangel activated. I am listening.':recognition.lang.startsWith('es')?'Archangel activado. Te escucho.':'Архангел активирован. Слушаю.',recognition.lang);setVoiceUI();return}
-  if(voiceActive){$('chatInput').value=raw;sendChat()}
- };
- recognition.onerror=e=>{if(e.error==='not-allowed'){voiceWake=false;voiceActive=false;setVoiceUI();toast('Нет разрешения на микрофон')}else if(e.error!=='no-speech')$('voiceState').textContent='Ошибка распознавания: '+e.error};
- recognition.onend=()=>{if(voiceWake&&!voiceSpeaking){setTimeout(()=>{if(voiceWake&&!voiceSpeaking)try{recognition.start()}catch{}},500)}};
- try{recognition.start();voiceWake=true;voiceActive=false;setVoiceUI()}catch(e){toast('Не удалось запустить распознавание: '+e.message)}
+ if(voiceWake)return;
+ if(!SR){toast('В этом браузере нет распознавания речи. Попробуй Chrome или Edge.');return;}
+ if(!window.isSecureContext){toast('Для микрофона открой сайт через HTTPS.');return;}
+ stopRecognition();
+ let instance;
+ try{
+  instance=new SR();
+  instance.lang=$('voiceLanguage')?.value||'ru-RU';
+  instance.continuous=true;
+  instance.interimResults=false;
+  instance.maxAlternatives=1;
+  recognition=instance;
+  instance.onresult=e=>{
+   if(!voiceWake||recognition!==instance||voiceSpeaking)return;
+   let heard='';
+   for(let j=e.resultIndex;j<e.results.length;j++)if(e.results[j].isFinal)heard+=(e.results[j][0]?.transcript||'')+' ';
+   heard=heard.trim();
+   if(!heard||activeController)return;
+   const input=$('chatInput');
+   if(input.value.trim()){
+    input.value=(input.value.trim()+' '+heard).slice(0,12000);
+    toast('Речь добавлена в черновик. Нажми отправку, когда будешь готов.');
+   }else{
+    input.value=heard;
+    sendChat();
+   }
+  };
+  instance.onerror=e=>{
+   if(recognition!==instance||!voiceWake)return;
+   if(e.error==='no-speech'||e.error==='aborted')return;
+   if(['not-allowed','service-not-allowed','audio-capture'].includes(e.error)){
+    stopRecognition();
+    toast(e.error==='audio-capture'?'Микрофон не найден или занят.':'Доступ к микрофону запрещён в настройках браузера.');
+   }else if(e.error==='network'){
+    stopRecognition();
+    toast('Сервис распознавания речи недоступен. Проверь соединение или используй другой браузер.');
+   }else if($('voiceState'))$('voiceState').textContent='Ошибка распознавания: '+e.error;
+  };
+  instance.onend=()=>{
+   if(!voiceWake||recognition!==instance||voiceSpeaking)return;
+   if(recognitionRetryTimer!==null)clearTimeout(recognitionRetryTimer);
+   recognitionRetryTimer=setTimeout(()=>{
+    recognitionRetryTimer=null;
+    if(voiceWake&&!voiceSpeaking&&recognition===instance&&!activeController){
+     try{instance.start()}catch(e){
+      stopRecognition();
+      toast('Не удалось возобновить микрофон: '+e.message);
+     }
+    }else if(voiceWake&&recognition===instance&&activeController){
+     // Avoid triggering recognition repeatedly while the assistant is generating.
+     recognitionRetryTimer=setTimeout(()=>{recognitionRetryTimer=null;if(voiceWake&&!voiceSpeaking&&recognition===instance)try{instance.start()}catch{}},900);
+    }
+   },550);
+  };
+  instance.start();
+  recognitionRequestTime=Date.now();
+  voiceWake=true;voiceActive=true;
+  setVoiceUI();
+ }catch(e){
+  stopRecognition();
+  toast('Не удалось включить микрофон: '+(e.message||'ошибка браузера'));
+ }
 }
-$('voiceStart').onclick=()=>{if(voiceWake){voiceActive=!voiceActive;setVoiceUI();toast(voiceActive?'Активный режим включён вручную':'Возврат в ожидание ключевой фразы')}else startRecognition()};
-$('voiceStop').onclick=()=>{voiceWake=false;voiceActive=false;if(recognition){recognition.onend=null;try{recognition.stop()}catch{}recognition=null}setVoiceUI();toast('Микрофон выключен')};
+$('voiceStart').onclick=()=>{if(voiceWake){stopRecognition();toast('Микрофон выключен');}else startRecognition();};
+$('voiceSpeakerToggle').onclick=()=>{
+ state.prefs.autoSpeak=!state.prefs.autoSpeak;
+ save();syncSpeakerButton();
+ if(!state.prefs.autoSpeak){
+  stopVoicePlayback();
+  if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}
+ }
+ toast(state.prefs.autoSpeak?'Озвучка ответов включена':'Озвучка ответов выключена');
+};
+$('voiceLanguage')?.addEventListener('change',()=>{
+ if(voiceWake){stopRecognition();startRecognition();}
+ else setVoiceUI();
+});
+
 function speak(text,forcedLocale){
  if(!('speechSynthesis'in window))return;
  const clean=String(text).replace(/https?:\/\/\S+/g,'ссылка').replace(/```[\s\S]*?```/g,'код пропущен').slice(0,2500);if(!clean.trim())return;
@@ -1276,7 +1375,7 @@ window.addEventListener('keydown',e=>{
 window.addEventListener('beforeunload',()=>{if(recognition){voiceWake=false;try{recognition.stop()}catch{}}});
 
 // ===== ARCHANGEL AI 3.0 CORE =====
-const ARCHANGEL_VERSION='4.15.0';
+const ARCHANGEL_VERSION='4.16.0';
 let activeController=null;
 const localGateway=()=>((location.protocol==='http:'||location.protocol==='https:')&&!!location.hostname);
 async function gatewayJSON(path,payload){
@@ -1467,7 +1566,7 @@ sendChat=async function(){
    thinking.remove();answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nИзображение приложено, но для смыслового анализа подключи vision-модель.';if(files.some(f=>f.kind==='audio'))answer+='\n\nАудиодорожка приложена, но анализ звука требует подключённой модели OpenRouter с поддержкой аудиовхода.';addMessage('assistant',answer);
   }
   if(body){renderAssistantBody(body,answer);state.messages.push({role:'assistant',text:answer,time:Date.now()});state.messages=state.messages.slice(-80);save();}
-  if(voiceActive||state.prefs.autoSpeak)speak(answer);
+  if(state.prefs.autoSpeak)speak(answer);
  }catch(e){thinking.remove();if(e.name==='AbortError'){answer='Генерация остановлена.';}else answer='Ошибка подключения: '+e.message;if(body){const full=(body.textContent?body.textContent+'\n\n':'')+answer;renderAssistantBody(body,full);state.messages.push({role:'assistant',text:full,time:Date.now()});save();}else addMessage('assistant',answer);}
  finally{activeController=null;$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('sendButton').textContent='➤';$('sendButton').classList.remove('is-stop');$('sendButton').title='Отправить';$('chatInput').focus();}
 };
@@ -1487,7 +1586,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.15 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.16 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
@@ -1560,7 +1659,7 @@ for(const key of ['ru','en','es']){
 let voicePlaybackEpoch=0;
 function stopVoicePlayback(){voicePlaybackEpoch++;voiceSpeaking=false;if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch{};}
 $('stopSpeaking')?.addEventListener('click',()=>{stopVoicePlayback();const label=$('voiceCatalogStatus');if(label)label.textContent='Озвучка остановлена.';});
-$('autoSpeak')?.addEventListener('change',()=>{state.prefs.autoSpeak=$('autoSpeak').checked;save();toast(state.prefs.autoSpeak?'Автоозвучка ответов включена':'Автоозвучка выключена');});
+$('autoSpeak')?.addEventListener('change',()=>{state.prefs.autoSpeak=$('autoSpeak').checked;save();syncSpeakerButton();if(!state.prefs.autoSpeak)stopVoicePlayback();toast(state.prefs.autoSpeak?'Озвучка включена':'Озвучка выключена');});
 function splitSpeechText(text,max=220){const out=[];let rest=String(text||'').replace(/\s+/g,' ').trim();while(rest.length>max){let cut=-1;for(const re of [/[.!?。！？;:](?=\s)/g,/,\s/g,/\s/g]){let m;while((m=re.exec(rest))!==null)if(m.index>max*.55&&m.index<max)cut=m.index+m[0].length;if(cut>0)break;}if(cut<1)cut=max;out.push(rest.slice(0,cut).trim());rest=rest.slice(cut).trim();}if(rest)out.push(rest);return out;}
 function speak(text,forcedLocale){if(!('speechSynthesis'in window))return;const clean=String(text||'').replace(/https?:\/\/\S+/g,'').replace(/```[\s\S]*?```/g,'').replace(/\n{2,}/g,'. ').replace(/\s+/g,' ').trim();if(!clean)return;stopVoicePlayback();const locale=outputLocale(clean,forcedLocale),key=localeKey(locale),cfg=VOICE_LANGS[key],voice=chosenVoice(locale),rate=+$((cfg&&$(cfg.rate))?.value)||.98,pitch=+$((cfg&&$(cfg.pitch))?.value)||.97;const pieces=splitSpeechText(clean);const playback=voicePlaybackEpoch;let index=0;const status=$('voiceCatalogStatus');if(status)status.textContent=`Озвучка: ${voice?voice.name+' · '+voice.lang:'системный голос · '+locale}. Фрагмент ${pieces.length} · скорость ${rate.toFixed(2)}×.`;const resume=voiceWake&&!!recognition;if(resume){voiceSpeaking=true;try{recognition.stop()}catch{}}function next(){if(playback!==voicePlaybackEpoch)return;if(index>=pieces.length){voiceSpeaking=false;if(resume&&voiceWake)setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550);return;}const u=new SpeechSynthesisUtterance(pieces[index++]);u.lang=locale;if(voice)u.voice=voice;u.rate=rate;u.pitch=voiceProfilePitch(locale,state.prefs[cfg.genderKey]||'male',pitch);u.volume=1;u.onend=next;u.onerror=()=>{if(playback!==voicePlaybackEpoch)return;voiceSpeaking=false;if(resume&&voiceWake&&recognition)setTimeout(()=>{try{recognition.start()}catch{}},550);};speechSynthesis.speak(u);}next();}
 // Persist the selected interface and all three voice profiles.
@@ -1673,7 +1772,7 @@ async function initializeArchangel(){
  setBootCaption('ЗАГРУЗКА ЛОКАЛЬНОГО ПРОФИЛЯ');
  load();
  setBootCaption('ПОДГОТОВКА ИНТЕРФЕЙСА');
- restorePrefs();updateVoiceCatalog();renderAll();restoreChat();setVoiceUI();updateVoiceValueLabels();if(window.matchMedia('(max-width:760px)').matches)go('chat');
+ restorePrefs();updateVoiceCatalog();renderAll();restoreChat();setVoiceUI();syncSpeakerButton();updateVoiceValueLabels();if(window.matchMedia('(max-width:760px)').matches)go('chat');
  if(!SR&&$('voiceSupportBadge'))$('voiceSupportBadge').textContent='НЕТ API';
  setBootCaption('ПРОВЕРКА ЛОКАЛЬНОГО ШЛЮЗА');
  if(localGateway()){
