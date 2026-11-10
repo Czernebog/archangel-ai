@@ -5,9 +5,9 @@
 <meta name="theme-color" content="#090909"><meta name="color-scheme" content="dark"><meta name="description" content="ARCHANGEL AI — персональный ИИ-помощник CZERNEBOG">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
 <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
-<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/icon.svg">
 <title>ARCHANGEL AI — Web Edition 4.1 | Czernebog</title>
-<link rel="preload" as="image" href="assets/archangel-user-cover.jpg">
+<link rel="preload" as="image" href="assets/archangel-brand-cover.svg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpath fill=%22white%22 d=%22M50 8 96 92H76L50 42 24 92H4Z%22/%3E%3Cpath stroke=%22black%22 stroke-width=%229%22 d=%22M31 68h38%22/%3E%3C/svg%3E">
 
 <style>
@@ -400,7 +400,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
 </div>
 <div class="app">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><img id="brandLogo" src="assets/archangel-user-cover.jpg" alt="Оригинальная эмблема ARCHANGEL AI"></div>
+  <div class="brand"><img id="brandLogo" src="assets/archangel-brand-cover.svg" alt="Оригинальная эмблема ARCHANGEL AI"></div>
   <div class="nav-label">Рабочее пространство</div>
   <nav class="nav" id="navigation">
     <button class="active" data-page="overview"><span class="ico">⌂</span>Обзор</button>
@@ -562,7 +562,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
 'use strict';
 const LOGO='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320"><text x="160" y="258" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="286" font-weight="700" fill="#fff">A</text></svg>`);
 ['bootEmblem','heroLogo','welcomeLogo'].forEach(id=>{const img=document.getElementById(id);if(img)img.src=LOGO;});
-const sidebarBrandImage=document.getElementById('brandLogo');if(sidebarBrandImage)sidebarBrandImage.src='assets/archangel-user-cover.jpg';
+const sidebarBrandImage=document.getElementById('brandLogo');if(sidebarBrandImage)sidebarBrandImage.src='assets/archangel-brand-cover.svg';
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function reportBootError(error){
  const boot=$('bootScreen');
