@@ -175,6 +175,8 @@ class Handler(SimpleHTTPRequestHandler):
                            ('disconnect-ip', ip, 32, 60.0, 0.0)),
             'extract': (('extract-session', self.session_id, 10, 60.0, 0.0),
                         ('extract-ip', ip, 24, 60.0, 0.0)),
+            'math': (('math-session', self.session_id, 12, 60.0, 0.4),
+                     ('math-ip', ip, 40, 60.0, 0.0)),
         }
         specs = policies[action]
         now = time.monotonic()
@@ -325,7 +327,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '4.13.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '4.15.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'antiSpam': {'enabled': True, 'chatPerSessionPerMinute': 10, 'chatCooldownSeconds': 2.5, 'maxConcurrentPerSession': 1, 'maxConcurrentPerIp': MAX_ACTIVE_CHATS_PER_IP, 'oneChatAtATime': True}}
@@ -366,7 +368,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         action = {'/api/config': 'config', '/api/disconnect': 'disconnect',
-                  '/api/chat': 'chat', '/api/extract': 'extract'}.get(self.path)
+                  '/api/chat': 'chat', '/api/extract': 'extract', '/api/math': 'math'}.get(self.path)
         if not action:
             return self._json(404, {'error': 'Маршрут не найден.'})
         if not self._require_site_password(): return
@@ -380,6 +382,7 @@ class Handler(SimpleHTTPRequestHandler):
             if action == 'disconnect': return self._disconnect()
             if action == 'chat': return self._chat()
             if action == 'extract': return self._extract()
+            if action == 'math': return self._math()
         except (ValueError, json.JSONDecodeError) as e:
             return self._json(400, {'error': str(e)})
         except BrokenPipeError:
@@ -608,6 +611,21 @@ class Handler(SimpleHTTPRequestHandler):
     def _event(self, obj):
         raw = ('data: ' + json.dumps(obj, ensure_ascii=False) + '\n\n').encode('utf-8')
         self.wfile.write(raw); self.wfile.flush()
+
+
+    def _math(self):
+        data = self._read_json(max_bytes=8192)
+        expression = data.get('expression', '')
+        operation = data.get('operation', 'simplify')
+        variable = data.get('variable', 'x')
+        if not isinstance(expression, str) or not isinstance(operation, str) or not isinstance(variable, str):
+            return self._json(400, {'error': 'Некорректные параметры математической задачи.'})
+        from math_engine import calculate
+        try:
+            output = calculate(expression, operation, variable)
+        except ValueError as exc:
+            return self._json(400, {'error': str(exc)})
+        return self._json(200, output)
 
     def _extract(self):
         data = self._read_json(max_bytes=15 * 1024 * 1024); name = str(data.get('name', 'file'))[:180]
