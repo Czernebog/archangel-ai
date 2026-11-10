@@ -307,7 +307,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '4.1.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '4.7.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'antiSpam': {'enabled': True, 'chatPerSessionPerMinute': 10, 'chatCooldownSeconds': 2.5, 'maxConcurrentPerSession': 1, 'maxConcurrentPerIp': MAX_ACTIVE_CHATS_PER_IP, 'oneChatAtATime': True}}
