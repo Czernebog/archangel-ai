@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
 <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
 <link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-<title>ARCHANGEL AI — Web Edition 4.4 | Czernebog</title>
+<title>ARCHANGEL AI — Web Edition 4.5 | Czernebog</title>
 <link rel="preload" as="image" href="assets/archangel-user-cover.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpath fill=%22white%22 d=%22M50 8 96 92H76L50 42 24 92H4Z%22/%3E%3Cpath stroke=%22black%22 stroke-width=%229%22 d=%22M31 68h38%22/%3E%3C/svg%3E">
 
@@ -560,6 +560,44 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
 }
 @media(prefers-reduced-motion:reduce){.sidebar,.mobile-scrim{transition:none}}
 </style>
+
+<style id="archangel-v45-ux">
+/* ARCHANGEL 4.5 — compact, accessible UI refinement */
+:root{--focus-ring:#f4f4f4}
+:where(button,a,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--focus-ring)!important;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.56}
+button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
+.chat-input-wrap{border-top:1px solid var(--line);background:#090909}
+#chatInput{font-size:15px;line-height:1.55;resize:none;max-height:180px;min-height:43px}
+.message{max-width:min(94%,740px);overflow-wrap:anywhere;line-height:1.65}
+.message .meta{letter-spacing:.035em}
+.message-copy{display:inline-flex;gap:6px;align-items:center;margin-top:10px;min-height:32px;background:#171717;border:1px solid #383838;border-radius:9px;padding:5px 11px;font-size:12px;color:#efefef}
+.message-copy:hover{background:#282828;border-color:#777}
+.messages{scroll-behavior:smooth}
+@media(min-width:761px){
+ .topbar{min-height:64px}
+ .chat-top{padding:15px 18px}
+ .chat-input-wrap{padding:14px 18px}
+ .message{font-size:14px}
+ #page-chat .chat-layout{gap:16px}
+ .recent-panel{min-height:120px}
+}
+@media(max-width:760px){
+ #page-chat .page-head{margin-bottom:8px}
+ #page-chat .page-head .lead{font-size:13px;line-height:1.5}
+ .chat-top{padding:11px 13px}
+ #chatInput{font-size:16px;min-height:44px}
+ .chat-input-wrap{padding:10px 12px max(12px,env(safe-area-inset-bottom))}
+ .message{max-width:100%;font-size:14px;line-height:1.6}
+ .message-copy{min-height:36px}
+ .recent-open{font-size:14px;min-height:44px}
+ .recent-delete{min-width:42px;min-height:42px}
+ .mobile-tabbar button{min-width:0;min-height:52px}
+ .top-actions .pill{max-width:135px;overflow:hidden}
+}
+@media(max-width:390px){.top-title{font-size:13px}.top-actions{gap:5px}.topbar{padding-left:9px;padding-right:9px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
@@ -596,7 +634,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.4</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.5</div>
   </div>
 </aside>
 <main class="main">
@@ -1451,6 +1489,51 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
   const close=document.createElement('button');close.className='btn';close.textContent='Понятно';close.style.marginTop='12px';
   const dismiss=()=>overlay.remove();close.addEventListener('click',dismiss);overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});
   panel.append(title,p,close);overlay.append(panel);document.body.append(overlay);close.focus();
+ });
+})();
+</script>
+
+<script id="archangel-v45-ux">
+(()=>{
+ const input=document.getElementById('chatInput');
+ const messages=document.getElementById('messages');
+ if(input){
+   const sizeInput=()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,180)+'px'};
+   input.addEventListener('input',sizeInput);
+   const send=document.getElementById('sendButton');
+   send?.addEventListener('click',()=>requestAnimationFrame(sizeInput));
+   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey)requestAnimationFrame(sizeInput)});
+   sizeInput();
+ }
+ function addCopyButtons(){
+   if(!messages)return;
+   messages.querySelectorAll('.message.assistant:not([data-copy-ready])').forEach(message=>{
+     message.dataset.copyReady='1';
+     const body=Array.from(message.children).find(el=>el.tagName==='DIV'&&!el.classList.contains('meta'));
+     if(!body)return;
+     const button=document.createElement('button');
+     button.type='button';button.className='message-copy';
+     button.textContent='⧉ Копировать ответ';
+     button.setAttribute('aria-label','Копировать ответ ARCHANGEL');
+     button.addEventListener('click',async()=>{
+       const content=body.textContent||'';
+       try{
+         await navigator.clipboard.writeText(content);
+         button.textContent='✓ Скопировано';
+         setTimeout(()=>{button.textContent='⧉ Копировать ответ'},1600);
+       }catch(_){button.textContent='Не удалось скопировать';setTimeout(()=>{button.textContent='⧉ Копировать ответ'},1600);}
+     });
+     message.appendChild(button);
+   });
+ }
+ if(messages){new MutationObserver(addCopyButtons).observe(messages,{childList:true,subtree:false});addCopyButtons()}
+ document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&!e.shiftKey){
+   e.preventDefault();
+   document.querySelector('[data-mobile-page="chat"]')?.click();
+   document.querySelector('[data-page="chat"]')?.click();
+   input?.focus();
+  }
  });
 })();
 </script>
