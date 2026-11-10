@@ -2,6 +2,7 @@
 """ARCHANGEL AI 4.1 lightweight web gateway with isolated browser sessions."""
 from __future__ import annotations
 import base64, json, mimetypes, os, re, sys, threading, urllib.request, urllib.error, zipfile, webbrowser, subprocess, ipaddress, shutil, secrets, time, hmac
+import hashlib
 from io import BytesIO
 from pathlib import Path
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -10,6 +11,19 @@ from http.cookies import SimpleCookie
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent
+
+def _approved_inline_script_hashes():
+    """Hash allowlist for first-party inline scripts. Fail closed if HTML is unavailable."""
+    try:
+        html = (ROOT / 'index.html').read_text(encoding='utf-8')
+    except OSError:
+        return ''
+    entries = re.findall(r'<script\\b[^>]*>([\\s\\S]*?)</script\\s*>', html, flags=re.IGNORECASE)
+    return ' '.join("'sha256-" + base64.b64encode(hashlib.sha256(
+        source.encode('utf-8')).digest()).decode('ascii') + "'" for source in entries)
+
+INLINE_SCRIPT_HASHES = _approved_inline_script_hashes()
+
 TUNNEL_MODE = os.environ.get('ARCHANGEL_TUNNEL', '').lower() in ('1', 'true', 'yes')
 HOSTED_MODE = os.environ.get('ARCHANGEL_PUBLIC', '').lower() in ('1', 'true', 'yes') or os.environ.get('RENDER', '').lower() == 'true'
 PUBLIC_MODE = HOSTED_MODE or TUNNEL_MODE
@@ -228,7 +242,7 @@ class Handler(SimpleHTTPRequestHandler):
         # Hosted edition calls providers exclusively through this server-side gateway.
         # Local development retains optional direct HTTPS connections.
         connect_sources = "'self'" if PUBLIC_MODE else "'self' https:"
-        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src " + connect_sources + "; media-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none'")
+        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' " + INLINE_SCRIPT_HASHES + "; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src " + connect_sources + "; media-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none'")
         if PUBLIC_MODE or self.headers.get('X-Forwarded-Proto', '').split(',')[0].strip().lower() == 'https':
             self.send_header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
         if getattr(self, 'new_session_cookie', None):
