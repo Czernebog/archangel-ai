@@ -1,0 +1,48 @@
+name: ARCHANGEL Quality Checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'server.py'
+      - 'math_engine.py'
+      - 'test_math_engine.py'
+      - 'requirements.txt'
+      - '.github/workflows/quality-checks.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Python syntax checks
+        run: python -m py_compile server.py math_engine.py test_math_engine.py
+      - name: Math engine regression tests
+        run: python -m unittest -v test_math_engine
+      - name: Validate inline JavaScript syntax
+        run: |
+          python - <<'PY'
+          import pathlib, re, subprocess, tempfile
+          html = pathlib.Path('index.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script\b[^>]*>([\s\S]*?)</script\s*>', html, re.I)
+          if not scripts:
+              raise RuntimeError('ARCHANGEL has no inline scripts to validate')
+          for i, script in enumerate(scripts, 1):
+              with tempfile.NamedTemporaryFile(mode='w', suffix='.js', encoding='utf-8') as temp:
+                  temp.write(script)
+                  temp.flush()
+                  subprocess.run(['node', '--check', temp.name], check=True)
+              print('Validated script', i)
+          PY
