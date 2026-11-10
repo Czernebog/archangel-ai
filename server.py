@@ -224,7 +224,11 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header('Permissions-Policy', 'microphone=(self), camera=(), geolocation=(), payment=(), usb=()')
         self.send_header('Cross-Origin-Resource-Policy', 'same-origin')
         self.send_header('Cross-Origin-Opener-Policy', 'same-origin')
-        self.send_header('Content-Security-Policy', "default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https:; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'")
+        self.send_header('X-Permitted-Cross-Domain-Policies', 'none')
+        # Hosted edition calls providers exclusively through this server-side gateway.
+        # Local development retains optional direct HTTPS connections.
+        connect_sources = "'self'" if PUBLIC_MODE else "'self' https:"
+        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src " + connect_sources + "; media-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none'")
         if PUBLIC_MODE or self.headers.get('X-Forwarded-Proto', '').split(',')[0].strip().lower() == 'https':
             self.send_header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
         if getattr(self, 'new_session_cookie', None):
@@ -307,7 +311,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '4.7.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '4.13.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'antiSpam': {'enabled': True, 'chatPerSessionPerMinute': 10, 'chatCooldownSeconds': 2.5, 'maxConcurrentPerSession': 1, 'maxConcurrentPerIp': MAX_ACTIVE_CHATS_PER_IP, 'oneChatAtATime': True}}
