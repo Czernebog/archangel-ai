@@ -485,8 +485,278 @@ class Handler(SimpleHTTPRequestHandler):
                 text_parts.append(content)
             else:
                 for part in content:
-                    if isinstance(part, dict) and isinstance(part.get('text'), str):
+                    if not isinstance(part, dict):
+                        return self._json(400, {'error': 'Вложение должно быть JSON-объектом.'})
+                    part_type = part.get('type')
+                    if part_type == 'text' and isinstance(part.get('text'), str):
                         text_parts.append(part['text'])
+                    elif part_type == 'image_url' and message['role'] == 'user':
+                        image = part.get('image_url')
+                        uri = image.get('url') if isinstance(image, dict) else None
+                        if not isinstance(uri, str) or len(uri) > 11 * 1024 * 1024 or not re.match(r'^data:image/(png|jpeg|webp|gif);base64,[a-zA-Z0-9+/=]+
+                if len(part_text) > MAX_SINGLE_TEXT:
+                    return self._json(413, {'error': f'Одно текстовое сообщение превышает лимит {MAX_SINGLE_TEXT:,} символов.'})
+                total_text += len(part_text)
+                if total_text > MAX_CHAT_TEXT:
+                    return self._json(413, {'error': f'Общий объём текста запроса превышает лимит {MAX_CHAT_TEXT:,} символов.'})
+        # Refuse oversized combined multi-modal payloads before reaching the upstream model.
+        if len(json.dumps(messages, ensure_ascii=False)) > 15 * 1024 * 1024:
+            return self._json(413, {'error': 'Общий размер мультимодального запроса превышает 15 МБ.'})
+        temperature = data.get('temperature', 0.35)
+        if not isinstance(temperature, (int, float)) or not (0 <= float(temperature) <= 2):
+            return self._json(400, {'error': 'Температура должна быть числом от 0 до 2.'})
+        payload = {'model': cfg['model'], 'messages': messages, 'stream': True, 'temperature': float(temperature)}
+        if isinstance(data.get('max_tokens'), int):
+            payload['max_tokens'] = max(1, min(data['max_tokens'], 32768))
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'text/event-stream, application/json',
+            'User-Agent': 'ARCHANGEL-AI/4.1',
+        }
+        if cfg['api_key']:
+            headers['Authorization'] = 'Bearer ' + cfg['api_key']
+        if cfg['provider'] == 'openrouter':
+            headers['HTTP-Referer'] = (('https' if PUBLIC_MODE else 'http') + '://' + (self.headers.get('X-Forwarded-Host') or self.headers.get('Host', 'localhost'))) 
+            headers['X-Title'] = 'ARCHANGEL AI by Czernebog'
+        req = urllib.request.Request(
+            cfg['endpoint'],
+            data=json.dumps(payload, ensure_ascii=False, separators=(',', ':')).encode('utf-8'),
+            headers=headers,
+            method='POST',
+        )
+        try:
+            upstream = urllib.request.urlopen(req, timeout=180)
+        except urllib.error.HTTPError as e:
+            detail = e.read(3000).decode('utf-8', 'replace')
+            if cfg['api_key']:
+                detail = detail.replace(cfg['api_key'], '[скрытый ключ]')
+            return self._json(e.code, {'error': f'Провайдер вернул HTTP {e.code}: {detail[:1800]}'})
+        except Exception as e:
+            return self._json(502, {'error': 'Не удалось подключиться к провайдеру: ' + str(e)[:500]})
+
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/event-stream; charset=utf-8')
+        self.send_header('Cache-Control', 'no-cache, no-transform')
+        self.send_header('X-Accel-Buffering', 'no')
+        self.send_header('Connection', 'close')
+        self.close_connection = True
+        self.end_headers()
+        try:
+            content_type = upstream.headers.get('Content-Type', '').lower()
+            if 'text/event-stream' not in content_type:
+                obj = json.loads(upstream.read().decode('utf-8', 'replace'))
+                choices = obj.get('choices') or []
+                content = (((choices[0].get('message') or {}).get('content')) if choices else None)
+                if isinstance(content, list):
+                    content = ''.join(str(x.get('text', '')) for x in content if isinstance(x, dict))
+                if isinstance(content, str) and content:
+                    self._event({'delta': content})
+                self._event({'done': True})
+                return
+
+            data_lines = []
+            done_sent = False
+            def process_event(lines):
+                nonlocal done_sent
+                if not lines:
+                    return
+                raw_data = '\n'.join(lines).strip()
+                if not raw_data:
+                    return
+                if raw_data == '[DONE]':
+                    self._event({'done': True})
+                    done_sent = True
+                    return
+                try:
+                    chunk = json.loads(raw_data)
+                except Exception:
+                    return
+                if isinstance(chunk.get('error'), dict):
+                    message = str(chunk['error'].get('message') or chunk['error'])[:500]
+                    self._event({'error': 'Провайдер сообщил об ошибке: ' + message})
+                    done_sent = True
+                    return
+                choices = chunk.get('choices') or []
+                if not choices:
+                    return
+                choice = choices[0]
+                delta = (choice.get('delta') or {}).get('content')
+                if isinstance(delta, str) and delta:
+                    self._event({'delta': delta})
+                elif isinstance(delta, list):
+                    text_value = ''.join(str(x.get('text', '')) for x in delta if isinstance(x, dict))
+                    if text_value:
+                        self._event({'delta': text_value})
+                if choice.get('finish_reason') is not None and not done_sent:
+                    self._event({'done': True})
+                    done_sent = True
+
+            for raw in upstream:
+                line = raw.decode('utf-8', 'replace').rstrip('\r\n')
+                if not line:
+                    process_event(data_lines)
+                    data_lines = []
+                    if done_sent:
+                        break
+                    continue
+                if line.startswith(':'):
+                    continue
+                if line.startswith('data:'):
+                    data_lines.append(line[5:].lstrip())
+            if data_lines and not done_sent:
+                process_event(data_lines)
+            if not done_sent:
+                self._event({'done': True})
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+        except Exception as e:
+            try:
+                self._event({'error': 'Поток прерван: ' + str(e)[:300]})
+            except Exception:
+                pass
+        finally:
+            upstream.close()
+
+    def _event(self, obj):
+        raw = ('data: ' + json.dumps(obj, ensure_ascii=False) + '\n\n').encode('utf-8')
+        self.wfile.write(raw); self.wfile.flush()
+
+
+    def _math(self):
+        data = self._read_json(max_bytes=8192)
+        expression = data.get('expression', '')
+        operation = data.get('operation', 'simplify')
+        variable = data.get('variable', 'x')
+        if not isinstance(expression, str) or not isinstance(operation, str) or not isinstance(variable, str):
+            return self._json(400, {'error': 'Некорректные параметры математической задачи.'})
+        from math_engine import calculate
+        try:
+            output = calculate(expression, operation, variable)
+        except ValueError as exc:
+            return self._json(400, {'error': str(exc)})
+        return self._json(200, output)
+
+    def _extract(self):
+        data = self._read_json(max_bytes=15 * 1024 * 1024); name = str(data.get('name', 'file'))[:180]
+        encoded = data.get('data', '')
+        if not isinstance(encoded, str) or len(encoded) > 14 * 1024 * 1024:
+            return self._json(413, {'error': 'Файл слишком большой для извлечения текста (максимум 10 МБ).'} )
+        try: raw = base64.b64decode(encoded.split(',', 1)[-1], validate=True)
+        except Exception: return self._json(400, {'error': 'Не удалось прочитать данные файла.'})
+        ext = Path(name).suffix.lower(); extracted = ''; warning = None
+        if ext == '.docx':
+            try:
+                with zipfile.ZipFile(BytesIO(raw)) as z:
+                    info = z.getinfo('word/document.xml')
+                    if info.file_size > 24 * 1024 * 1024:
+                        raise ValueError('Внутренний XML DOCX слишком велик (максимум 24 МБ).')
+                    xml = z.read('word/document.xml')
+                root = ET.fromstring(xml)
+                ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+                paras = []
+                for p in root.findall('.//w:p', ns):
+                    line = ''.join(t.text or '' for t in p.findall('.//w:t', ns))
+                    if line.strip(): paras.append(line)
+                extracted = '\n'.join(paras)
+            except Exception as e: warning = 'Не удалось разобрать DOCX: ' + str(e)[:200]
+        elif ext == '.pdf':
+            try:
+                from pypdf import PdfReader
+                reader = PdfReader(BytesIO(raw)); pages = reader.pages[:200]; extracted = '\n\n'.join((p.extract_text() or '') for p in pages)
+                if len(reader.pages) > 200: warning = 'Извлечено не более 200 страниц.'
+            except ImportError:
+                warning = 'Для извлечения PDF установи необязательный модуль: python -m pip install pypdf. DOCX и текстовые файлы работают без него.'
+            except Exception as e: warning = 'PDF не удалось разобрать: ' + str(e)[:200]
+        else:
+            try: extracted = raw.decode('utf-8-sig')
+            except UnicodeDecodeError: extracted = raw.decode('cp1251', 'replace')
+        extracted = extracted[:220000]
+        if not extracted.strip() and not warning: warning = 'В файле не найден извлекаемый текст; возможно, это скан или изображение.'
+        return self._json(200, {'ok': bool(extracted.strip()), 'name': name, 'text': extracted, 'warning': warning,
+                               'chars': len(extracted)})
+
+
+def open_browser(url: str):
+    # Prefer Opera when installed; otherwise use the Windows default browser.
+    if os.name == 'nt':
+        try:
+            controller = webbrowser.get('opera')
+            if controller.open_new(url):
+                return True
+        except Exception:
+            pass
+        candidates = [Path(found) for found in [shutil.which('opera'), shutil.which('opera.exe')] if found]
+        candidates += [
+            Path(os.environ.get('LOCALAPPDATA', '')) / 'Programs' / 'Opera' / 'launcher.exe',
+            Path(os.environ.get('LOCALAPPDATA', '')) / 'Programs' / 'Opera' / 'opera.exe',
+            Path(os.environ.get('LOCALAPPDATA', '')) / 'Programs' / 'Opera GX' / 'opera.exe',
+            Path(os.environ.get('PROGRAMFILES', '')) / 'Opera' / 'launcher.exe',
+            Path(os.environ.get('PROGRAMFILES(X86)', '')) / 'Opera' / 'launcher.exe',
+            Path(os.environ.get('LOCALAPPDATA', '')) / 'Programs' / 'Opera GX' / 'launcher.exe',
+            Path(os.environ.get('PROGRAMFILES', '')) / 'Opera GX' / 'launcher.exe',
+            Path(os.environ.get('PROGRAMFILES(X86)', '')) / 'Opera GX' / 'launcher.exe',
+        ]
+        for executable in candidates:
+            try:
+                if executable.is_file():
+                    subprocess.Popen([str(executable), '--new-window', url], close_fds=True)
+                    return True
+            except Exception:
+                continue
+    try:
+        return bool(webbrowser.open(url, new=2, autoraise=True))
+    except Exception:
+        return False
+
+
+def main():
+    global PORT
+    ThreadingHTTPServer.allow_reuse_address = True
+    ThreadingHTTPServer.daemon_threads = True
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    PORT = int(server.server_address[1])
+    url = f'http://{HOST}:{PORT}'
+    print('\nARCHANGEL AI 4.1 | CZERNEBOG', flush=True)
+    if TUNNEL_MODE:
+        print(f'Локальный шлюз доступен только на {url}; публичный вход идёт через HTTPS-туннель.', flush=True)
+        print('Сессии изолированы; переписки на сервере не сохраняются.', flush=True)
+    elif HOSTED_MODE:
+        print(f'Веб-сервер слушает {HOST}:{PORT} (ожидается HTTPS reverse proxy).', flush=True)
+        print('Сессии изолированы по браузерной cookie; история на сервере не сохраняется.', flush=True)
+    else:
+        print(f'Локальный адрес: {url}', flush=True)
+        print('Сервер готов. Пытаюсь открыть Opera; если она не запустится, используй адрес выше.', flush=True)
+        print('API-ключ хранится только в RAM этого процесса и не записывается в файлы.', flush=True)
+        opener = threading.Timer(0.8, lambda: open_browser(url))
+        opener.daemon = True
+        opener.start()
+    try:
+        server.serve_forever(poll_interval=0.25)
+    except KeyboardInterrupt:
+        print('\nARCHANGEL завершает работу...', flush=True)
+    finally:
+        with LOCK:
+            for entry in SESSIONS.values():
+                entry['config'].update(provider=None, model=None, api_key=None, endpoint=None)
+            SESSIONS.clear()
+        server.shutdown()
+        server.server_close()
+
+if __name__ == '__main__': main(), uri):
+                            return self._json(400, {'error': 'Разрешены только изображения PNG/JPEG/WebP/GIF в формате data URL, до 11 МБ.'})
+                    elif part_type == 'input_audio' and message['role'] == 'user':
+                        if cfg['provider'] != 'openrouter':
+                            return self._json(400, {'error': 'Аудиодорожки сейчас поддерживаются только через OpenRouter и модель с аудиовходом.'})
+                        audio = part.get('input_audio')
+                        if not isinstance(audio, dict):
+                            return self._json(400, {'error': 'Аудиоданные отсутствуют.'})
+                        fmt, encoded = audio.get('format'), audio.get('data')
+                        if fmt not in ('mp3', 'wav', 'm4a', 'ogg', 'webm', 'flac', 'aac') or not isinstance(encoded, str) or len(encoded) > 7 * 1024 * 1024 or not re.fullmatch(r'[a-zA-Z0-9+/=]+', encoded):
+                            return self._json(400, {'error': 'Допустима одна аудиодорожка MP3/WAV/M4A/OGG/WebM/FLAC/AAC размером до 5 МБ.'})
+                        if any(p.get('type') == 'input_audio' for p in content if p is not part and isinstance(p, dict)):
+                            return self._json(400, {'error': 'Передавай не более одной аудиодорожки.'})
+                    else:
+                        return self._json(400, {'error': 'Неподдерживаемое вложение или роль сообщения.'})
             for part_text in text_parts:
                 if len(part_text) > MAX_SINGLE_TEXT:
                     return self._json(413, {'error': f'Одно текстовое сообщение превышает лимит {MAX_SINGLE_TEXT:,} символов.'})
