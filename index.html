@@ -1487,6 +1487,11 @@ window.addEventListener('keydown',e=>{
 // Restore and initialization.
 // App initialization is performed after the 3.1 voice module below.
 window.addEventListener('beforeunload',()=>{if(recognition){voiceWake=false;try{recognition.stop()}catch{}}});
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='hidden'&&voiceWake){
+  stopRecognition();
+ }
+});
 
 // ===== ARCHANGEL AI 3.0 CORE =====
 const ARCHANGEL_VERSION='4.17.0';
@@ -1801,7 +1806,20 @@ for(const key of ['ru','en','es']){
 }
 
 let voicePlaybackEpoch=0;
-function stopVoicePlayback(){voicePlaybackEpoch++;voiceSpeaking=false;if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch{};}
+function stopVoicePlayback(){
+ const wasSpeaking=voiceSpeaking;
+ voicePlaybackEpoch++;
+ voiceSpeaking=false;
+ if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch{}
+ if(wasSpeaking&&voiceWake&&recognition){
+  setTimeout(()=>{
+   if(voiceWake&&!voiceSpeaking&&recognition){
+    try{recognition.start()}catch(e){if(e.name!=='InvalidStateError')setVoiceUI();}
+   }
+  },350);
+ }
+ if(typeof setVoiceUI==='function')setVoiceUI();
+}
 $('stopSpeaking')?.addEventListener('click',()=>{stopVoicePlayback();const label=$('voiceCatalogStatus');if(label)label.textContent='Озвучка остановлена.';});
 $('autoSpeak')?.addEventListener('change',()=>{state.prefs.autoSpeak=$('autoSpeak').checked;save();syncSpeakerButton();if(!state.prefs.autoSpeak)stopVoicePlayback();toast(state.prefs.autoSpeak?'Озвучка включена':'Озвучка выключена');});
 function splitSpeechText(text,max=220){const out=[];let rest=String(text||'').replace(/\s+/g,' ').trim();while(rest.length>max){let cut=-1;for(const re of [/[.!?。！？;:](?=\s)/g,/,\s/g,/\s/g]){let m;while((m=re.exec(rest))!==null)if(m.index>max*.55&&m.index<max)cut=m.index+m[0].length;if(cut>0)break;}if(cut<1)cut=max;out.push(rest.slice(0,cut).trim());rest=rest.slice(cut).trim();}if(rest)out.push(rest);return out;}
