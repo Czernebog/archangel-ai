@@ -658,7 +658,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.12</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.13</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -689,7 +689,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.12</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.13</div>
   </div>
 </aside>
 <main class="main">
@@ -766,7 +766,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
     <div class="api-step"><b class="num">04</b><div><b>Проверь соединение</b><span>Нажми «Проверить соединение». Если тест успешен, перейди в «ИИ-ассистент» и отправь запрос.</span></div></div>
    </div>
    <div class="api-warning" style="margin-top:13px"><b>Важно: безопасность и расходы.</b> Веб-версия использует сервер ARCHANGEL по HTTPS. API-ключ хранится только в оперативной памяти отдельной браузерной сессии и очищается при перезапуске сервера. Не публикуй ключ и не используй чужой аккаунт. Проверь возрастные требования, доступность API и стоимость у провайдера; несовершеннолетним настройку аккаунтов и оплату следует проводить с родителем/опекуном, если это требуется условиями.</div>
-   <p class="footnote" style="margin-top:10px">Для работы API запускай приложение через START-ARCHANGEL.cmd. Локальный шлюз снимает зависимость от CORS и не отдаёт ключ браузерному JavaScript. Не открывай HTML двойным щелчком.</p>
+   <p class="footnote" style="margin-top:10px">Открывай ARCHANGEL через защищённый HTTPS-сайт. Подключение ИИ выполняется сервером: ключ не записывается в HTML или историю чатов. Для Windows не требуется устанавливать отдельные файлы.</p>
   </div>
   <div class="card" id="settings-style">
    <div class="between"><h3 class="section-title">Характер и ответы</h3><span class="badge">Стиль</span></div>
@@ -820,8 +820,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.12.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.12.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.13.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.13.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1329,7 +1329,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.12 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.13 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
@@ -1337,24 +1337,15 @@ document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI �
 
 function localeKey(locale){const l=String(locale||'').toLowerCase();return l.startsWith('ru')?'ru':l.startsWith('es')?'es':'en';}
 function updateVoiceValueLabels(){for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];for(const [id,suffix] of [[c.rate,'×'],[c.pitch,'']]){const el=$(id),label=$(id+'Val');if(el&&label)label.textContent=(+el.value).toFixed(2)+suffix;}}}
-function classifyVoiceGender(v,locale){const n=String(v.name||'').toLowerCase();const key=localeKey(locale);const male=key==='ru'?/(alexei|alexey|aleksei|pavel|dmitry|dmitriy|maxim|maksim|mikhail|oleg|sergey|nikolay|vladimir|igor|male|man)/i.test(n):key==='es'?/(jorge|diego|carlos|miguel|pablo|juan|antonio|male|man|masculin)/i.test(n):/(david|guy|christopher|ryan|mark|daniel|james|george|thomas|andrew|michael|male|man)/i.test(n);const female=key==='ru'?/(daria|darya|irina|alena|elena|olga|svetlana|natalia|polina|ekaterina|marina|anna|female|woman)/i.test(n):key==='es'?/(lucia|lucía|sofia|sofía|carmen|maria|maría|elena|female|woman|femenin)/i.test(n):/(zira|aria|jenny|sara|samantha|victoria|ava|emma|julia|karen|susan|female|woman)/i.test(n);if(male)return'male';if(female)return'female';return'unknown';}
+function classifyVoiceGender(v,locale){const n=String(v.name||'').toLowerCase();const key=localeKey(locale);const male=key==='ru'?/(alexei|alexey|aleksei|pavel|dmitry|dmitriy|maxim|maksim|mikhail|oleg|sergey|nikolay|vladimir|igor|male|man)/i.test(n):key==='es'?/(jorge|diego|carlos|miguel|pablo|juan|antonio|alvaro|álvaro|raul|raúl|enrique|felipe|male|man|masculin)/i.test(n):/(david|guy|christopher|ryan|mark|daniel|james|george|thomas|andrew|michael|oliver|alex|aaron|male|man)/i.test(n);const female=key==='ru'?/(daria|darya|irina|alena|elena|olga|svetlana|natalia|polina|ekaterina|marina|anna|female|woman)/i.test(n):key==='es'?/(lucia|lucía|sofia|sofía|carmen|maria|maría|elena|helena|laura|paulina|conchita|isabel|paloma|female|woman|femenin)/i.test(n):/(zira|aria|jenny|sara|samantha|victoria|ava|emma|julia|karen|susan|sonia|libby|hazel|female|woman)/i.test(n);if(male)return'male';if(female)return'female';return'unknown';}
 function findGenderVoice(locale,gender){
  const key=localeKey(locale),cfg=VOICE_LANGS[key];
- const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(cfg.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name));
- const exact=list.find(v=>classifyVoiceGender(v,locale)===gender);
- if(exact)return exact;
- // Neutral metadata: keep correct language even when gender cannot be determined.
- return list.find(v=>classifyVoiceGender(v,locale)==='unknown')||list[0]||null;
+ const list=speechVoices().filter(v=>String(v.lang||'').toLowerCase().startsWith(cfg.prefix));
+ const exact=list.filter(v=>classifyVoiceGender(v,locale)===gender);
+ return exact.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;
 }
-function voiceProfilePitch(locale,gender,base){
- const v=findGenderVoice(locale,gender);if(!v)return base;
- if(classifyVoiceGender(v,locale)!=='unknown')return base;
- return gender==='male'?Math.max(.65,Math.min(1.1,base*.88)):Math.max(.65,Math.min(1.1,base*1.1));
-}
-function actualProfileNote(locale,gender,v){
- if(!v)return 'Нет установленного голоса';
- return v.name+(classifyVoiceGender(v,locale)!==gender?' · профиль тембра':'');
-}
+function voiceProfilePitch(locale,gender,base){return base;}
+function actualProfileNote(locale,gender,v){return v?v.name+' · '+v.lang:'Не найден голос этого профиля на устройстве';}
 function populateVoiceSelect(id,prefix,selected){const el=$(id);if(!el)return;const current=selected||el.value;const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(prefix));el.innerHTML='';const o=document.createElement('option');o.value='';o.textContent=prefix==='ru'?'Автовыбор русского голоса':prefix==='es'?'Selección automática':'Auto-select English voice';el.append(o);list.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name)).forEach(v=>{const x=document.createElement('option');x.value=v.voiceURI||v.name;x.textContent=`${v.name} · ${v.lang}${v.localService?'':' · online'}`;el.append(x)});if(current&&[...el.options].some(x=>x.value===current))el.value=current;}
 function updateVoiceChoiceUI(){
  for(const [key,locale,labelMale,labelFemale] of [['ru','ru-RU','мужской','женский'],['en','en-US','male','female'],['es','es-ES','masculino','femenino']]){
@@ -1365,10 +1356,26 @@ function updateVoiceChoiceUI(){
   for(const [suffix,gender] of [['MaleName','male'],['FemaleName','female']]){
    const v=findGenderVoice(locale,gender),el=$(`voice${cap}${suffix}`);
    if(el)el.textContent=actualProfileNote(locale,gender,v);
+   for(const kind of ['voice-preview','voice-use']){
+    const button=document.querySelector(`[data-${kind}="${key}:${gender}"]`);
+    if(button){button.disabled=!v;button.title=v?'Прослушать или выбрать: '+v.name:'Такого голоса нет в системе или браузере';}
+   }
   }
  }
 }
-function updateVoiceCatalog(){for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];populateVoiceSelect(c.select,c.prefix,state.prefs[c.voiceKey]||'');}const counts={};for(const k of Object.keys(VOICE_LANGS)){counts[k]=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(VOICE_LANGS[k].prefix)).length;}const status=$('voiceCatalogStatus');if(status)status.textContent=`Голоса устройства: русский — ${counts.ru}, English — ${counts.en}, español — ${counts.es}. Для длинного текста выбери голос устройства; настройки скорости и тембра сохраняются отдельно.`;updateVoiceChoiceUI();}
+function updateVoiceCatalog(){
+ for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];populateVoiceSelect(c.select,c.prefix,state.prefs[c.voiceKey]||'');}
+ const labels={ru:'Русский',en:'English',es:'Español'};
+ const summaries=Object.keys(VOICE_LANGS).map(k=>{
+  const c=VOICE_LANGS[k],available=speechVoices().filter(v=>String(v.lang||'').toLowerCase().startsWith(c.prefix));
+  const foundM=available.filter(v=>classifyVoiceGender(v,c.locale)==='male').length;
+  const foundF=available.filter(v=>classifyVoiceGender(v,c.locale)==='female').length;
+  return `${labels[k]}: ${available.length} (муж. ${foundM}, жен. ${foundF})`;
+ });
+ const status=$('voiceCatalogStatus');
+ if(status)status.textContent='Голоса устройства — '+summaries.join(' · ')+'. Если кнопка недоступна, браузер не предоставил соответствующий голос. Кнопка «Обновить голоса» повторяет проверку.';
+ updateVoiceChoiceUI();
+}
 function outputLocale(text,forced){if(forced)return forced;const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;if(state.prefs.language==='es')return'es-ES';if(state.prefs.language==='en')return'en-US';const value=String(text||'').toLowerCase();const ru=(value.match(/[а-яё]/g)||[]).length;const esMarks=(value.match(/[áéíóúüñ¿¡]/g)||[]).length;const esWords=(value.match(/\b(hola|gracias|por favor|buenos|buenas|usted|tarea|solución|analizar|puedes|quieres|sistema|respuesta)\b/g)||[]).length;const en=(value.match(/[a-z]/g)||[]).length;if(ru>Math.max(en,esMarks+esWords*3))return'ru-RU';if(esMarks+esWords*3>0&&esMarks+esWords*3>=en*.12)return'es-ES';return'en-US';}
 function chosenVoice(locale){const key=localeKey(locale),c=VOICE_LANGS[key],voices=speechVoices(),selected=$(c.select)?.value||state.prefs[c.voiceKey];if(selected){const v=voices.find(x=>(x.voiceURI||x.name)===selected);if(v)return v;}const g=state.prefs[c.genderKey]||'male';const profile=findGenderVoice(locale,g);if(profile)return profile;return voices.filter(v=>(v.lang||'').toLowerCase().startsWith(c.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;}
 function voiceSample(locale){const k=localeKey(locale);return k==='ru'?'Здравствуйте. Я Архангел. Я внимательно разберу задачу, проверю детали и предложу точное решение.':k==='es'?'Hola. Soy Archangel. Analizaré la tarea con atención, comprobaré los detalles y te propondré una solución precisa.':'Hello. I am Archangel. I will examine the task carefully, verify the details, and give you a precise solution.';}
