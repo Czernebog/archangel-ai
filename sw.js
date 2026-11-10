@@ -1,5 +1,5 @@
-const CACHE = 'archangel-pwa-v1';
-const SHELL = ['/manifest.webmanifest','/icons/icon-192.png','/icons/icon-512.png','/icons/apple-touch-icon.png'];
+const CACHE = 'archangel-pwa-v4.1';
+const SHELL = ['/manifest.webmanifest','/icons/icon.svg'];
 self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 // Never cache chat/API traffic, HTML containing session state, or user data.
