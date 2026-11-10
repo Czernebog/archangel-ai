@@ -1134,7 +1134,7 @@ $('exportBackup').onclick=()=>{const snapshot={...state,history:state.history.sl
 $('importBackup').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{try{if(!i.files?.[0])return;const d=JSON.parse(await i.files[0].text()),src=d?.state;if(!src||typeof src!=='object'||Array.isArray(src))throw Error('В резервной копии не найден объект state.');if(!confirm('Заменить текущие заметки, задачи, историю и настройки этой резервной копией? Оригиналы файлов и API-ключи не импортируются.'))return;const arr=(key,limit)=>Array.isArray(src[key])?src[key].filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,limit):[];const prefs=src.prefs&&typeof src.prefs==='object'&&!Array.isArray(src.prefs)?src.prefs:{};const plugins=src.plugins&&typeof src.plugins==='object'&&!Array.isArray(src.plugins)?src.plugins:{};const next={history:arr('history',240),notes:arr('notes',100),tasks:arr('tasks',200),library:arr('library',80).map(x=>({...x,originalMissing:true})),messages:arr('messages',60).filter(x=>['user','assistant'].includes(x.role)),chats:arr('chats',60),activeChatId:typeof src.activeChatId==='string'?src.activeChatId:null,prefs:{...state.prefs},plugins:{...state.plugins}};for(const [k,v] of Object.entries(prefs))if(Object.prototype.hasOwnProperty.call(next.prefs,k)&&typeof v===typeof next.prefs[k]&&(typeof v!=='number'||Number.isFinite(v)))next.prefs[k]=v;for(const [k,v] of Object.entries(plugins))if(Object.prototype.hasOwnProperty.call(next.plugins,k)&&typeof v==='boolean')next.plugins[k]=v;state=next;normalizeConversations();save();restorePrefs();renderAll();restoreChat();renderRecentChats();toast('Резервная копия импортирована. Бинарные оригиналы файлов не входят в JSON.')}catch(e){toast('Не удалось импортировать JSON: '+e.message)}finally{i.value=''}};i.click()};
 $('wipeData').onclick=async()=>{if(!confirm('Удалить все данные ARCHANGEL в этом браузере, включая библиотеку файлов и настройки? Это действие необратимо.'))return;await clearLibraryAssets();storageRemove(DBKEY);for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_asset_'))volatileStore.delete(key);state={history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',autoSpeak:false,voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};renderAll();restorePrefs();toast('Все локальные данные и оригиналы файлов удалены.');};
 function downloadBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
-// Voice 1.2: separate RU / EN profiles, selectable installed voices and bilingual wake phrases.
+// Voice input and device voices. Microphone starts only after the user's click.
 // Declare the voice map before any timers, callbacks or preference restore can run.
 // Using `var` avoids a temporal-dead-zone crash in Chromium/Opera during startup.
 var VOICE_LANGS={ru:{prefix:'ru',select:'voiceRuSelect',rate:'voiceRateRu',pitch:'voicePitchRu',voiceKey:'voiceRuVoice',genderKey:'voiceRuGender',locale:'ru-RU'},en:{prefix:'en',select:'voiceEnSelect',rate:'voiceRateEn',pitch:'voicePitchEn',voiceKey:'voiceEnVoice',genderKey:'voiceEnGender',locale:'en-US'},es:{prefix:'es',select:'voiceEsSelect',rate:'voiceRateEs',pitch:'voicePitchEs',voiceKey:'voiceEsVoice',genderKey:'voiceEsGender',locale:'es-ES'}};
@@ -1229,7 +1229,8 @@ function applyVoiceGender(locale,gender){
 // Voice audition handlers are registered once by the three-language laboratory below.
 
 let recognitionRetryTimer=null;
-let recognitionRequestTime=0;
+let recognitionCommitTimer=null;
+let voiceDraftManaged=false;
 function setVoiceUI(){
  const mic=$('voiceStart'),status=$('voiceState');
  if(mic){
@@ -1253,6 +1254,8 @@ function syncSpeakerButton(){
 function stopRecognition(){
  voiceWake=false;voiceActive=false;
  if(recognitionRetryTimer!==null){clearTimeout(recognitionRetryTimer);recognitionRetryTimer=null;}
+ if(recognitionCommitTimer!==null){clearTimeout(recognitionCommitTimer);recognitionCommitTimer=null;}
+ voiceDraftManaged=false;
  const old=recognition;recognition=null;
  if(old){old.onend=null;old.onresult=null;old.onerror=null;try{old.abort()}catch{}}
  setVoiceUI();
@@ -1276,13 +1279,19 @@ function startRecognition(){
    for(let j=e.resultIndex;j<e.results.length;j++)if(e.results[j].isFinal)heard+=(e.results[j][0]?.transcript||'')+' ';
    heard=heard.trim();
    if(!heard||activeController)return;
-   const input=$('chatInput');
-   if(input.value.trim()){
-    input.value=(input.value.trim()+' '+heard).slice(0,12000);
-    toast('Речь добавлена в черновик. Нажми отправку, когда будешь готов.');
-   }else{
-    input.value=heard;
-    sendChat();
+   const input=$('chatInput'),hadDraft=!!input.value.trim();
+   if(!hadDraft)voiceDraftManaged=true;
+   input.value=(hadDraft?input.value.trim()+' ':'')+heard;
+   input.value=input.value.slice(0,12000);
+   if(recognitionCommitTimer!==null)clearTimeout(recognitionCommitTimer);
+   if(voiceDraftManaged){
+    recognitionCommitTimer=setTimeout(()=>{
+     recognitionCommitTimer=null;
+     if(voiceWake&&!activeController&&voiceDraftManaged&&input.value.trim()){
+      voiceDraftManaged=false;
+      sendChat();
+     }
+    },1150);
    }
   };
   instance.onerror=e=>{
@@ -1313,7 +1322,6 @@ function startRecognition(){
    },550);
   };
   instance.start();
-  recognitionRequestTime=Date.now();
   voiceWake=true;voiceActive=true;
   setVoiceUI();
  }catch(e){
@@ -1322,6 +1330,7 @@ function startRecognition(){
  }
 }
 $('voiceStart').onclick=()=>{if(voiceWake){stopRecognition();toast('Микрофон выключен');}else startRecognition();};
+$('chatInput')?.addEventListener('input',()=>{if(voiceDraftManaged){voiceDraftManaged=false;if(recognitionCommitTimer!==null){clearTimeout(recognitionCommitTimer);recognitionCommitTimer=null;}}});
 $('voiceSpeakerToggle').onclick=()=>{
  state.prefs.autoSpeak=!state.prefs.autoSpeak;
  save();syncSpeakerButton();
@@ -1664,7 +1673,7 @@ function splitSpeechText(text,max=220){const out=[];let rest=String(text||'').re
 function speak(text,forcedLocale){if(!('speechSynthesis'in window))return;const clean=String(text||'').replace(/https?:\/\/\S+/g,'').replace(/```[\s\S]*?```/g,'').replace(/\n{2,}/g,'. ').replace(/\s+/g,' ').trim();if(!clean)return;stopVoicePlayback();const locale=outputLocale(clean,forcedLocale),key=localeKey(locale),cfg=VOICE_LANGS[key],voice=chosenVoice(locale),rate=+$((cfg&&$(cfg.rate))?.value)||.98,pitch=+$((cfg&&$(cfg.pitch))?.value)||.97;const pieces=splitSpeechText(clean);const playback=voicePlaybackEpoch;let index=0;const status=$('voiceCatalogStatus');if(status)status.textContent=`Озвучка: ${voice?voice.name+' · '+voice.lang:'системный голос · '+locale}. Фрагмент ${pieces.length} · скорость ${rate.toFixed(2)}×.`;const resume=voiceWake&&!!recognition;if(resume){voiceSpeaking=true;try{recognition.stop()}catch{}}function next(){if(playback!==voicePlaybackEpoch)return;if(index>=pieces.length){voiceSpeaking=false;if(resume&&voiceWake)setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550);return;}const u=new SpeechSynthesisUtterance(pieces[index++]);u.lang=locale;if(voice)u.voice=voice;u.rate=rate;u.pitch=voiceProfilePitch(locale,state.prefs[cfg.genderKey]||'male',pitch);u.volume=1;u.onend=next;u.onerror=()=>{if(playback!==voicePlaybackEpoch)return;voiceSpeaking=false;if(resume&&voiceWake&&recognition)setTimeout(()=>{try{recognition.start()}catch{}},550);};speechSynthesis.speak(u);}next();}
 // Persist the selected interface and all three voice profiles.
 const oldRestorePrefs=restorePrefs;restorePrefs=function(){oldRestorePrefs();for(const k of ['interfaceLanguage','voiceEsVoice','voiceEsGender','voiceRateEs','voicePitchEs'])if(state.prefs[k]!==undefined&&$(k))$(k).value=state.prefs[k];if($('interfaceLanguage'))$('interfaceLanguage').value=state.prefs.interfaceLanguage||'ru';if($('autoSpeak'))$('autoSpeak').checked=!!state.prefs.autoSpeak;if($('voiceEsSelect'))$('voiceEsSelect').value=state.prefs.voiceEsVoice||'';applyInterfaceLanguage();updateVoiceCatalog();updateVoiceValueLabels();};
-$('savePrefs').onclick=()=>{for(const k of ['tone','detail','language','voiceLanguage','voiceOutputLanguage','answerStyle'])state.prefs[k]=$(k).value;state.prefs.interfaceLanguage=$('interfaceLanguage').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;state.prefs.autoSpeak=!!$('autoSpeak')?.checked;for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];state.prefs[c.voiceKey]=$(c.select)?.value||'';state.prefs[c.rate]=+$(c.rate).value;state.prefs[c.pitch]=+$(c.pitch).value;}for(const [id,key] of [['voiceRateEs','voiceRateEs'],['voicePitchEs','voicePitchEs']])state.prefs[key]=+$(id).value;save();applyInterfaceLanguage();updateVoiceValueLabels();toast(state.prefs.interfaceLanguage==='en'?'Settings saved':state.prefs.interfaceLanguage==='es'?'Ajustes guardados':'Настройки сохранены');};
+$('savePrefs').onclick=()=>{for(const k of ['tone','detail','language','voiceLanguage','voiceOutputLanguage','answerStyle'])state.prefs[k]=$(k).value;state.prefs.interfaceLanguage=$('interfaceLanguage').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;state.prefs.autoSpeak=!!$('autoSpeak')?.checked;syncSpeakerButton();for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];state.prefs[c.voiceKey]=$(c.select)?.value||'';state.prefs[c.rate]=+$(c.rate).value;state.prefs[c.pitch]=+$(c.pitch).value;}for(const [id,key] of [['voiceRateEs','voiceRateEs'],['voicePitchEs','voicePitchEs']])state.prefs[key]=+$(id).value;save();applyInterfaceLanguage();updateVoiceValueLabels();toast(state.prefs.interfaceLanguage==='en'?'Settings saved':state.prefs.interfaceLanguage==='es'?'Ajustes guardados':'Настройки сохранены');};
 for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];$(c.select)?.addEventListener('change',()=>{state.prefs[c.voiceKey]=$(c.select).value;const v=speechVoices().find(x=>(x.voiceURI||x.name)===$(c.select).value);if(v){const g=classifyVoiceGender(v,c.locale);if(g!=='unknown')state.prefs[c.genderKey]=g;}save();});for(const id of [c.rate,c.pitch])$(id)?.addEventListener('input',updateVoiceValueLabels);}
 $('interfaceLanguage')?.addEventListener('change',()=>{state.prefs.interfaceLanguage=$('interfaceLanguage').value;applyInterfaceLanguage();});
 $('refreshVoices').onclick=()=>{updateVoiceCatalog();toast('Список системных голосов обновлён')};
