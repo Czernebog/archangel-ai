@@ -1009,6 +1009,8 @@ function renderMathExpression(source,display=false){
    }
    if(name==='sqrt'){const v=group(depth+1),n=create('msqrt');n.append(v);return n}
    if(name==='text'||name==='mathrm'||name==='operatorname')return group(depth+1);
+   if(name==='{'||name==='}')return create('mo',name);
+   if(name==='quad'||name==='qquad'||name==='displaystyle')return create('mspace');
    if(name in greek)return create('mo',greek[name]);
    if(['sin','cos','tan','log','ln','lim','max','min'].includes(name))return create('mi',name);
    return create('mtext','\\'+name);
@@ -1274,7 +1276,7 @@ window.addEventListener('keydown',e=>{
 window.addEventListener('beforeunload',()=>{if(recognition){voiceWake=false;try{recognition.stop()}catch{}}});
 
 // ===== ARCHANGEL AI 3.0 CORE =====
-const ARCHANGEL_VERSION='4.1.0';
+const ARCHANGEL_VERSION='4.15.0';
 let activeController=null;
 const localGateway=()=>((location.protocol==='http:'||location.protocol==='https:')&&!!location.hostname);
 async function gatewayJSON(path,payload){
