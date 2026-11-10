@@ -653,6 +653,32 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 }
 #bootScreen #bootEmblem{display:block;width:104px!important;height:104px!important;object-fit:contain;transform:none!important;transition:none!important;filter:none!important}
 </style>
+
+<style id="archangel-413-polish">
+/* Stable, compact interface with accessible voice controls and reduced visual clutter. */
+.voice-choice:disabled,.voice-choice-actions button:disabled{
+  opacity:.48!important;cursor:not-allowed!important;filter:none!important
+}
+.voice-choice:disabled:hover{background:#111!important;border-color:#303030!important}
+.voice-audition-card{min-width:0}
+.voice-audition-head p,.voice-status-line{line-height:1.55}
+.voice-choice small{overflow-wrap:anywhere;line-height:1.45;white-space:normal}
+.voice-choice:focus-visible,.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#refreshVoices{font-weight:600}
+#voiceCatalogStatus{padding:11px 14px;background:#101010;border:1px solid #303030;border-radius:12px}
+@media(max-width:760px){
+  .voice-choice-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+  .voice-choice{padding:10px 8px;align-items:flex-start}
+  .voice-choice .voice-choice-mark{flex-shrink:0}
+  .voice-choice-actions{display:flex;gap:8px}
+  .voice-choice-actions button{flex:1;min-width:0;min-height:44px;white-space:normal}
+  #voiceCatalogStatus{font-size:12px}
+  .topbar .top-actions .pill{min-width:0;overflow:hidden}
+}
+@media(prefers-reduced-motion:reduce){
+  .boot-screen,.boot-mark{animation:none!important}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
@@ -1513,10 +1539,10 @@ async function initializeArchangel(){
   }catch(e){apiStatus('Локальный шлюз пока недоступен: '+e.message,false);}
  }else apiStatus('Сервер ARCHANGEL недоступен. Обнови страницу или попробуй позже.',false);
  const cover=$('heroCover');if(cover){try{await waitAtMost(cover.decode(),1800)}catch(e){}}
- const remaining=Math.max(0,1100-(performance.now()-started));
+ const remaining=Math.max(0,520-(performance.now()-started));
  await new Promise(resolve=>setTimeout(resolve,remaining));
  setBootCaption('СИСТЕМА ГОТОВА К РАБОТЕ');
- if(boot){boot.classList.add('is-ready');await new Promise(resolve=>setTimeout(resolve,780));boot.classList.add('is-hidden');setTimeout(()=>boot.remove(),500);}
+ if(boot){boot.classList.add('is-ready');await new Promise(resolve=>setTimeout(resolve,260));boot.classList.add('is-hidden');setTimeout(()=>boot.remove(),380);}
  document.body.classList.add('app-ready');
 }
 $('bootRetry')?.addEventListener('click',()=>location.reload());
