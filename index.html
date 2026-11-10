@@ -5,9 +5,9 @@
 <meta name="theme-color" content="#090909"><meta name="color-scheme" content="dark"><meta name="description" content="ARCHANGEL AI — персональный ИИ-помощник CZERNEBOG">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
 <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
-<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/icon.svg">
-<title>ARCHANGEL AI — Web Edition 4.1 | Czernebog</title>
-<link rel="preload" as="image" href="assets/archangel-brand-cover.svg">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<title>ARCHANGEL AI — Web Edition 4.2 | Czernebog</title>
+<link rel="preload" as="image" href="assets/archangel-user-cover.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpath fill=%22white%22 d=%22M50 8 96 92H76L50 42 24 92H4Z%22/%3E%3Cpath stroke=%22black%22 stroke-width=%229%22 d=%22M31 68h38%22/%3E%3C/svg%3E">
 
 <style>
@@ -390,17 +390,44 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @media(max-height:650px) and (max-width:760px){.chat-card{min-height:280px;height:calc(100dvh - 155px)}.page-head .eyebrow{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
+
+<style id="archangel-42-conversations">
+/* ARCHANGEL 4.2: original branded header and private, browser-local conversations */
+.sidebar{overflow:hidden}
+.brand{min-height:94px!important;max-height:112px;overflow:hidden}
+.brand #brandLogo{width:100%!important;max-width:194px!important;height:92px!important;object-fit:contain!important;object-position:center!important;filter:none!important}
+.recent-panel{display:flex;flex-direction:column;gap:7px;min-height:106px;max-height:min(42vh,370px);overflow:hidden;margin-top:13px;border-top:1px solid #292929;padding-top:12px}
+.recent-head{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 3px 3px}
+.recent-title{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:#b7b7b7;font-weight:700}
+.recent-new{border:1px solid #555;color:#fafafa;background:#171717;border-radius:9px;min-width:31px;height:31px;font-size:21px;line-height:1;cursor:pointer}
+.recent-new:hover{border-color:white;background:#292929}
+.recent-list{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;display:flex;flex-direction:column;gap:4px;min-height:0;padding-right:2px}
+.recent-empty{padding:12px 9px;font-size:11px;color:#858585;line-height:1.5}
+.recent-row{display:flex;align-items:center;gap:3px;border:1px solid transparent;background:transparent;border-radius:10px;padding:3px 4px 3px 2px;min-height:39px}
+.recent-row:hover{background:#191919;border-color:#343434}
+.recent-row.is-current{background:#202020;border-color:#484848}
+.recent-open{flex:1;min-width:0;text-align:left;display:flex;align-items:center;gap:8px;padding:7px 5px;background:transparent;color:#ddd;border:0;font-size:11px;line-height:1.35;cursor:pointer}
+.recent-open .recent-bubble{flex:none;opacity:.7;font-size:14px}
+.recent-open .recent-name{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.recent-row.is-current .recent-open{color:#fff;font-weight:700}
+.recent-delete{flex:none;width:30px;height:30px;border:0;background:transparent;color:#959595;border-radius:7px;font-size:16px;cursor:pointer}
+.recent-delete:hover,.recent-delete:focus-visible{background:#393939;color:white}
+.recent-privacy{font-size:10px;color:#777;padding:3px 5px;line-height:1.35}
+.side-bottom{flex-shrink:0}
+@media(max-width:760px){.recent-panel{max-height:35dvh}.brand #brandLogo{height:75px!important}}
+@media(max-height:710px){.recent-panel{max-height:27vh}.side-bottom .status-card{display:none}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" alt="Эмблема ARCHANGEL AI"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.1</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.2</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><img id="brandLogo" src="assets/archangel-brand-cover.svg" alt="Оригинальная эмблема ARCHANGEL AI"></div>
+  <div class="brand"><img id="brandLogo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wgARCAD2AVwDASIAAhEBAxEB/8QAGwABAAEFAQAAAAAAAAAAAAAAAAUBAwQGBwL/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIQAxAAAAHRgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK0lyNdSHKvO66UAAAAAAAAAAAAAAAAAAAN407pp7824gmeZdR041kAAAAAAAAAAAAAAAAAAGy7lHSJBwNyBOqYOReOU0lokAAAAAAAAAAAAAAAAASMduRstu5AGmWq0N02PnnQyB0bqvMzGAAAAAAAAAAAAAAAAB76bpu8jn+681PIK9I5ttJt2o7diHM3ryAAAAAAAAAAAAAAAK0yzdJilTVdT6sOUurDlOT00UqGhQu+6EAAAAAAAAAAAAAAANr1XpRmWrunGxObjpDm46Q5uOl5nK+ml7mnTNVNSAAAAAAAAAAAAAABL9AgJ888y3XQgAABuOnSB0fHyByvxPQZ5XBbe5sgXseFzyeV22UXfJ4XbZROQYAAAAAvWdjNx90tGmQNy2AAAAdFktM3IitX3zUDFzYCfI6Yi7hes1kC7H58WX7WDIGPnYmWZWD6wC9r+w68AAAAAVUzzBTGGYdJ22Q6YEOnKEJSajzFBVQVr5FfXgenkV9eB6pQVz48bFGx49+aCtAAAAAAZ2CJOzhCUpGCUpGCVRQzLVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/xAAqEAABAwMDAwMEAwAAAAAAAAADAQIEAAUTERJQEBQwICFAFSI0NTNwgP/aAAgBAQABBQL+vMb6xvpUVOJtgcsrpeQ7g8RZw7I9IqKj2IRhWKMnDCYpSMajGFfjFaC5I9XoOhOGswdxau5NkS0F2SqmhzxuGt4cMWryXfIa5WuE9CDq5BwyuEghzSaI5GMI9SPqzG3Cq7hyR+EsodB1eDbI/S3GwyqciOacahLwTWq5wRoIVXM2WV1hFzRqvQfu4K0BySalFwx19/RZTaOqULOBU0XgbWHFFq9F9vRHIoTouqVdQ4pPARhZjomniuocsbgLKHoQjBN7yNXeRq7yNXeRq7yNXeRqbKA51KmqShYT/PiCwR6vRdSepqq1wCIUVXoPt862ByyqVUahyZTeuym1ZUgaGC5FavzbOHZHq6lxxfBBNhk9LuHHIRFWtjtrWOdSoqLcgo0rmq2karqcxza0XTG/SlG9EVFSkG93S5jYPyiYpCMajGVeC75Pht5s0WrmHNFtX50qYVxJh3QqkS2yI9xlPBRnrJtcc5GxxJJJHtrkZDgzTGkxAsSWlyMpJokNcz9+hLkJyx7t5bMLU2tEIgxvcr3eGzG2m1SvaowcN2N7SJYFnVIjjjxrx/Kz9MiFfBiCIxIf6+2fnBKwc/6a9r5pUDc5MQ5SzRIEd2+br0RypWta9EcqVqvWG4KFSNFa6cfuJCOcnnjCaWiR8VRxoR3ZNypFYp8G0j4rGhKILiLCTIIIVWSjUPwITowb5W6gHxIspq0spFV0vWklI1rZmld2iUM+xhnoQn+JP//EABQRAQAAAAAAAAAAAAAAAAAAAID/2gAIAQMBAT8BMH//xAAUEQEAAAAAAAAAAAAAAAAAAACA/9oACAECAQE/ATB//8QANhAAAgAEBAMFBgQHAAAAAAAAAQIAAxExEBIhQQRCUCIwMjNxEyBRcpGxI0BSgSRhYnCAwdH/2gAIAQEABj8C/t54W+keFvpGop0la2XU4iaLpf06TnN3+2FRBQ2IpDI1wejqg3MBRYCHf4CsFTdDgs0c2h6O008tsMu7mkZdn0wdN7jo6LudTgE2QQGFxCuOYYNTwtqOiou1zgXawFYZzcnBpR5bYZxdPt0Vpp5tBgJYu/2xQ7HQ4FTYwyHY9DCi5hUHKMGpZdB7iPvY4LOG+h6HnNk1wd/gPdaUd9Rg6fToYO764JKHqfdSYNjFRgSPC+vQUljcxQd1mHiTXoLzj6DCsxgo/nHnLHnLHnLHnLHnLHnLAVZqknChtDp8D0BE3A1wWV+nU++CLiFmDcYJOHofz61svaOBJsIZzue4aUeXUYPLO4gg3H54zDd/tgQLvp3KNtY45xZ40jNlNPjSOypPpFCKRLWUl02EdoEesUUEx2lI9RFaRXI1PjTCpU09I1jsqT+2EnIoFU1p3qoLk0gKLDDJsndKdxocGp4l1EJ+8TJKkCXXLSkLw/D0Wg1NLwomL+MD4hEsSqBivij2szxo1KwJfCSj7TmelYmrxi6ZezWOIYitNaGBLmkMrbUiezCqyamkduhlnkpEqXsVEZeGlhZQtaEnTECTa0akSPk70zTy2wZzsILG57ppRs2OTbWkOf6zCz+HoaijLWAJmvEE7GwiV8kTPn/5EocC1P10NDE0T5uaYyeGtaRxUSv3+0cQkw0SYSIq7p7Ic1YlPsFgzOGfNLbXxWhFM1nm8wroIkfJ+f0NPc0JHufxAqhH0jM3FqyDlguLWEaEjv2rnJHKgiaAxA9mGofWDmzWsoqTCirgMtcpv6Rk/EHZrlYa+kOFLrSWSQwjP2z2a5gOzEoLn8oHRbxKHbQPXxXFIlOpYr7TKQYcJavQmlsmZW1vSGpLAqmS8OCuZXGutIQexXKoIpWFBlAoopQn/cUCdnIVGvxg5ZQViuUkHT6QPw+TIdbiJeWUAErv8YC5bOHhmC5a7f4S/wD/xAAsEAACAgADBwMEAwEAAAAAAAABEQAhEDFBUFFhcYGRoTCx8SBAweFw0fCA/9oACAEBAAE/If47AZU+ST5JCt3MNkvwf7hinFnc2SyFa/wwEiAiCFtFNNBHY+eeIQA6SHSCIa8PV+KbwRqg6g2OpFCuY4PAyHRnLaae7TCoGvVENbGZAXejghTqOZhnUUETLfZhWC2KdW0PRGGa4imsSjg5Fm+Q4VvezsUi1l0Bng4Fl8mLEKP3sAgsCMzz1bDACyITKeRhdjx4Zy3MnVGCg1d3psOgGPu0wEZzo5wiRJzP0ONQdfAZXMjuhCA5ijsJwBGf8YH/AMXpEYjEYjOMBctYIVgIeCdKj+dgm4ouWsAAyAEPSegZE5a7BcQMv34XiBOPmZ8zPmZ8zPmZ8zD4KQDzwASwgjyhTvA5ffiyhKR9w1wX5oOofrKGiMTIcdg8Dl+v7+jH4zLzgYtAZ5Q+dnegz1l0NcOCRQZaIj98qFvhg/SMv59Gzc3QONSIb66wggJPCf1jJ4GzjUi3EQUsJJGdCyKbgUNMG4Bz2eyAxASGZWUIHg4xYIN7xg6gIPGCGG3hoQQbzmodEZn1cl1BBr0oYUwsK66+k7y8PpB/tvE8T2GE6JQhvhyqpHYoZhpgAEShQiUZW6FQQVS55f3LiNvCMtPJI3AnxXeDpGvjDBVaQN1I9ntG0ziJAlMiXarMAikoggxxlZ4tL4163CqoVzGJvENAEYwx9rPpOhSxzE4gjLMhSjb7kRhptCeY25w0BBhWgyULwM8X7wDwQFAEMY8RZZAQznU8z3I8cWd1wKvMzrCaT0+ViMD1EsFzi7fqnGF74z9Ci+tnfGd8Zt3hmdyGEiWSzCRzjpTxeGXNlxnfAbh3l097fBc4mgs8IEWXiQKhnAxvOEk5n1aRWJsn+o8AiIHYUYPGphOCAsgigOOyWjbUAyNGhhCppzNafuXtlIhI7uEWUBJDjXSClG7gRQhPkEaLjBAJ5hbCa6woZMRcAI0GRFuVCgADO8emdWNEtvQ8YdDUTiQ9Y0RAMTJHNLS6ABBKAWsb4Xcco42qi7SEHgbw8NIgsN2f/Ev/2gAMAwEAAgADAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAJAAAAAAAAAAAAAAAAAAAMPMCAAAAAAAAAAAAAAAAABBJKKAAAAAAAAAAAAAAAAACEMIMAAAAAAAAAAAAAAAAEEOAHEIAAAAAAAAAAAAAAAAMMAEEBAAAAAAAAAAAAAAAJIPPPBFCAAAAAAAAAAAAAFCPAAAMCICMCDCCDIAAAAALBKAAAFADPJOEEHPIAAAAAHOFFDFAAAAAIMPHIIAAAAAMAEEMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAID/2gAIAQMBAT8QMH//xAAUEQEAAAAAAAAAAAAAAAAAAACA/9oACAECAQE/EDB//8QAKxABAAIBAgUDBAMBAQEAAAAAAQARITFBUWFxgZEQobFQwdHwIDBA8XCA/9oACAEBAAE/EP8AztABa4CfvX2j+tfEri1XVT9JsgS0uGjzXiUa0Z5Eo5eCMVtCp+lNRPo4W1MftUvBjyb9FZPRP3lLrRhycQdm1cVpo/RzJU7yty9iVgkKug+8doDNcQjWmg1zoHzZ29MM2mek9z6Pmev1fti/M6y7VAM5pl8HmVdJr4Uz8E7+gmUNJnWPNVApEpGm/oprMCT4P/AxObpMp1IHWfapekFcxslbVU1z1OzOmu0It65FOp2forPWzbTUfODvADBoYP3xF0rpgF/aNnausvptaWvreH5nSUNmwVm2E7XcfoZrN84b+i2vE6diYsqY7nyR9PZCRwHs0z9xBQLlycPzDuRQvc2fH0NnAZ8VaJpjlJu7vdmdtdpUewrGr59UgRpNGG1avwT+Z1j71IcGV4vx9D5zxaXx+XaVFWpJzrB7pHDtFXivqazYfVyYfb4nTsw67trcGT3ISaMg7Jr9BMs7z4NbPEDaXH1ajlgTkTkM5DOQw5ERab6B4WIbTBODn7y6zpW8wJCnYdnn6CGmiYaDK8DAaowGwYPidf59Z17zvVlOx4z2+gGuZpNi5N3K+09oEeQEouft/wAT9v8Aift/xP2/4n7f8T9v+ICMQ8ky4GYkLutfaFvQ3Daye3+8IBatAcYa4AKN3n5Trg3muEi9rsfMuXLly5crWG/BGyUm06Gzudn0bWVfycr7f7iX/cQY4Hs9DAIPwGX2I26r7Njx/M1m08N4tHmvM0go6ouDqPkJa0A3ZMP8CV/oMswA3RegfL6P1YArX2Y7xb/oZ2j5HSfs9pYmGx0fTk/aaHA+GC3rQFsyAxabvfGqQNRfhHwDrSfDEpCLKrc46RPrnYXvOeS0vaVeU0s+USB0jDqmHQXbE61AZzDLA8wQtFgExxjMn1UIiAg1E0j2B+I0Mv8AbmD5MXv2lF4ZcjH5jzlJnrB35+z+k1mEpdw08npdtk2uNH62hG3RNknEVWAUsau2pRSCws430nuYwo6de0dvtI0nAs5QQEAARhmostLSNGwWUTGpAyQOxGS6GQAv3BBDOxRVOgxpUudFZixfYKaSAErdDF3FcZYBWL8RGRPjdb2bgnRZqaq2Nvea+n9v7Cbnjm+L4ucXyQ35bk2IphSzxW/6SDQazdNb4vxP+lEiIRSXtCKsF28XY8RddA+bEV0AB+vWFg+LZwEGpkoia3dhrrEKyrFg85uw3mJVuau3SJilBTO6gcMEK5KvspCNdBsco4sZBj+o/ExgfGiNRLjFDpDXVXPMyWUgbrPD+zVhqCmBSXxJzHz6VK9SpURNfW+E5zzOc8wGhHEOYttusYVZ1uLjpSaq2sRtq6Zl8Chd1LfM63Ebuc1bbgQggcIMQCNPEgYKLoqyVh0rvDqgOFHVftEHVAutN3vb3jBM1HCKSq13Zqg0UW/2GsMVCMx910BW8p2iW0B1hdThH+14xuqNjW7eEOgnbUqluTr9oJQbDkqtas1HrF2IrChvgR4IRF8pkVtzqq3eVtIF1QoXlza4KlcULpbNsN9opOnpTkTk6PKFyBgFM5KNv8Fy/wDANMuTiBoE1NTOkrgTqoiMjlUC5gRCmyhppNaFUhwBZFi7A21l0WRHTGIgxPfTUqM1sYhSx04LGmLrfjmWI6KlBVijIrvB+gJpGhtS7NbiGgRtUVhUSMi9GuXNG/8A8S//2Q==" alt="Оригинальная эмблема ARCHANGEL AI"></div>
   <div class="nav-label">Рабочее пространство</div>
   <nav class="nav" id="navigation">
     <button class="active" data-page="overview"><span class="ico">⌂</span>Обзор</button>
@@ -416,9 +443,15 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
     </details>
   </nav>
   <div class="nav-settings"><button data-page="settings" aria-label="Открыть настройки системы" title="Центр настроек"><span class="ico">⚙</span>Настройки</button></div>
+
+  <section class="recent-panel" aria-label="Недавние диалоги">
+    <div class="recent-head"><span class="recent-title" id="recentChatsTitle">Недавние чаты</span><button type="button" class="recent-new" id="newRecentChat" title="Новый чат" aria-label="Новый чат">+</button></div>
+    <div class="recent-list" id="recentChatsList" role="list"><p class="recent-empty">Здесь появятся ваши диалоги.</p></div>
+    <div class="recent-privacy" id="recentPrivacy">Диалоги хранятся в этом браузере</div>
+  </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.1</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.2</div>
   </div>
 </aside>
 <main class="main">
@@ -562,7 +595,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px}
 'use strict';
 const LOGO='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320"><text x="160" y="258" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="286" font-weight="700" fill="#fff">A</text></svg>`);
 ['bootEmblem','heroLogo','welcomeLogo'].forEach(id=>{const img=document.getElementById(id);if(img)img.src=LOGO;});
-const sidebarBrandImage=document.getElementById('brandLogo');if(sidebarBrandImage)sidebarBrandImage.src='assets/archangel-brand-cover.svg';
+const sidebarBrandImage=document.getElementById('brandLogo');if(sidebarBrandImage)sidebarBrandImage.src='data:image/jpeg;base64,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';
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function reportBootError(error){
  const boot=$('bootScreen');
@@ -579,7 +612,7 @@ window.addEventListener('error',event=>{if(event.target&&event.target!==window)r
 window.addEventListener('unhandledrejection',event=>reportBootError(event.reason));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8), now=()=>new Date().toLocaleString('ru-RU');
 const DBKEY='archangel_onefile_v1';const volatileStore=new Map();function storageGet(k){try{return localStorage.getItem(k)??volatileStore.get(k)??null}catch(e){return volatileStore.get(k)??null}}function storageSet(k,v){try{localStorage.setItem(k,v);volatileStore.delete(k);return true}catch(e){volatileStore.set(k,String(v));return false}}function storageRemove(k){try{localStorage.removeItem(k)}catch(e){}volatileStore.delete(k)}
-let state={history:[],notes:[],tasks:[],library:[],messages:[],plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};
+let state={history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};
 let api={protocol:'chat',endpoint:'https://api.openai.com/v1/chat/completions',model:'',key:''}, pendingFiles=[], recognition=null, voiceWake=false, voiceActive=false, lastMath='';
 function load(){
  try{
@@ -722,9 +755,9 @@ function setApiProtocol(){return 'chat';}
 $('toggleApiKey').onclick=()=>{const field=$('apiKey');const reveal=field.type==='password';field.type=reveal?'text':'password';$('toggleApiKey').textContent=reveal?'◌':'◉';$('toggleApiKey').title=reveal?'Скрыть ключ':'Показать ключ'};
 function apiStatus(message,connected=false){$('apiStatus').textContent=message;$('apiState').classList.toggle('connected',connected)}
 $('savePrefs').onclick=()=>{state.prefs.tone=$('tone').value;state.prefs.detail=$('detail').value;state.prefs.language=$('language').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;state.prefs.answerStyle=$('answerStyle').value;state.prefs.voiceLanguage=$('voiceLanguage').value;state.prefs.voiceOutputLanguage=$('voiceOutputLanguage').value;state.prefs.voiceRuVoice=$('voiceRuSelect').value;state.prefs.voiceEnVoice=$('voiceEnSelect').value;state.prefs.voiceRateRu=+$('voiceRateRu').value;state.prefs.voicePitchRu=+$('voicePitchRu').value;state.prefs.voiceRateEn=+$('voiceRateEn').value;state.prefs.voicePitchEn=+$('voicePitchEn').value;state.prefs.voiceRate=state.prefs.voiceRateRu;state.prefs.voicePitch=state.prefs.voicePitchRu;save();updateVoiceValueLabels();toast('Настройки сохранены')};function restorePrefs(){for(const k of ['tone','detail','language','answerStyle','voiceLanguage','voiceOutputLanguage','voiceRuVoice','voiceEnVoice','voiceRuGender','voiceEnGender','voiceRateRu','voicePitchRu','voiceRateEn','voicePitchEn','voiceRate','voicePitch','confirmHighRisk'])if(state.prefs[k]!==undefined&&$(k))$(k).type==='checkbox'?$(k).checked=state.prefs[k]:$(k).value=state.prefs[k];if(state.prefs.voiceRateRu===undefined&&state.prefs.voiceRate!==undefined&&$('voiceRateRu'))$('voiceRateRu').value=state.prefs.voiceRate;if(state.prefs.voicePitchRu===undefined&&state.prefs.voicePitch!==undefined&&$('voicePitchRu'))$('voicePitchRu').value=state.prefs.voicePitch;updateVoiceValueLabels()}
-$('exportBackup').onclick=()=>{const snapshot={...state,history:state.history.slice(0,240),notes:state.notes.slice(0,100),tasks:state.tasks.slice(0,200),library:state.library.slice(0,80)};const data={version:'3.6.0',exportedAt:new Date().toISOString(),state:snapshot,notice:'Резервная копия не содержит бинарные оригиналы файлов библиотеки и API-ключи.'};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'archangel-backup-3.6.0.json')};
-$('importBackup').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{try{if(!i.files?.[0])return;const d=JSON.parse(await i.files[0].text()),src=d?.state;if(!src||typeof src!=='object'||Array.isArray(src))throw Error('В резервной копии не найден объект state.');if(!confirm('Заменить текущие заметки, задачи, историю и настройки этой резервной копией? Оригиналы файлов и API-ключи не импортируются.'))return;const arr=(key,limit)=>Array.isArray(src[key])?src[key].filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,limit):[];const prefs=src.prefs&&typeof src.prefs==='object'&&!Array.isArray(src.prefs)?src.prefs:{};const plugins=src.plugins&&typeof src.plugins==='object'&&!Array.isArray(src.plugins)?src.plugins:{};const next={history:arr('history',240),notes:arr('notes',100),tasks:arr('tasks',200),library:arr('library',80).map(x=>({...x,originalMissing:true})),messages:arr('messages',60).filter(x=>['user','assistant'].includes(x.role)),prefs:{...state.prefs},plugins:{...state.plugins}};for(const [k,v] of Object.entries(prefs))if(Object.prototype.hasOwnProperty.call(next.prefs,k)&&typeof v===typeof next.prefs[k]&&(typeof v!=='number'||Number.isFinite(v)))next.prefs[k]=v;for(const [k,v] of Object.entries(plugins))if(Object.prototype.hasOwnProperty.call(next.plugins,k)&&typeof v==='boolean')next.plugins[k]=v;state=next;save();restorePrefs();renderAll();restoreChat();toast('Резервная копия импортирована. Бинарные оригиналы файлов не входят в JSON.')}catch(e){toast('Не удалось импортировать JSON: '+e.message)}finally{i.value=''}};i.click()};
-$('wipeData').onclick=async()=>{if(!confirm('Удалить все данные ARCHANGEL в этом браузере, включая библиотеку файлов и настройки? Это действие необратимо.'))return;await clearLibraryAssets();storageRemove(DBKEY);for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_asset_'))volatileStore.delete(key);state={history:[],notes:[],tasks:[],library:[],messages:[],plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};renderAll();restorePrefs();toast('Все локальные данные и оригиналы файлов удалены.');};
+$('exportBackup').onclick=()=>{const snapshot={...state,history:state.history.slice(0,240),notes:state.notes.slice(0,100),tasks:state.tasks.slice(0,200),library:state.library.slice(0,80)};const data={version:'4.2.0',exportedAt:new Date().toISOString(),state:snapshot,notice:'Резервная копия не содержит бинарные оригиналы файлов библиотеки и API-ключи.'};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'archangel-backup-4.2.json')};
+$('importBackup').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{try{if(!i.files?.[0])return;const d=JSON.parse(await i.files[0].text()),src=d?.state;if(!src||typeof src!=='object'||Array.isArray(src))throw Error('В резервной копии не найден объект state.');if(!confirm('Заменить текущие заметки, задачи, историю и настройки этой резервной копией? Оригиналы файлов и API-ключи не импортируются.'))return;const arr=(key,limit)=>Array.isArray(src[key])?src[key].filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,limit):[];const prefs=src.prefs&&typeof src.prefs==='object'&&!Array.isArray(src.prefs)?src.prefs:{};const plugins=src.plugins&&typeof src.plugins==='object'&&!Array.isArray(src.plugins)?src.plugins:{};const next={history:arr('history',240),notes:arr('notes',100),tasks:arr('tasks',200),library:arr('library',80).map(x=>({...x,originalMissing:true})),messages:arr('messages',60).filter(x=>['user','assistant'].includes(x.role)),chats:arr('chats',60),activeChatId:typeof src.activeChatId==='string'?src.activeChatId:null,prefs:{...state.prefs},plugins:{...state.plugins}};for(const [k,v] of Object.entries(prefs))if(Object.prototype.hasOwnProperty.call(next.prefs,k)&&typeof v===typeof next.prefs[k]&&(typeof v!=='number'||Number.isFinite(v)))next.prefs[k]=v;for(const [k,v] of Object.entries(plugins))if(Object.prototype.hasOwnProperty.call(next.plugins,k)&&typeof v==='boolean')next.plugins[k]=v;state=next;normalizeConversations();save();restorePrefs();renderAll();restoreChat();renderRecentChats();toast('Резервная копия импортирована. Бинарные оригиналы файлов не входят в JSON.')}catch(e){toast('Не удалось импортировать JSON: '+e.message)}finally{i.value=''}};i.click()};
+$('wipeData').onclick=async()=>{if(!confirm('Удалить все данные ARCHANGEL в этом браузере, включая библиотеку файлов и настройки? Это действие необратимо.'))return;await clearLibraryAssets();storageRemove(DBKEY);for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_asset_'))volatileStore.delete(key);state={history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};renderAll();restorePrefs();toast('Все локальные данные и оригиналы файлов удалены.');};
 function downloadBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
 // Voice 1.2: separate RU / EN profiles, selectable installed voices and bilingual wake phrases.
 // Declare the voice map before any timers, callbacks or preference restore can run.
@@ -964,8 +997,7 @@ handleFiles=async function(files){
  save();renderAll();
  if(label)label.textContent=`Готово: добавлено ${added}, ошибок ${failed}.`;
  if(percent)percent.textContent='100%';if(bar)bar.style.width='100%';
- toast(`Загрузка завершена: добавлено ${added}, ошибок ${failed}.`);
- if(status&&status.dataset.hideTimer)clearTimeout(Number(status.dataset.hideTimer));
+ toast(`Загрузка завершена: добавлено ${added}, ошибок ${failed}.`); if(status&&status.dataset.hideTimer)clearTimeout(Number(status.dataset.hideTimer));
  if(status)status.dataset.hideTimer=String(setTimeout(()=>{status.hidden=true;if(bar)bar.style.width='0%'},4500));
 };
 const libraryPage=$('page-library');
@@ -997,7 +1029,8 @@ $('disconnectApi').onclick=async()=>{
  try{
   const response=await fetch('/api/disconnect',{method:'POST',credentials:'same-origin'});
   let result={};try{result=await response.json()}catch{}
-  if(!response.ok||!result.ok)throw Error(result.error||`HTTP ${response.status}`);  api={protocol:'chat',endpoint:'/api/chat',model:'',key:'',provider:null};
+  if(!response.ok||!result.ok)throw Error(result.error||`HTTP ${response.status}`);
+  api={protocol:'chat',endpoint:'/api/chat',model:'',key:'',provider:null};
   $('apiKey').value='';$('apiModel').value='';
   apiStatus('Провайдер отключён. Сервер подтвердил удаление ключа из памяти.',false);
   renderAll();toast('Подключение отключено, ключ удалён из RAM сервера.');
@@ -1052,7 +1085,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.1 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.2 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
@@ -1104,6 +1137,67 @@ const UI_TEXT={ru:{nav:['Обзор','Ассистент','Библиотека'
 function applyInterfaceLanguage(){const l=$('interfaceLanguage')?.value||state.prefs.interfaceLanguage||'ru',d=UI_TEXT[l]||UI_TEXT.ru;document.documentElement.lang=l;document.title=`ARCHANGEL AI · ${l==='ru'?'Помощник':l==='es'?'Asistente':'Assistant'}`;const nav=[...document.querySelectorAll('#navigation button[data-page],.nav-settings button[data-page]')];const order=['overview','chat','library','tasks','search','history','settings'];nav.forEach(b=>{const i=order.indexOf(b.dataset.page);if(i>=0){const icon=b.querySelector('.ico');b.innerHTML='';if(icon)b.append(icon);b.append(document.createTextNode(d.nav[i]));}});const page=document.querySelector('.page.active');if(page?.id==='page-settings')$('topTitle').textContent=d.top.settings;else if(page){const key=page.id.replace('page-','');$('topTitle').textContent=d.top[key]||'ARCHANGEL AI';}const setLabel=(id,v)=>{const x=document.querySelector(`label[for="${id}"]`);if(x)x.textContent=v;};setLabel('interfaceLanguage',l==='ru'?'Язык интерфейса':l==='es'?'Idioma de interfaz':'Interface language');setLabel('language',d.lang);setLabel('tone',d.tone);setLabel('detail',d.detail);setLabel('voiceLanguage',d.recognition);setLabel('voiceOutputLanguage',d.output);const h=document.querySelector('#page-settings .page-head h1');if(h)h.textContent=d.settings;const cards={'settings-style':d.settings,'settings-voice':d.voice,'settings-api':d.api,'settings-data':d.data,'settings-about':d.about};for(const [id,v] of Object.entries(cards)){const h=document.querySelector(`#${id} h3`);if(h)h.textContent=v;}const b=$('savePrefs');if(b)b.textContent=d.save;}
 // Preserve page title localization after navigation changes.
 const originalGo=go;go=function(page){originalGo(page);applyInterfaceLanguage();};
+
+// ARCHANGEL AI 4.2 — multiple private local conversations; migration from 4.1.
+const MAX_RECENT_CHATS=60;
+function safeConversationMessages(messages){return(Array.isArray(messages)?messages:[]).filter(m=>m&&['user','assistant'].includes(m.role)).slice(-80).map(m=>({role:m.role,text:String(m.text||'').slice(0,9000),time:Number.isFinite(m.time)?m.time:Date.now()}));}
+function conversationTitle(messages){const first=messages.find(m=>m.role==='user'&&String(m.text||'').trim());return first?String(first.text).trim().replace(/\s+/g,' ').slice(0,66):'Новый диалог';}
+function normalizeConversations(){
+ const raw=Array.isArray(state.chats)?state.chats:[];
+ state.chats=raw.filter(c=>c&&typeof c==='object'&&typeof c.id==='string').slice(0,MAX_RECENT_CHATS).map(c=>({id:c.id.slice(0,75),title:String(c.title||'Новый диалог').slice(0,75),updated:Number.isFinite(c.updated)?c.updated:Date.now(),messages:safeConversationMessages(c.messages)}));
+ const existing=state.chats.find(c=>c.id===state.activeChatId);
+ if(existing){state.messages=safeConversationMessages(existing.messages);}
+ else if(state.messages.length){const id=uid();state.chats.unshift({id,title:conversationTitle(state.messages),updated:Date.now(),messages:safeConversationMessages(state.messages)});state.activeChatId=id;}
+ else{state.activeChatId=null;state.messages=[];}
+}
+function saveCurrentConversation(){
+ if(!Array.isArray(state.chats))state.chats=[];
+ state.messages=safeConversationMessages(state.messages);
+ if(!state.messages.length&&!state.activeChatId)return;
+ let c=state.chats.find(x=>x.id===state.activeChatId);
+ if(!c){if(!state.messages.length)return;c={id:uid(),title:'Новый диалог',updated:Date.now(),messages:[]};state.chats.unshift(c);state.activeChatId=c.id;}
+ c.messages=state.messages.map(m=>({...m}));c.title=conversationTitle(c.messages);c.updated=Date.now();
+ state.chats.sort((a,b)=>b.updated-a.updated);state.chats=state.chats.slice(0,MAX_RECENT_CHATS);
+}
+function renderRecentChats(){
+ const el=$('recentChatsList');if(!el)return;el.replaceChildren();
+ if(!Array.isArray(state.chats)||!state.chats.length){const empty=document.createElement('p');empty.className='recent-empty';empty.textContent='Первый разговор появится здесь.';el.append(empty);return;}
+ for(const c of [...state.chats].sort((a,b)=>b.updated-a.updated)){
+  const row=document.createElement('div');row.className='recent-row'+(c.id===state.activeChatId?' is-current':'');row.setAttribute('role','listitem');
+  const open=document.createElement('button');open.type='button';open.className='recent-open';open.title=c.title;open.setAttribute('aria-label','Открыть чат: '+c.title);const bubble=document.createElement('span');bubble.className='recent-bubble';bubble.textContent='◉';const title=document.createElement('span');title.className='recent-name';title.textContent=c.title;open.append(bubble,title);
+  open.addEventListener('click',()=>openRecentChat(c.id));
+  const del=document.createElement('button');del.type='button';del.className='recent-delete';del.title='Удалить чат';del.setAttribute('aria-label','Удалить чат: '+c.title);del.textContent='×';del.addEventListener('click',()=>deleteRecentChat(c.id));
+  row.append(open,del);el.append(row);
+ }
+}
+function closeRecentSidebar(){if(window.innerWidth<=760)$('sidebar')?.classList.remove('open');}
+function newRecentChat(){
+ if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
+ saveCurrentConversation();state.activeChatId=null;state.messages=[];pendingFiles=[];renderAttach();$('chatInput').value='';save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
+}
+function openRecentChat(id){
+ if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
+ if(state.activeChatId===id){go('chat');closeRecentSidebar();return;}
+ saveCurrentConversation();const c=state.chats.find(x=>x.id===id);if(!c)return;
+ state.activeChatId=id;state.messages=safeConversationMessages(c.messages);pendingFiles=[];renderAttach();$('chatInput').value='';save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
+}
+function deleteRecentChat(id){
+ if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
+ const c=state.chats.find(x=>x.id===id);if(!c)return;
+ if(!confirm('Удалить диалог «'+c.title+'»? Восстановить его будет нельзя.'))return;
+ state.chats=state.chats.filter(x=>x.id!==id);
+ if(state.activeChatId===id){state.activeChatId=null;state.messages=[];pendingFiles=[];renderAttach();restoreChat();}
+ save();renderRecentChats();toast('Диалог удалён');
+}
+const previousLoad42=load;load=function(){previousLoad42();normalizeConversations();renderRecentChats();};
+const previousSave42=save;save=function(){saveCurrentConversation();const result=previousSave42();renderRecentChats();return result;};
+$('newRecentChat').addEventListener('click',newRecentChat);
+// Existing clear button becomes a new dialog action, preserving earlier conversations.
+$('clearChat').onclick=newRecentChat;
+// On full data reset, remove the list from the visible sidebar as well.
+const previousWipe42=$('wipeData').onclick;
+$('wipeData').onclick=async function(...args){await previousWipe42.apply(this,args);renderRecentChats();};
+
 // 3.2 staged initialization: finish local UI first, probe gateway with a timeout, then reveal the emblem.
 function setBootCaption(text){const el=$('bootCaption');if(el)el.textContent=text;}
 function waitAtMost(promise,ms){return Promise.race([promise,new Promise(resolve=>setTimeout(()=>resolve(null),ms))]);}
