@@ -1716,7 +1716,23 @@ sendChat=async function(){
   }
   if(body){renderAssistantBody(body,answer);state.messages.push({role:'assistant',text:answer,time:Date.now()});state.messages=state.messages.slice(-80);save();}
   if(state.prefs.autoSpeak)speak(answer);
- }catch(e){thinking.remove();if(e.name==='AbortError'){answer='Генерация остановлена.';}else answer='Ошибка подключения: '+e.message;if(body){const full=(body.textContent?body.textContent+'\n\n':'')+answer;renderAssistantBody(body,full);state.messages.push({role:'assistant',text:full,time:Date.now()});save();}else addMessage('assistant',answer);}
+ }catch(e){
+  thinking.remove();
+  const aborted=e.name==='AbortError';
+  answer=aborted?'Генерация остановлена.':'Ошибка подключения: '+e.message;
+  if(!aborted){
+   // Keep unsent input and uploaded files available for an explicit manual retry.
+   if(q&&!$('chatInput').value.trim())$('chatInput').value=q;
+   if(files.length){pendingFiles=[...files,...pendingFiles].slice(0,12);renderAttach();}
+   toast('Не удалось отправить запрос. Текст и вложения сохранены для повторной попытки.');
+  }
+  if(body){
+   const full=(body.textContent?body.textContent+'\n\n':'')+answer;
+   renderAssistantBody(body,full);
+   state.messages.push({role:'assistant',text:full,time:Date.now()});
+   save();
+  }else addMessage('assistant',answer);
+ }
  finally{activeController=null;$('tokenHint').textContent='Готов';$('sendButton').disabled=false;$('sendButton').textContent='➤';$('sendButton').classList.remove('is-stop');$('sendButton').title='Отправить';$('chatInput').focus();}
 };
 $('sendButton').onclick=sendChat;
