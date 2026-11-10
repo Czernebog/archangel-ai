@@ -714,6 +714,20 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 .message.assistant .answer-formatted strong{font-weight:750;color:#fff}
 @media(max-width:760px){.message.assistant{max-width:100%;font-size:13px}.message.assistant .answer-formatted pre{font-size:11px}}
 </style>
+<style id="archangel-417-workspace">
+.quick-prompts{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px;align-items:center}
+.quick-prompts button{background:#111;color:#ddd;border:1px solid #383838;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:600;cursor:pointer;line-height:1.3;transition:background .14s,border-color .14s}
+.quick-prompts button:hover{background:#1d1d1d;border-color:#bcbcbc}
+.quick-prompts button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.chat-card{border-color:#303030;box-shadow:0 3px 28px rgba(0,0,0,.18)}
+.chat-top{min-height:63px}
+.chat-top .row{gap:8px}
+#copyLastAnswer{min-width:34px;min-height:34px;font-size:16px}
+.composer textarea{background:#111;border-color:#424242}
+.composer textarea:focus{border-color:#e5e5e5;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.chat-layout{align-items:start}
+@media(max-width:760px){.quick-prompts{gap:6px}.quick-prompts button{padding:8px 10px;font-size:10px}.chat-top{min-height:55px}.message{max-width:100%}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
@@ -766,7 +780,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button><button class="icon-btn speaker-toggle" id="voiceSpeakerToggle" type="button" aria-label="Включить озвучивание ответов" aria-pressed="false" title="Включить озвучивание ответов"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="quick-prompts" aria-label="Быстрые задачи"><button type="button" data-smart-prompt="math">Решить задачу</button><button type="button" data-smart-prompt="code">Проверить код</button><button type="button" data-smart-prompt="vision">Разобрать изображение</button></div><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button><button class="icon-btn speaker-toggle" id="voiceSpeakerToggle" type="button" aria-label="Включить озвучивание ответов" aria-pressed="false" title="Включить озвучивание ответов"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
  <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted voice-status" id="voiceState" role="status" aria-live="polite">Микрофон выключен</div><p class="footnote" style="margin-top:10px">Нажми значок микрофона рядом с полем сообщения, чтобы включить или выключить распознавание речи. Никакие специальные слова не нужны. Значок динамика управляет озвучкой ответов. Браузер может передавать речь своему сервису распознавания.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
@@ -1066,6 +1080,25 @@ function renderMathExpression(source,display=false){
  }
  try{const math=create('math');if(display)math.setAttribute('display','block');math.setAttribute('aria-label',tex);math.append(parse());return math;}catch{return null;}
 }
+
+function applySmartPrompt(kind){
+ const prompts={
+  math:'Реши задачу последовательно: запиши условия, правильные формулы, вычисления и проверь ответ. Задача: ',
+  code:'Проверь следующий код: найди ошибки, объясни причину, предложи исправленную версию и тесты. Код: ',
+  vision:'Внимательно изучи приложенное изображение: опиши видимые детали, прочитай текст и формулы, отметь всё неразборчивое. '
+ };
+ const input=$('chatInput'),value=prompts[kind];
+ if(!input||!value)return;
+ const prior=input.value.trim();input.value=(prior?prior+'\n\n':'')+value;
+ input.focus();input.setSelectionRange(input.value.length,input.value.length);
+}
+document.querySelectorAll('[data-smart-prompt]').forEach(button=>button.addEventListener('click',()=>applySmartPrompt(button.dataset.smartPrompt)));
+$('copyLastAnswer')?.addEventListener('click',()=>{
+ const last=[...state.messages].reverse().find(m=>m.role==='assistant'&&String(m.text||'').trim());
+ if(!last){toast('Сначала получи ответ от ARCHANGEL.');return;}
+ copyText(String(last.text));toast('Последний ответ скопирован.');
+});
+
 function renderAssistantBody(target,value){
  target.replaceChildren();
  const text=String(value||'').slice(0,60000);
