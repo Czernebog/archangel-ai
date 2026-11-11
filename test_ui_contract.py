@@ -74,7 +74,7 @@ class UIContractTests(unittest.TestCase):
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
         self.assertIn('aria-label="Отправить сообщение"', self.html)
-        self.assertIn('aria-label="Остановить генерацию"', self.html)
+        self.assertIn("setAttribute('aria-label','Остановить генерацию')", self.html)
 
 
 if __name__ == "__main__":
