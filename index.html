@@ -1871,7 +1871,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
  if(deep)messages[0].content+=' Для сложных вопросов используй более подробный анализ и самопроверку: перепроверь расчёты, предположения и соответствие ответа вопросу. Не выдумывай выполнение инструментов.';
- const requestBody=JSON.stringify({messages,temperature:deep?.2:.35,max_tokens:deep?8192:3072});
+ const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
  let response;try{response=await fetch('/api/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:requestBody,signal:controller.signal});}catch(e){if(e.name==='AbortError')throw e;throw Error('Не удалось связаться с локальным шлюзом. Проверь, что окно сервера открыто: '+e.message)}
