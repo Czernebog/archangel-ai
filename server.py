@@ -117,7 +117,7 @@ class Handler(SimpleHTTPRequestHandler):
         # back to the socket peer when the header is absent or malformed.
         peer = self.client_address[0] if self.client_address else 'unknown'
         forwarded = self.headers.get('X-Forwarded-For', '')
-        if forwarded:
+        if HOSTED_MODE and forwarded:
             candidate = forwarded.split(',')[-1].strip()
             try:
                 return ipaddress.ip_address(candidate).compressed
@@ -532,7 +532,7 @@ class Handler(SimpleHTTPRequestHandler):
         if cfg['api_key']:
             headers['Authorization'] = 'Bearer ' + cfg['api_key']
         if cfg['provider'] == 'openrouter':
-            headers['HTTP-Referer'] = (('https' if PUBLIC_MODE else 'http') + '://' + (self.headers.get('X-Forwarded-Host') or self.headers.get('Host', 'localhost'))) 
+            headers['HTTP-Referer'] = ('https://archangel-ai-czernebog.onrender.com' if PUBLIC_MODE else 'http://localhost') 
             headers['X-Title'] = 'ARCHANGEL AI by Czernebog'
         req = urllib.request.Request(
             cfg['endpoint'],
