@@ -547,15 +547,13 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             upstream = urllib.request.build_opener(NoRedirect).open(req, timeout=180)
         except urllib.error.HTTPError as e:
-            detail = e.read(3000).decode('utf-8', 'replace')
-            if cfg['api_key']:
-                detail = detail.replace(cfg['api_key'], '[скрытый ключ]')
+            e.close()
             # Provider error bodies can echo prompts or credentials. Return a safe, actionable status.
             if e.code in (301, 302, 303, 307, 308):
                 return self._json(502, {'error': 'Провайдер перенаправил запрос. Проверь адрес API; переход заблокирован ради безопасности ключа.'})
             return self._json(e.code if 400 <= e.code <= 599 else 502,
                               {'error': f'Провайдер вернул HTTP {e.code}. Проверь API-ключ, модель и лимиты провайдера.'})
-        except Exception as e:
+        except Exception:
             return self._json(502, {'error': 'Не удалось подключиться к провайдеру. Проверь его доступность и настройки API.'})
 
         self.send_response(200)
@@ -603,7 +601,7 @@ class Handler(SimpleHTTPRequestHandler):
                 if not raw_data:
                     return
                 if raw_data == '[DONE]':
-                    self._event({'done': True})
+                    self._event({'done': True} if has_output else {'error': 'Модель завершила ответ без текста.'})
                     done_sent = True
                     return
                 try:
@@ -628,7 +626,7 @@ class Handler(SimpleHTTPRequestHandler):
                         self._event({'delta': text_value})
                         has_output = True
                 if choice.get('finish_reason') is not None and not done_sent:
-                    self._event({'done': True})
+                    self._event({'done': True} if has_output else {'error': 'Модель завершила ответ без текста.'})
                     done_sent = True
 
             for raw in upstream:
@@ -657,7 +655,7 @@ class Handler(SimpleHTTPRequestHandler):
                     self._event({'error': 'Модель не вернула текст. Проверь её поддержку потоковых ответов.'})
         except (BrokenPipeError, ConnectionResetError):
             pass
-        except Exception as e:
+        except Exception:
             try:
                 self._event({'error': 'Поток ответа прервался. Попробуй повторить запрос.'})
             except Exception:
