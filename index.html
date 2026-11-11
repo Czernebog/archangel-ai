@@ -715,10 +715,6 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 @media(max-width:760px){.message.assistant{max-width:100%;font-size:13px}.message.assistant .answer-formatted pre{font-size:11px}}
 </style>
 <style id="archangel-417-workspace">
-.quick-prompts{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px;align-items:center}
-.quick-prompts button{background:#111;color:#ddd;border:1px solid #383838;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:600;cursor:pointer;line-height:1.3;transition:background .14s,border-color .14s}
-.quick-prompts button:hover{background:#1d1d1d;border-color:#bcbcbc}
-.quick-prompts button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .chat-card{border-color:#303030;box-shadow:0 3px 28px rgba(0,0,0,.18)}
 .chat-top{min-height:63px}
 .chat-top .row{gap:8px}
@@ -726,7 +722,60 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 .composer textarea{background:#111;border-color:#424242}
 .composer textarea:focus{border-color:#e5e5e5;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
 .chat-layout{align-items:start}
-@media(max-width:760px){.quick-prompts{gap:6px}.quick-prompts button{padding:8px 10px;font-size:10px}.chat-top{min-height:55px}.message{max-width:100%}}
+@media(max-width:760px){</style>
+<style id="archangel-418-mobile-refinement">
+/* Single final mobile layout to resolve legacy overrides. */
+@media(max-width:760px){
+ html,body{width:100%;max-width:100%;overflow-x:hidden}
+ html{height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+ body{height:100dvh;overflow:hidden}
+ .app,.main{height:100dvh!important;min-height:0!important;max-width:100vw;overflow:hidden}
+ .main{display:flex;flex-direction:column;min-width:0}
+ .topbar{flex:0 0 auto;height:calc(60px + env(safe-area-inset-top))!important;min-height:60px;padding:env(safe-area-inset-top) 10px 0!important}
+ .topbar>.row{min-width:0}
+ .topbar .top-title{font-size:14px!important;min-width:0;max-width:45vw;overflow:hidden;text-overflow:ellipsis}
+ .topbar .top-sub{display:none!important}
+ .topbar .top-actions{flex-shrink:0}
+ .topbar .top-actions .pill{max-width:96px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .content{flex:1 1 auto;min-height:0!important;overflow-y:auto;padding:13px 11px calc(16px + env(safe-area-inset-bottom))!important}
+ .content:has(#page-chat.active){padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important;overflow:hidden}
+ #page-chat.active{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden}
+ #page-chat .chat-layout{flex:1 1 auto;height:100%!important;min-height:0;overflow:hidden;gap:0}
+ #page-chat .chat-card{display:flex;flex-direction:column;flex:1 1 auto;min-height:0!important;height:100%!important;overflow:hidden;border-radius:13px}
+ #page-chat .chat-top{flex:0 0 auto;min-height:52px!important;padding:9px 11px;gap:8px}
+ #page-chat .chat-top .row{gap:5px;flex-wrap:nowrap}
+ #page-chat .chat-top .badge{max-width:90px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #page-chat .chat-top .tiny-btn{min-width:38px;min-height:38px;font-size:17px}
+ #page-chat .chat-top .small{font-size:11px;max-width:43vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #page-chat .messages{flex:1 1 auto;min-height:0!important;overflow-y:auto;overscroll-behavior:contain;padding:12px 11px;gap:12px}
+ #page-chat .message{font-size:14px;line-height:1.57;max-width:97%;overflow-wrap:anywhere}
+ #page-chat .message.assistant{max-width:100%;overflow-wrap:anywhere}
+ #page-chat .message pre,#page-chat .message math{max-width:100%;overflow-x:auto}
+ #page-chat .chat-input-wrap{flex:0 0 auto;padding:9px 9px calc(9px + env(safe-area-inset-bottom))!important;border-top:1px solid #303030}
+ #page-chat .composer{display:flex;align-items:flex-end;gap:6px;width:100%;min-width:0}
+ #page-chat .compose-tools{display:flex;align-items:center;gap:5px;flex:0 0 auto}
+ #page-chat .compose-tools .icon-btn{display:grid;place-items:center;min-height:42px!important;height:42px!important;min-width:38px!important;width:38px!important;padding:0}
+ #page-chat .compose-tools .speaker-toggle{min-width:33px!important;width:33px!important;height:38px!important;min-height:38px!important}
+ #page-chat #chatInput{flex:1 1 auto;min-width:0!important;width:100%!important;min-height:44px!important;height:46px;max-height:min(31dvh,140px);font-size:16px;line-height:1.45;padding:11px 9px;resize:none}
+ #page-chat #sendButton{flex:0 0 43px;height:44px!important;min-width:43px!important;min-height:44px!important}
+ #page-chat .chat-input-wrap>.between{display:flex;align-items:center;gap:8px;margin-top:5px!important}
+ #page-chat .chat-input-wrap>.between>.footnote:first-child{display:none!important}
+ #page-chat #voiceMicIndicator{display:inline-block!important;margin:0;font-size:10px;white-space:nowrap}
+ #page-chat #tokenHint{display:block!important;width:auto!important;margin-left:auto;text-align:right;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .sidebar{width:min(320px,88vw)!important;max-width:88vw;overflow-y:auto;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+ .toast{bottom:calc(15px + env(safe-area-inset-bottom))!important}
+}
+@media(max-width:380px){
+ .topbar .top-actions .pill{display:none}
+ #page-chat .compose-tools{gap:3px}
+ #page-chat .compose-tools .icon-btn{width:35px!important;min-width:35px!important}
+ #page-chat .compose-tools .speaker-toggle{width:30px!important;min-width:30px!important}
+ #page-chat .composer{gap:4px}
+ #page-chat #sendButton{flex-basis:40px;min-width:40px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #page-chat *,#page-chat *::before,#page-chat *::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
@@ -764,7 +813,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.17</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.18</div>
   </div>
 </aside>
 <main class="main">
@@ -780,7 +829,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="quick-prompts" aria-label="Быстрые задачи"><button type="button" data-smart-prompt="math">Решить задачу</button><button type="button" data-smart-prompt="code">Проверить код</button><button type="button" data-smart-prompt="vision">Разобрать изображение</button></div><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button><button class="icon-btn speaker-toggle" id="voiceSpeakerToggle" type="button" aria-label="Включить озвучивание ответов" aria-pressed="false" title="Включить озвучивание ответов"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button><button class="icon-btn speaker-toggle" id="voiceSpeakerToggle" type="button" aria-label="Включить озвучивание ответов" aria-pressed="false" title="Включить озвучивание ответов"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
  <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted voice-status" id="voiceState" role="status" aria-live="polite">Микрофон выключен</div><p class="footnote" style="margin-top:10px">Нажми значок микрофона рядом с полем сообщения, чтобы включить или выключить распознавание речи. Никакие специальные слова не нужны. Значок динамика управляет озвучкой ответов. Браузер может передавать речь своему сервису распознавания.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
@@ -1081,18 +1130,6 @@ function renderMathExpression(source,display=false){
  try{const math=create('math');if(display)math.setAttribute('display','block');math.setAttribute('aria-label',tex);math.append(parse());return math;}catch{return null;}
 }
 
-function applySmartPrompt(kind){
- const prompts={
-  math:'Реши задачу последовательно: запиши условия, правильные формулы, вычисления и проверь ответ. Задача: ',
-  code:'Проверь следующий код: найди ошибки, объясни причину, предложи исправленную версию и тесты. Код: ',
-  vision:'Внимательно изучи приложенное изображение: опиши видимые детали, прочитай текст и формулы, отметь всё неразборчивое. '
- };
- const input=$('chatInput'),value=prompts[kind];
- if(!input||!value)return;
- const prior=input.value.trim();input.value=(prior?prior+'\n\n':'')+value;
- input.focus();input.setSelectionRange(input.value.length,input.value.length);
-}
-document.querySelectorAll('[data-smart-prompt]').forEach(button=>button.addEventListener('click',()=>applySmartPrompt(button.dataset.smartPrompt)));
 $('copyLastAnswer')?.addEventListener('click',()=>{
  const last=[...state.messages].reverse().find(m=>m.role==='assistant'&&String(m.text||'').trim());
  if(!last){toast('Сначала получи ответ от ARCHANGEL.');return;}
@@ -1494,7 +1531,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // ===== ARCHANGEL AI 3.0 CORE =====
-const ARCHANGEL_VERSION='4.17.0';
+const ARCHANGEL_VERSION='4.18.0';
 let activeController=null;
 const localGateway=()=>((location.protocol==='http:'||location.protocol==='https:')&&!!location.hostname);
 async function gatewayJSON(path,payload){
@@ -1751,7 +1788,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.17 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.18 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
