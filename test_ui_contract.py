@@ -66,7 +66,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("playNeuralVoice(text,locale,g)", self.html)
 
     def test_no_external_script_or_frame_embedding(self):
-        scripts = re.findall(r"<script\\b[^>]*>", self.html, flags=re.I)
+        scripts = re.findall(r"<script\b[^>]*>", self.html, flags=re.I)
         self.assertGreater(len(scripts), 0)
         self.assertTrue(all(" src=" not in script.lower() for script in scripts))
         self.assertNotIn("<iframe", self.html.lower())
