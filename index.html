@@ -194,6 +194,15 @@ button{user-select:none;-webkit-user-select:none}
 button:disabled{pointer-events:none;cursor:not-allowed}
 @media (pointer:coarse){.icon-btn,.tiny-btn,.send,.mobile-menu,.recent-delete,.compose-tools button,.top-actions button{min-width:44px;min-height:44px}.btn,.voice-btn,.nav button,.settings-jumpbar button{min-height:44px}.composer textarea{font-size:16px}.mobile-menu{display:inline-flex}}
 button:focus-visible,[role="button"]:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* Three-language, two-voice voice picker */
+.voice-audition-grid-three .voice-choice{min-height:76px;touch-action:manipulation;transition:border-color .16s,background .16s,transform .12s}
+.voice-audition-grid-three .voice-choice:active:not(:disabled){transform:scale(.985)}
+.voice-audition-grid-three .voice-choice:disabled{opacity:.45;cursor:not-allowed}
+.voice-audition-grid-three .voice-choice:focus-visible{outline:2px solid white;outline-offset:2px}
+.voice-audition-grid-three .voice-choice-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.voice-audition-grid-three .voice-choice small{display:block;overflow-wrap:anywhere}
+@media(max-width:640px){.voice-audition-grid-three{grid-template-columns:1fr!important}.voice-audition-grid-three .voice-choice{min-height:68px}}
 </style>
 
 <style>
@@ -987,31 +996,31 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    </div>
   </div>
   <div class="card settings-voice-card" id="settings-voice">
-   <div class="between"><div><h3 class="section-title">Голоса и озвучка</h3><div class="mini-help">Выбери мужской или женский профиль для каждого языка и прослушай пример. Озвучка работает через голоса браузера и устройства.</div></div><span class="badge">RU / EN / ES</span></div>
+   <div class="between"><div><h3 class="section-title">Голоса и озвучка</h3><div class="mini-help">Три языка, два голоса для каждого: мужской и женский. Нажми на голос, чтобы выбрать его и прослушать пример.</div></div><span class="badge">RU / EN / ES</span></div>
    <div class="stack">
     <div class="form-row">
-     <div><label class="label" for="voiceLanguage">Язык распознавания</label><select class="select" id="voiceLanguage"><option value="ru-RU">Русский · Россия</option><option value="en-US">English · US</option><option value="en-GB">English · UK</option><option value="es-ES">Español · España</option></select></div>
+     <div><label class="label" for="voiceLanguage">Язык распознавания</label><select class="select" id="voiceLanguage"><option value="ru-RU">Русский · Россия</option><option value="en-US">English · US</option><option value="es-ES">Español · España</option></select></div>
      <div><label class="label" for="voiceOutputLanguage">Язык озвучивания</label><select class="select" id="voiceOutputLanguage"><option value="auto">Авто по тексту ответа</option><option value="ru-RU">Всегда русский</option><option value="en-US">Всегда английский</option><option value="es-ES">Всегда испанский</option></select></div>
     </div>
     <div class="voice-audition-grid voice-audition-grid-three">
      <div class="voice-audition-card">
       <div class="voice-audition-head"><div><h4>Русский — 2 голоса</h4><p>Одна фраза — два тембра</p></div><span class="badge" id="voiceRuChosenBadge">Профиль: мужской</span></div>
       <div class="voice-choice-row"><button type="button" class="voice-choice" data-voice-preview="ru:male"><span class="voice-choice-mark">М</span><span><b>Мужской</b><small id="voiceRuMaleName">Поиск голоса…</small></span><span class="voice-choice-play">▶</span></button><button type="button" class="voice-choice" data-voice-preview="ru:female"><span class="voice-choice-mark">Ж</span><span><b>Женский</b><small id="voiceRuFemaleName">Поиск голоса…</small></span><span class="voice-choice-play">▶</span></button></div>
-      <div class="voice-choice-actions"><button type="button" class="btn secondary" data-voice-use="ru:male">Выбрать мужской</button><button type="button" class="btn secondary" data-voice-use="ru:female">Выбрать женский</button></div>
+      
      </div>
      <div class="voice-audition-card">
       <div class="voice-audition-head"><div><h4>Английский — 2 голоса</h4><p>Мужской и женский голос</p></div><span class="badge" id="voiceEnChosenBadge">Профиль: мужской</span></div>
       <div class="voice-choice-row"><button type="button" class="voice-choice" data-voice-preview="en:male"><span class="voice-choice-mark">M</span><span><b>Мужской</b><small id="voiceEnMaleName">Searching voices…</small></span><span class="voice-choice-play">▶</span></button><button type="button" class="voice-choice" data-voice-preview="en:female"><span class="voice-choice-mark">F</span><span><b>Женский</b><small id="voiceEnFemaleName">Searching voices…</small></span><span class="voice-choice-play">▶</span></button></div>
-      <div class="voice-choice-actions"><button type="button" class="btn secondary" data-voice-use="en:male">Выбрать мужской</button><button type="button" class="btn secondary" data-voice-use="en:female">Выбрать женский</button></div>
+      
      </div>
      <div class="voice-audition-card">
-      <div class="voice-audition-head"><div><h4>ESPAÑOL · PRUEBA DE VOZ</h4><p>Escucha los dos perfiles de voz</p></div><span class="badge" id="voiceEsChosenBadge">Профиль: мужской</span></div>
+      <div class="voice-audition-head"><div><h4>Испанский — 2 голоса</h4><p>Мужской и женский голос</p></div><span class="badge" id="voiceEsChosenBadge">Профиль: мужской</span></div>
       <div class="voice-choice-row"><button type="button" class="voice-choice" data-voice-preview="es:male"><span class="voice-choice-mark">M</span><span><b>Мужской</b><small id="voiceEsMaleName">Buscando voces…</small></span><span class="voice-choice-play">▶</span></button><button type="button" class="voice-choice" data-voice-preview="es:female"><span class="voice-choice-mark">F</span><span><b>Женский</b><small id="voiceEsFemaleName">Buscando voces…</small></span><span class="voice-choice-play">▶</span></button></div>
-      <div class="voice-choice-actions"><button type="button" class="btn secondary" data-voice-use="es:male">Выбрать мужской</button><button type="button" class="btn secondary" data-voice-use="es:female">Выбрать женский</button></div>
+      
      </div>
     </div>
-    <div class="voice-comparison-note">Мужской и женский профили доступны на русском, английском и испанском. Если отдельного системного голоса нет, профиль использует доступный голос нужного языка с изменением высоты тона. Это не замена настоящему мужскому или женскому голосу — установленные голоса можно выбрать ниже.</div>
-    <div class="voice-panel-grid">
+    <div class="voice-comparison-note">Каждый язык имеет два варианта выбора: мужской и женский. Доступность реального голоса зависит от устройства. Если подходящий голос не установлен, ARCHANGEL покажет это вместо подмены его другим.</div>
+    <div class="voice-panel-grid" style="display:none" aria-hidden="true">
      <div class="voice-control-card"><h4>РУССКИЙ ГОЛОС</h4><label class="label" for="voiceRuSelect">Доступный голос устройства</label><select class="select" id="voiceRuSelect"><option value="">Автовыбор русского голоса</option></select><button class="btn secondary" id="testVoiceRu" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateRuVal">0.97×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.97" id="voiceRateRu" style="width:100%"><div class="small muted">Тембр <b id="voicePitchRuVal">0.96</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.96" id="voicePitchRu" style="width:100%"></div>
      <div class="voice-control-card"><h4>АНГЛИЙСКИЙ ГОЛОС</h4><label class="label" for="voiceEnSelect">Голос устройства</label><select class="select" id="voiceEnSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEn" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEnVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEn" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEnVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEn" style="width:100%"></div>
      <div class="voice-control-card"><h4>ИСПАНСКИЙ ГОЛОС</h4><label class="label" for="voiceEsSelect">Голос устройства</label><select class="select" id="voiceEsSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEs" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEsVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEs" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEsVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEs" style="width:100%"></div>
@@ -1934,14 +1943,14 @@ function updateVoiceCatalog(){
   return `${labels[k]}: ${available.length} (муж. ${foundM}, жен. ${foundF})`;
  });
  const status=$('voiceCatalogStatus');
- if(status)status.textContent='Голоса устройства — '+summaries.join(' · ')+'. Для каждого профиля ARCHANGEL выбирает наиболее качественный найденный вариант; при отсутствии нужного голоса используй список и кнопку прослушивания.';
+ if(status)status.textContent='Голоса устройства — '+summaries.join(' · ')+'. Нажми мужской или женский голос, чтобы выбрать и прослушать его. Недоступные голоса отмечены.';
  updateVoiceChoiceUI();
 }
 function outputLocale(text,forced){if(forced)return forced;const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;if(state.prefs.language==='es')return'es-ES';if(state.prefs.language==='en')return'en-US';const value=String(text||'').toLowerCase();const ru=(value.match(/[а-яё]/g)||[]).length;const esMarks=(value.match(/[áéíóúüñ¿¡]/g)||[]).length;const esWords=(value.match(/\b(hola|gracias|por favor|buenos|buenas|usted|tarea|solución|analizar|puedes|quieres|sistema|respuesta)\b/g)||[]).length;const en=(value.match(/[a-z]/g)||[]).length;if(ru>Math.max(en,esMarks+esWords*3))return'ru-RU';if(esMarks+esWords*3>0&&esMarks+esWords*3>=en*.12)return'es-ES';return'en-US';}
 function chosenVoice(locale){const key=localeKey(locale),c=VOICE_LANGS[key],voices=speechVoices(),selected=$(c.select)?.value||state.prefs[c.voiceKey];if(selected){const v=voices.find(x=>(x.voiceURI||x.name)===selected&&String(x.lang||'').toLowerCase().startsWith(c.prefix));if(v)return v;}const g=state.prefs[c.genderKey]||'male';const profile=findGenderVoice(locale,g);if(profile)return profile;return voices.filter(v=>(v.lang||'').toLowerCase().startsWith(c.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;}
 function voiceSample(locale){const k=localeKey(locale);return k==='ru'?'Здравствуйте. Я Архангел. Я внимательно разберу задачу, проверю детали и предложу точное решение.':k==='es'?'Hola. Soy Archangel. Analizaré la tarea con atención, comprobaré los detalles y te propondré una solución precisa.':'Hello. I am Archangel. I will examine the task carefully, verify the details, and give you a precise solution.';}
-function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice){toast('Такой голос не найден автоматически. Выбери доступный вариант в списке вручную.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice.voiceURI||voice.name;const select=$(cfg.select);if(select)select.value=voice.voiceURI||voice.name;save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);}
-for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice){toast('Голос этого типа не найден в системе. Выбери доступный голос вручную ниже.');return;}stopVoicePlayback();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
+function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice){toast('Этот голос не найден на устройстве.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice.voiceURI||voice.name;const select=$(cfg.select);if(select)select.value=voice.voiceURI||voice.name;save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);}
+for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice){toast('Голос этого типа пока не установлен на устройстве.');return;}applyVoiceGender(locale,gender);stopVoicePlayback();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
 for(const b of document.querySelectorAll('[data-voice-use]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voiceUse.split(':');applyVoiceGender(VOICE_LANGS[key].locale,gender);});
 for(const key of ['ru','en','es']){
  const c=VOICE_LANGS[key],cap=key==='ru'?'Ru':key==='en'?'En':'Es';
