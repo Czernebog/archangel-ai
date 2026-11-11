@@ -1,0 +1,81 @@
+"""Static app smoke tests: accessibility, controls and regression guards."""
+from html.parser import HTMLParser
+from pathlib import Path
+import re
+import unittest
+
+
+class UIParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.ids = {}
+        self.brain_buttons = []
+        self.voice_buttons = []
+        self.textareas = 0
+        self.has_lang = False
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "html":
+            self.has_lang = bool(attrs.get("lang"))
+        if "id" in attrs:
+            key = attrs["id"]
+            self.ids[key] = self.ids.get(key, 0) + 1
+        if tag == "button":
+            if attrs.get("data-brain-mode"):
+                self.brain_buttons.append((attrs["data-brain-mode"], attrs.get("aria-pressed")))
+            if attrs.get("data-voice-preview"):
+                self.voice_buttons.append(attrs["data-voice-preview"])
+        if tag == "textarea":
+            self.textareas += 1
+
+
+class UIContractTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.html = Path("index.html").read_text("utf-8")
+        cls.parser = UIParser()
+        cls.parser.feed(cls.html)
+
+    def test_unique_critical_controls(self):
+        for id_ in (
+            "chatInput", "sendButton", "clearChat", "messages", "sidebar",
+            "mobileMenu", "voiceStart", "modelStatus", "bootScreen", "chatModelBadge"
+        ):
+            with self.subTest(id=id_):
+                self.assertEqual(self.parser.ids.get(id_), 1)
+
+    def test_only_six_voice_choices(self):
+        expected = {f"{language}:{gender}" for language in ("ru", "en", "es")
+                    for gender in ("male", "female")}
+        self.assertEqual(set(self.parser.voice_buttons), expected)
+        self.assertEqual(len(self.parser.voice_buttons), len(expected))
+        self.assertNotIn("data-voice-use=", self.html)
+
+    def test_response_mode_buttons_are_accessible(self):
+        self.assertEqual({mode for mode, _ in self.parser.brain_buttons},
+                         {"balanced", "deep"})
+        self.assertTrue(all(pressed in ("true", "false")
+                            for _, pressed in self.parser.brain_buttons))
+        self.assertIn("function syncBrainMode()", self.html)
+
+    def test_voice_has_single_device_fallback_and_neural_router(self):
+        # A second speakDevice definition previously caused infinite recursion.
+        self.assertEqual(len(re.findall(r"function speakDevice\(text,forcedLocale\)", self.html)), 1)
+        self.assertIn("function speak(text,forcedLocale)", self.html)
+        self.assertIn("playNeuralVoice(text,locale,g)", self.html)
+
+    def test_no_external_script_or_frame_embedding(self):
+        scripts = re.findall(r"<script\\b[^>]*>", self.html, flags=re.I)
+        self.assertGreater(len(scripts), 0)
+        self.assertTrue(all(" src=" not in script.lower() for script in scripts))
+        self.assertNotIn("<iframe", self.html.lower())
+
+    def test_html_language_and_accessibility(self):
+        self.assertTrue(self.parser.has_lang)
+        self.assertIn('aria-label="Отправить сообщение"', self.html)
+        self.assertIn('aria-label="Остановить генерацию"', self.html)
+
+
+if __name__ == "__main__":
+    unittest.main()
