@@ -78,6 +78,14 @@ class GatewaySecurityTests(unittest.TestCase):
             origin="https://attacker.example")
         self.assertEqual(status, 403, body)
 
+    def test_reasoning_model_parameter_detection(self):
+        for model in ("o3", "o4-mini", "gpt-5", "gpt-5.6", "gpt-6-astra"):
+            with self.subTest(model=model):
+                self.assertTrue(server._openai_reasoning_model(model))
+        for model in ("gpt-4o-mini", "gemini-2.5-pro", "llama-3.3", "openrouter/free"):
+            with self.subTest(model=model):
+                self.assertFalse(server._openai_reasoning_model(model))
+
     def test_bad_provider_and_invalid_model(self):
         origin = f"http://127.0.0.1:{self.port}"
         status, _, _ = self.request(
