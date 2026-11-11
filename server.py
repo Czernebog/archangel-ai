@@ -40,6 +40,8 @@ SITE_PASSWORD = os.environ.get('ARCHANGEL_SITE_PASSWORD', '')
 MAX_ACTIVE_CHATS = 40
 MAX_ACTIVE_CHATS_PER_IP = 4
 MAX_UPSTREAM_RESPONSE = 4 * 1024 * 1024  # Reject unbounded provider output.
+MAX_TTS_TEXT = 1200
+MAX_TTS_AUDIO = 3 * 1024 * 1024
 DEFAULT_CONFIG = {'provider': None, 'model': None, 'api_key': None, 'endpoint': None}
 SESSIONS = {}
 # Sliding-window request timestamps and in-flight chat guards are RAM-only.
@@ -176,6 +178,8 @@ class Handler(SimpleHTTPRequestHandler):
                            ('disconnect-ip', ip, 32, 60.0, 0.0)),
             'extract': (('extract-session', self.session_id, 10, 60.0, 0.0),
                         ('extract-ip', ip, 24, 60.0, 0.0)),
+            'tts': (('tts-session', self.session_id, 5, 60.0, 1.0),
+                    ('tts-ip', ip, 16, 60.0, 0.0)),
             'math': (('math-session', self.session_id, 12, 60.0, 0.4),
                      ('math-ip', ip, 40, 60.0, 0.0)),
         }
@@ -331,6 +335,7 @@ class Handler(SimpleHTTPRequestHandler):
             data = {'ok': True, 'version': '4.15.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
+                    'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
                     'antiSpam': {'enabled': True, 'chatPerSessionPerMinute': 10, 'chatCooldownSeconds': 2.5, 'maxConcurrentPerSession': 1, 'maxConcurrentPerIp': MAX_ACTIVE_CHATS_PER_IP, 'oneChatAtATime': True}}
             return self._json(200, data)
         if not self._allowed_static_path(path):
@@ -369,7 +374,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         action = {'/api/config': 'config', '/api/disconnect': 'disconnect',
-                  '/api/chat': 'chat', '/api/extract': 'extract', '/api/math': 'math'}.get(self.path)
+                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/extract': 'extract', '/api/math': 'math'}.get(self.path)
         if not action:
             return self._json(404, {'error': 'Маршрут не найден.'})
         if not self._require_site_password(): return
@@ -382,6 +387,7 @@ class Handler(SimpleHTTPRequestHandler):
             if action == 'config': return self._configure()
             if action == 'disconnect': return self._disconnect()
             if action == 'chat': return self._chat()
+            if action == 'tts': return self._tts()
             if action == 'extract': return self._extract()
             if action == 'math': return self._math()
         except (ValueError, json.JSONDecodeError) as e:
@@ -464,6 +470,57 @@ class Handler(SimpleHTTPRequestHandler):
         value = json.loads(self.rfile.read(n).decode('utf-8'))
         if not isinstance(value, dict): raise ValueError('Тело запроса должно быть JSON-объектом.')
         return value
+
+    def _tts(self):
+        """Opt-in neural speech with this browser session's own OpenAI key.
+
+        No global public key and no TTS text/audio stored on the server.
+        """
+        data = self._read_json(max_bytes=8 * 1024)
+        with LOCK:
+            cfg = dict(self._session_entry()['config'])
+        if cfg['provider'] != 'openai' or not cfg['api_key']:
+            return self._json(409, {'error': 'Нейроголос доступен с личным OpenAI API-ключом в настройках ИИ. Используется обычная озвучка устройства.'})
+        raw_text, language, gender = data.get('text'), data.get('language'), data.get('gender')
+        if not isinstance(raw_text, str) or not raw_text.strip() or len(raw_text) > MAX_TTS_TEXT:
+            return self._json(400, {'error': 'Для озвучки нужен текст до 1200 символов.'})
+        if language not in ('ru', 'en', 'es') or gender not in ('male', 'female'):
+            return self._json(400, {'error': 'Укажи один из трёх языков и мужской или женский голос.'})
+        # Curated voice pairs, not an arbitrary client-selected upstream voice.
+        voice = 'onyx' if gender == 'male' else 'nova'
+        langs = {'ru': 'Russian', 'en': 'English', 'es': 'Spanish'}
+        instructions = ('Speak naturally in ' + langs[language] +
+                        '. Be clear, warm and expressive, with realistic pauses. '
+                        'Read only the supplied text. Do not add anything.')
+        payload = json.dumps({'model': 'gpt-4o-mini-tts', 'voice': voice, 'input': raw_text,
+                              'instructions': instructions, 'response_format': 'mp3'}, ensure_ascii=False).encode('utf-8')
+        req = urllib.request.Request(
+            'https://api.openai.com/v1/audio/speech', data=payload, method='POST',
+            headers={'Authorization': 'Bearer ' + cfg['api_key'],
+                     'Content-Type': 'application/json', 'Accept': 'audio/mpeg'})
+        class NoRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, request, fp, code, msg, headers, newurl):
+                return None
+        try:
+            with urllib.request.build_opener(NoRedirect).open(req, timeout=45) as response:
+                audio = response.read(MAX_TTS_AUDIO + 1)
+                mime = response.headers.get('Content-Type', '').split(';')[0].strip().lower()
+                if len(audio) > MAX_TTS_AUDIO or mime not in ('audio/mpeg', 'audio/mp3', 'application/octet-stream'):
+                    return self._json(502, {'error': 'Сервис озвучки вернул неожиданный ответ.'})
+                if not audio:
+                    return self._json(502, {'error': 'Сервис озвучки вернул пустой звук.'})
+        except urllib.error.HTTPError as error:
+            code = error.code
+            error.close()
+            return self._json(502, {'error': 'Ошибка нейроозвучки (HTTP ' + str(code) + '). Проверь лимиты и доступ модели в OpenAI.'})
+        except Exception:
+            return self._json(502, {'error': 'Нейроозвучка временно недоступна. Попробуй голос устройства.'})
+        self.send_response(200)
+        self.send_header('Content-Type', 'audio/mpeg')
+        self.send_header('Content-Length', str(len(audio)))
+        self.send_header('Cache-Control', 'no-store')
+        self.end_headers()
+        self.wfile.write(audio)
 
     def _chat(self):
         data = self._read_json(max_bytes=MAX_BODY)
