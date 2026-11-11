@@ -1742,7 +1742,7 @@ $('saveApi').onclick=async()=>{
  const provider=$('apiProvider').value,model=$('apiModel').value.trim(),key=provider==='ollama'?'':$('apiKey').value.trim(),endpoint=$('apiEndpoint').value.trim();
  if(!model)return toast('Укажи точный ID модели из каталога провайдера.');if(provider!=='ollama'&&!key)return toast('Введи API-ключ провайдера.');if(provider==='custom'&&!/^https:\/\//i.test(endpoint))return toast('Пользовательский endpoint должен начинаться с HTTPS.');if(provider==='ollama'&&location.hostname!== '127.0.0.1'&&location.hostname!=='localhost')return toast('Ollama доступна только при локальном запуске на компьютере.');
  $('saveApi').disabled=true;
- try{await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};$('apiKey').value='';$('apiKey').type='password';$('toggleApiKey').textContent='◉';apiStatus(`Шлюз настроен: ${provider} · ${model}. Ключ хранится только в памяти текущей сессии сервера.`,true);renderAll();toast('Провайдер подключён к серверу ARCHANGEL.');}
+ try{await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};$('apiKey').value='';$('apiKey').type='password';$('toggleApiKey').textContent='◉';apiStatus(`Шлюз настроен: ${provider} · ${model}. Ключ хранится только в памяти текущей сессии сервера.`,true);renderAll();updateVoiceCatalog();toast('Провайдер подключён к серверу ARCHANGEL.');}
  catch(e){apiStatus('Ошибка настройки: '+e.message,false);toast(e.message)}finally{$('saveApi').disabled=false;}
 };
 $('disconnectApi').onclick=async()=>{
@@ -1754,7 +1754,7 @@ $('disconnectApi').onclick=async()=>{
   api={protocol:'chat',endpoint:'/api/chat',model:'',key:'',provider:null};
   $('apiKey').value='';$('apiModel').value='';
   apiStatus('Провайдер отключён. Сервер подтвердил удаление ключа из памяти.',false);
-  renderAll();toast('Подключение отключено, ключ удалён из RAM сервера.');
+  renderAll();updateVoiceCatalog();stopVoicePlayback(false);toast('Подключение отключено, ключ удалён из RAM сервера.');
  }catch(e){apiStatus('Не удалось подтвердить отключение: '+e.message,false);toast('Отключение не подтверждено. Проверь окно сервера ARCHANGEL.');}
  finally{button.disabled=false;}
 };
@@ -1956,7 +1956,7 @@ function previewDeviceVoice(locale,gender,voice){
  u.onerror=()=>toast('Не удалось воспроизвести системный голос.');
  speechSynthesis.speak(u);
 }
-for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice&&!(api.provider==='openai'&&api.key==='server-configured')){toast('Голос этого типа пока не установлен на устройстве.');return;}applyVoiceGender(locale,gender);if(api.provider==='openai'&&api.key==='server-configured'){playNeuralVoice(voiceSample(locale),locale,gender).then(ok=>{if(!ok&&voice)previewDeviceVoice(locale,gender,voice);});return;}previewDeviceVoice(locale,gender,voice);return;const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
+for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice&&!(api.provider==='openai'&&api.key==='server-configured')){toast('Голос этого типа пока не установлен на устройстве.');return;}applyVoiceGender(locale,gender);if(api.provider==='openai'&&api.key==='server-configured'){playNeuralVoice(voiceSample(locale),locale,gender).then(ok=>{if(!ok&&voice)previewDeviceVoice(locale,gender,voice);});return;}previewDeviceVoice(locale,gender,voice);});
 for(const b of document.querySelectorAll('[data-voice-use]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voiceUse.split(':');applyVoiceGender(VOICE_LANGS[key].locale,gender);});
 for(const key of ['ru','en','es']){
  const c=VOICE_LANGS[key],cap=key==='ru'?'Ru':key==='en'?'En':'Es';
