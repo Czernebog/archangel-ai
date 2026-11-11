@@ -10,6 +10,13 @@ on:
       - 'test_math_engine.py'
       - 'requirements.txt'
       - '.github/workflows/quality-checks.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'server.py'
+      - 'test_security_gateway.py'
+      - '.github/workflows/quality-checks.yml'
   workflow_dispatch:
 
 permissions:
@@ -28,9 +35,9 @@ jobs:
       - name: Install runtime dependencies
         run: python -m pip install -r requirements.txt
       - name: Python syntax checks
-        run: python -m py_compile server.py math_engine.py test_math_engine.py
+        run: python -m py_compile server.py math_engine.py test_math_engine.py test_security_gateway.py
       - name: Math engine regression tests
-        run: python -m unittest -v test_math_engine
+        run: python -m unittest -v test_math_engine test_security_gateway
       - name: Validate inline JavaScript syntax
         run: |
           python - <<'PY'
