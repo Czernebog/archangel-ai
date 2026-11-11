@@ -778,6 +778,18 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
  #page-chat *,#page-chat *::before,#page-chat *::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
 }
 </style>
+<style id="archangel-419-phone-voice">
+@media(max-width:760px){
+ #settings-voice .voice-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+ #settings-voice .voice-actions>button{flex:1 1 150px;min-height:44px;font-size:13px}
+ #settings-voice .autovoice-toggle{width:100%;min-height:44px}
+ #settings-voice select,#settings-voice .select{font-size:16px}
+ #page-chat .compose-tools{gap:6px}
+ #page-chat .composer{gap:8px}
+ #page-chat #chatInput{font-size:16px}
+ #page-chat .send{flex-shrink:0}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
@@ -814,7 +826,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.18</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.19</div>
   </div>
 </aside>
 <main class="main">
@@ -830,7 +842,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button><button class="icon-btn speaker-toggle" id="voiceSpeakerToggle" type="button" aria-label="Включить озвучивание ответов" aria-pressed="false" title="Включить озвучивание ответов"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9a4 4 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
  <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted voice-status" id="voiceState" role="status" aria-live="polite">Микрофон выключен</div><p class="footnote" style="margin-top:10px">Нажми значок микрофона рядом с полем сообщения, чтобы включить или выключить распознавание речи. Никакие специальные слова не нужны. Значок динамика управляет озвучкой ответов. Браузер может передавать речь своему сервису распознавания.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
@@ -935,9 +947,9 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
      <div class="voice-control-card"><h4>ИСПАНСКИЙ ГОЛОС</h4><label class="label" for="voiceEsSelect">Голос устройства</label><select class="select" id="voiceEsSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEs" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEsVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEs" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEsVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEs" style="width:100%"></div>
     </div>
     <div class="voice-status-line" id="voiceCatalogStatus">Загрузка голосов, доступных в браузере…</div>
-    <div class="voice-actions voice-actions-enhanced"><button type="button" class="btn secondary" id="refreshVoices">↻ Обновить голоса</button><button type="button" class="btn ghost" id="stopSpeaking">■ Остановить озвучку</button><label class="autovoice-toggle" for="autoSpeak"><input id="autoSpeak" type="checkbox" class="toggle"><span>Автоматически озвучивать ответы ИИ</span></label></div>
+    <div class="voice-actions voice-actions-enhanced"><button type="button" class="btn secondary" id="refreshVoices">↻ Обновить голоса</button><button type="button" class="btn secondary" id="playLastAnswer" aria-label="Прослушать последний ответ ИИ">▶ Прослушать последний ответ</button><button type="button" class="btn ghost" id="stopSpeaking">■ Остановить озвучку</button><label class="autovoice-toggle" for="autoSpeak"><input id="autoSpeak" type="checkbox" class="toggle"><span>Автоматически озвучивать ответы ИИ</span></label></div>
    </div>
-   <p class="footnote">Озвучка использует Web Speech API и системные голоса устройства: на Windows, Android и iPhone список может различаться. Без установленного голоса соответствующего языка озвучка не гарантируется. Для более естественного звучания выбирай Natural или Neural, если доступны. Распознавание микрофона работает на одном выбранном языке за раз.</p>
+   <p class="footnote">На телефоне сначала нажми «Прослушать доступный голос» или «Прослушать последний ответ», чтобы браузер разрешил воспроизведение. Автоматическая озвучка не гарантируется на iPhone без действия пользователя. Озвучка использует Web Speech API и системные голоса устройства: на Windows, Android и iPhone список может различаться. Без установленного голоса соответствующего языка озвучка не гарантируется. Для более естественного звучания выбирай Natural или Neural, если доступны. Распознавание микрофона работает на одном выбранном языке за раз.</p>
   </div>
   <div class="card" id="settings-data">
    <div class="between"><h3 class="section-title">Данные и резервная копия</h3><span class="badge">На устройстве</span></div>
@@ -1384,16 +1396,7 @@ function setVoiceUI(){
  if(status)status.textContent=voiceWake?(voiceSpeaking?'Микрофон временно приостановлен на время ответа.':'Микрофон включён · говори свободно'):'Микрофон выключен';
  const indicator=$('voiceMicIndicator');if(indicator)indicator.textContent=voiceWake?'Микрофон: включён':'Микрофон: выключен';
 }
-function syncSpeakerButton(){
- const button=$('voiceSpeakerToggle'),enabled=!!state.prefs.autoSpeak;
- if(button){
-  button.classList.toggle('enabled',enabled);
-  button.setAttribute('aria-pressed',String(enabled));
-  button.setAttribute('aria-label',enabled?'Выключить озвучивание ответов':'Включить озвучивание ответов');
-  button.title=enabled?'Выключить озвучивание ответов':'Включить озвучивание ответов';
- }
- if($('autoSpeak'))$('autoSpeak').checked=enabled;
-}
+function syncSpeakerButton(){if($('autoSpeak'))$('autoSpeak').checked=!!state.prefs.autoSpeak;}
 function stopRecognition(){
  voiceWake=false;voiceActive=false;
  if(recognitionRetryTimer!==null){clearTimeout(recognitionRetryTimer);recognitionRetryTimer=null;}
@@ -1474,15 +1477,6 @@ function startRecognition(){
 }
 $('voiceStart').onclick=()=>{if(voiceWake){stopRecognition();toast('Микрофон выключен');}else startRecognition();};
 $('chatInput')?.addEventListener('input',()=>{if(voiceDraftManaged){voiceDraftManaged=false;if(recognitionCommitTimer!==null){clearTimeout(recognitionCommitTimer);recognitionCommitTimer=null;}}});
-$('voiceSpeakerToggle').onclick=()=>{
- state.prefs.autoSpeak=!state.prefs.autoSpeak;
- save();syncSpeakerButton();
- if(!state.prefs.autoSpeak){
-  stopVoicePlayback();
-  if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}
- }
- toast(state.prefs.autoSpeak?'Озвучка ответов включена':'Озвучка ответов выключена');
-};
 $('voiceLanguage')?.addEventListener('change',()=>{
  if(voiceWake){stopRecognition();startRecognition();}
  else setVoiceUI();
@@ -1532,7 +1526,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // ===== ARCHANGEL AI 3.0 CORE =====
-const ARCHANGEL_VERSION='4.18.0';
+const ARCHANGEL_VERSION='4.19.0';
 let activeController=null;
 const localGateway=()=>((location.protocol==='http:'||location.protocol==='https:')&&!!location.hostname);
 async function gatewayJSON(path,payload){
@@ -1789,7 +1783,7 @@ $('testApi').onclick=async()=>{
 // Gateway status on startup.
 // Gateway state is restored by initializeArchangel() once, after local profile loading.
 // Version marker in page metadata.
-document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.18 · CZERNEBOG');
+document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI · WEB APP · 4.19 · CZERNEBOG');
 
 
 // ARCHANGEL 3.6.0: three-language support, sample references and long-form speech queue.
