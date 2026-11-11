@@ -1331,7 +1331,7 @@ function classifyVoiceGender(v,locale){
 function populateVoiceSelect(id,prefix,selected){
  const el=$(id);if(!el)return;const current=selected||el.value;const list=speechVoices().filter(v=>(v.lang||'').toLowerCase().startsWith(prefix));
  el.innerHTML='';const first=document.createElement('option');first.value='';first.textContent=prefix==='ru'?'Автовыбор по профилю':'Auto-select by profile';el.append(first);
- const sorted=list.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name));
+ const sorted=list.sort((a,b)=>bestVoiceScore(b,VOICE_LANGS[prefix]?.locale||prefix+'-'+prefix.toUpperCase(),'male')-bestVoiceScore(a,VOICE_LANGS[prefix]?.locale||prefix+'-'+prefix.toUpperCase(),'male')||a.name.localeCompare(b.name));
  for(const voice of sorted){const o=document.createElement('option');o.value=voice.voiceURI||voice.name;const gender=classifyVoiceGender(voice,prefix);const genderText=gender==='male'?(prefix==='ru'?'мужской':'male'):gender==='female'?(prefix==='ru'?'женский':'female'):(prefix==='ru'?'тип не определён':'type unknown');o.textContent=`${voice.name} · ${voice.lang} · ${genderText}${voice.localService?'':' · online'}`;el.append(o)}
  if(current&&[...el.options].some(o=>o.value===current))el.value=current;
 }
@@ -1801,12 +1801,45 @@ document.querySelectorAll('.side-foot').forEach(x=>x.textContent='ARCHANGEL AI �
 
 function localeKey(locale){const l=String(locale||'').toLowerCase();return l.startsWith('ru')?'ru':l.startsWith('es')?'es':'en';}
 function updateVoiceValueLabels(){for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];for(const [id,suffix] of [[c.rate,'×'],[c.pitch,'']]){const el=$(id),label=$(id+'Val');if(el&&label)label.textContent=(+el.value).toFixed(2)+suffix;}}}
-function classifyVoiceGender(v,locale){const n=String(v.name||'').toLowerCase();const key=localeKey(locale);const male=key==='ru'?/(alexei|alexey|aleksei|pavel|dmitry|dmitriy|maxim|maksim|mikhail|oleg|sergey|nikolay|vladimir|igor|male|man)/i.test(n):key==='es'?/(jorge|diego|carlos|miguel|pablo|juan|antonio|alvaro|álvaro|raul|raúl|enrique|felipe|male|man|masculin)/i.test(n):/(david|guy|christopher|ryan|mark|daniel|james|george|thomas|andrew|michael|oliver|alex|aaron|male|man)/i.test(n);const female=key==='ru'?/(daria|darya|irina|alena|elena|olga|svetlana|natalia|polina|ekaterina|marina|anna|female|woman)/i.test(n):key==='es'?/(lucia|lucía|sofia|sofía|carmen|maria|maría|elena|helena|laura|paulina|conchita|isabel|paloma|female|woman|femenin)/i.test(n):/(zira|aria|jenny|sara|samantha|victoria|ava|emma|julia|karen|susan|sonia|libby|hazel|female|woman)/i.test(n);if(male)return'male';if(female)return'female';return'unknown';}
+/* Device voice metadata is inconsistent. Match well-known voices, but never invent gender for unknown voices. */
+function classifyVoiceGender(v,locale){
+ const name=String(v?.name||'').toLowerCase(),key=localeKey(locale);
+ const matches=(items)=>items.some(item=>new RegExp('(^|[^a-záéíóúñа-яё])'+item+'([^a-záéíóúñа-яё]|$)','i').test(name));
+ const voices={
+  ru:{
+   male:['alexei','alexey','aleksei','pavel','dmitry','dmitriy','maxim','maksim','mikhail','oleg','sergey','nikolay','vladimir','igor','yuri','boris'],
+   female:['daria','darya','irina','alena','elena','olga','svetlana','natalia','polina','ekaterina','marina','anna','tatyana']
+  },
+  en:{
+   male:['david','guy','christopher','ryan','mark','daniel','james','george','thomas','andrew','michael','oliver','alex','aaron','arthur','brian','eric','henry','fred','ralph','reed','evan','tom','aaron'],
+   female:['zira','aria','jenny','sara','samantha','victoria','ava','emma','julia','karen','susan','sonia','libby','hazel','allison','siri','serena','moira','kate','tessa','fiona','joanna','kendra','kimberly','salli','amy','nicole','olivia','emily','stephanie']
+  },
+  es:{
+   male:['jorge','diego','carlos','miguel','pablo','juan','antonio','alvaro','álvaro','raul','raúl','enrique','felipe','alejandro','mateo','jorge','carlos','andrés','andres','luis','manuel','francisco'],
+   female:['lucia','lucía','sofia','sofía','carmen','maria','maría','elena','helena','laura','paulina','conchita','isabel','paloma','mónica','monica','paula','marta','ines','inés','penelope','penélope','marisol']
+  }
+ };
+ const profile=voices[key]||voices.en;
+ if(matches(['female','woman','feminine','femenina','femenino'])||matches(profile.female))return'female';
+ if(matches(['male','man','masculine','masculino'])||matches(profile.male))return'male';
+ return'unknown';
+}
+function bestVoiceScore(v,locale,gender){
+ let score=voiceQualityScore(v),name=String(v?.name||'').toLowerCase(),lang=String(v?.lang||'').toLowerCase();
+ const key=localeKey(locale),target=String(locale||'').toLowerCase();
+ if(lang===target)score+=10;
+ if(/neural|natural|premium|enhanced|wavenet|studio|high quality|online/i.test(name))score+=15;
+ if(/compact|low quality|legacy|robotic/i.test(name))score-=15;
+ if(key==='en'&&/(jenny|aria|guy|davis|samantha|daniel|siri|serena|oliver|ava|emma)/i.test(name))score+=7;
+ if(key==='es'&&/(helena|jorge|pablo|lucia|lucía|sofia|sofía|diego|carmen|maria|maría|conchita|paulina|isabel)/i.test(name))score+=7;
+ if(classifyVoiceGender(v,locale)===gender)score+=3;
+ return score;
+}
 function findGenderVoice(locale,gender){
  const key=localeKey(locale),cfg=VOICE_LANGS[key];
  const list=speechVoices().filter(v=>String(v.lang||'').toLowerCase().startsWith(cfg.prefix));
  const exact=list.filter(v=>classifyVoiceGender(v,locale)===gender);
- return exact.sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;
+ return exact.sort((a,b)=>bestVoiceScore(b,locale,gender)-bestVoiceScore(a,locale,gender)||a.name.localeCompare(b.name))[0]||null;
 }
 function voiceProfilePitch(locale,gender,base){return base;}
 function actualProfileNote(locale,gender,v){if(v)return v.name+' · '+v.lang;const k=localeKey(locale),count=speechVoices().filter(x=>String(x.lang||'').toLowerCase().startsWith(VOICE_LANGS[k].prefix)).length;return count?'Пол голоса не распознан — выбери из списка ниже':'Нет голосов этого языка в браузере';}
@@ -1837,7 +1870,7 @@ function updateVoiceCatalog(){
   return `${labels[k]}: ${available.length} (муж. ${foundM}, жен. ${foundF})`;
  });
  const status=$('voiceCatalogStatus');
- if(status)status.textContent='Голоса устройства — '+summaries.join(' · ')+'. Если кнопка недоступна, браузер не предоставил соответствующий голос. Кнопка «Обновить голоса» повторяет проверку.';
+ if(status)status.textContent='Голоса устройства — '+summaries.join(' · ')+'. Для каждого профиля ARCHANGEL выбирает наиболее качественный найденный вариант; при отсутствии нужного голоса используй список и кнопку прослушивания.';
  updateVoiceChoiceUI();
 }
 function outputLocale(text,forced){if(forced)return forced;const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;if(state.prefs.language==='es')return'es-ES';if(state.prefs.language==='en')return'en-US';const value=String(text||'').toLowerCase();const ru=(value.match(/[а-яё]/g)||[]).length;const esMarks=(value.match(/[áéíóúüñ¿¡]/g)||[]).length;const esWords=(value.match(/\b(hola|gracias|por favor|buenos|buenas|usted|tarea|solución|analizar|puedes|quieres|sistema|respuesta)\b/g)||[]).length;const en=(value.match(/[a-z]/g)||[]).length;if(ru>Math.max(en,esMarks+esWords*3))return'ru-RU';if(esMarks+esWords*3>0&&esMarks+esWords*3>=en*.12)return'es-ES';return'en-US';}
