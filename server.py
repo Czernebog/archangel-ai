@@ -39,6 +39,7 @@ MAX_SESSIONS = 3000
 SITE_PASSWORD = os.environ.get('ARCHANGEL_SITE_PASSWORD', '')
 MAX_ACTIVE_CHATS = 40
 MAX_ACTIVE_CHATS_PER_IP = 4
+MAX_UPSTREAM_RESPONSE = 4 * 1024 * 1024  # Reject unbounded provider output.
 DEFAULT_CONFIG = {'provider': None, 'model': None, 'api_key': None, 'endpoint': None}
 SESSIONS = {}
 # Sliding-window request timestamps and in-flight chat guards are RAM-only.
@@ -417,7 +418,8 @@ class Handler(SimpleHTTPRequestHandler):
         if PUBLIC_MODE and provider == 'ollama':
             return self._json(400, {'error': 'Ollama доступна только в локальной версии: облачный сервер не может подключиться к Ollama на твоём компьютере.'})
         model = str(data.get('model', '')).strip()
-        if not model or len(model) > 180: return self._json(400, {'error': 'Укажи точный идентификатор модели из каталога провайдера.'})
+        if not model or len(model) > 180 or any(ord(ch) < 32 or ord(ch) == 127 for ch in model):
+            return self._json(400, {'error': 'Укажи корректный идентификатор модели без управляющих символов.'})
         key = str(data.get('api_key', '')).strip()
         endpoint = PROVIDERS.get(provider)
         if provider == 'custom':
@@ -538,15 +540,23 @@ class Handler(SimpleHTTPRequestHandler):
             headers=headers,
             method='POST',
         )
+        # Do not follow redirects: the authorization header must never be sent to a new host.
+        class NoRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, request, fp, code, msg, headers, newurl):
+                return None
         try:
-            upstream = urllib.request.urlopen(req, timeout=180)
+            upstream = urllib.request.build_opener(NoRedirect).open(req, timeout=180)
         except urllib.error.HTTPError as e:
             detail = e.read(3000).decode('utf-8', 'replace')
             if cfg['api_key']:
                 detail = detail.replace(cfg['api_key'], '[скрытый ключ]')
-            return self._json(e.code, {'error': f'Провайдер вернул HTTP {e.code}: {detail[:1800]}'})
+            # Provider error bodies can echo prompts or credentials. Return a safe, actionable status.
+            if e.code in (301, 302, 303, 307, 308):
+                return self._json(502, {'error': 'Провайдер перенаправил запрос. Проверь адрес API; переход заблокирован ради безопасности ключа.'})
+            return self._json(e.code if 400 <= e.code <= 599 else 502,
+                              {'error': f'Провайдер вернул HTTP {e.code}. Проверь API-ключ, модель и лимиты провайдера.'})
         except Exception as e:
-            return self._json(502, {'error': 'Не удалось подключиться к провайдеру: ' + str(e)[:500]})
+            return self._json(502, {'error': 'Не удалось подключиться к провайдеру. Проверь его доступность и настройки API.'})
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/event-stream; charset=utf-8')
@@ -558,20 +568,35 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             content_type = upstream.headers.get('Content-Type', '').lower()
             if 'text/event-stream' not in content_type:
-                obj = json.loads(upstream.read().decode('utf-8', 'replace'))
+                response_body = upstream.read(MAX_UPSTREAM_RESPONSE + 1)
+                if len(response_body) > MAX_UPSTREAM_RESPONSE:
+                    self._event({'error': 'Ответ провайдера слишком большой.'})
+                    return
+                obj = json.loads(response_body.decode('utf-8', 'replace'))
+                if not isinstance(obj, dict):
+                    self._event({'error': 'Провайдер вернул некорректный формат ответа.'})
+                    return
+                if obj.get('error'):
+                    self._event({'error': 'Провайдер сообщил об ошибке. Проверь модель и ключ.'})
+                    return
                 choices = obj.get('choices') or []
                 content = (((choices[0].get('message') or {}).get('content')) if choices else None)
                 if isinstance(content, list):
                     content = ''.join(str(x.get('text', '')) for x in content if isinstance(x, dict))
                 if isinstance(content, str) and content:
                     self._event({'delta': content})
-                self._event({'done': True})
+                if not content:
+                    self._event({'error': 'Провайдер вернул пустой ответ. Проверь поддержку модели и её параметры.'})
+                else:
+                    self._event({'done': True})
                 return
 
             data_lines = []
             done_sent = False
+            bytes_received = 0
+            has_output = False
             def process_event(lines):
-                nonlocal done_sent
+                nonlocal done_sent, has_output
                 if not lines:
                     return
                 raw_data = '\n'.join(lines).strip()
@@ -586,8 +611,7 @@ class Handler(SimpleHTTPRequestHandler):
                 except Exception:
                     return
                 if isinstance(chunk.get('error'), dict):
-                    message = str(chunk['error'].get('message') or chunk['error'])[:500]
-                    self._event({'error': 'Провайдер сообщил об ошибке: ' + message})
+                    self._event({'error': 'Провайдер сообщил об ошибке при генерации. Проверь модель, ключ и лимиты.'})
                     done_sent = True
                     return
                 choices = chunk.get('choices') or []
@@ -597,15 +621,22 @@ class Handler(SimpleHTTPRequestHandler):
                 delta = (choice.get('delta') or {}).get('content')
                 if isinstance(delta, str) and delta:
                     self._event({'delta': delta})
+                    has_output = True
                 elif isinstance(delta, list):
                     text_value = ''.join(str(x.get('text', '')) for x in delta if isinstance(x, dict))
                     if text_value:
                         self._event({'delta': text_value})
+                        has_output = True
                 if choice.get('finish_reason') is not None and not done_sent:
                     self._event({'done': True})
                     done_sent = True
 
             for raw in upstream:
+                bytes_received += len(raw)
+                if bytes_received > MAX_UPSTREAM_RESPONSE:
+                    self._event({'error': 'Ответ модели превысил безопасный размер.'})
+                    done_sent = True
+                    break
                 line = raw.decode('utf-8', 'replace').rstrip('\r\n')
                 if not line:
                     process_event(data_lines)
@@ -620,12 +651,15 @@ class Handler(SimpleHTTPRequestHandler):
             if data_lines and not done_sent:
                 process_event(data_lines)
             if not done_sent:
-                self._event({'done': True})
+                if has_output:
+                    self._event({'done': True})
+                else:
+                    self._event({'error': 'Модель не вернула текст. Проверь её поддержку потоковых ответов.'})
         except (BrokenPipeError, ConnectionResetError):
             pass
         except Exception as e:
             try:
-                self._event({'error': 'Поток прерван: ' + str(e)[:300]})
+                self._event({'error': 'Поток ответа прервался. Попробуй повторить запрос.'})
             except Exception:
                 pass
         finally:
