@@ -2086,7 +2086,7 @@ function speakDevice(text,forcedLocale){
  next();
  return true;
 }
-function speak(text,forcedLocale){
+function speakDevice(text,forcedLocale){
  const locale=outputLocale(String(text||''),forcedLocale);
  if(api.provider==='openai'&&api.key==='server-configured'){
   const g=state.prefs[VOICE_LANGS[localeKey(locale)].genderKey]||'male';
