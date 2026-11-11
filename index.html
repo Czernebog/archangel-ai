@@ -722,7 +722,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 .composer textarea{background:#111;border-color:#424242}
 .composer textarea:focus{border-color:#e5e5e5;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
 .chat-layout{align-items:start}
-@media(max-width:760px){</style>
+</style>
 <style id="archangel-418-mobile-refinement">
 /* Single final mobile layout to resolve legacy overrides. */
 @media(max-width:760px){
@@ -741,6 +741,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
  .content:has(#page-chat.active){padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important;overflow:hidden}
  #page-chat.active{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden}
  #page-chat .chat-layout{flex:1 1 auto;height:100%!important;min-height:0;overflow:hidden;gap:0}
+ #page-chat .chat-aside{display:none!important}
  #page-chat .chat-card{display:flex;flex-direction:column;flex:1 1 auto;min-height:0!important;height:100%!important;overflow:hidden;border-radius:13px}
  #page-chat .chat-top{flex:0 0 auto;min-height:52px!important;padding:9px 11px;gap:8px}
  #page-chat .chat-top .row{gap:5px;flex-wrap:nowrap}
