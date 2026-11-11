@@ -71,7 +71,7 @@ class GatewaySecurityTests(unittest.TestCase):
         self.assertEqual(status, 400)
         status, _, _ = self.request(
             "/api/config", "POST",
-            {"provider": "openai", "model": "bad\\nmodel", "api_key": "test"}, origin=origin)
+            {"provider": "openai", "model": "bad" + chr(10) + "model", "api_key": "test"}, origin=origin)
         self.assertEqual(status, 400)
 
 
