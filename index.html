@@ -996,7 +996,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    </div>
   </div>
   <div class="card settings-voice-card" id="settings-voice">
-   <div class="between"><div><h3 class="section-title">Голоса и озвучка</h3><div class="mini-help">Три языка, два голоса для каждого: мужской и женский. Нажми на голос, чтобы выбрать его и прослушать пример.</div></div><span class="badge">RU / EN / ES</span></div>
+   <div class="between"><div><h3 class="section-title">Голоса и озвучка</h3><div class="mini-help">Русский, English, Español: ровно два варианта на язык. Выбери голос нажатием. При подключённом OpenAI API доступна более естественная нейросетевая речь.</div></div><span class="badge">RU / EN / ES</span></div>
    <div class="stack">
     <div class="form-row">
      <div><label class="label" for="voiceLanguage">Язык распознавания</label><select class="select" id="voiceLanguage"><option value="ru-RU">Русский · Россия</option><option value="en-US">English · US</option><option value="es-ES">Español · España</option></select></div>
@@ -1019,7 +1019,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
       
      </div>
     </div>
-    <div class="voice-comparison-note">Каждый язык имеет два варианта выбора: мужской и женский. Доступность реального голоса зависит от устройства. Если подходящий голос не установлен, ARCHANGEL покажет это вместо подмены его другим.</div>
+    <div class="voice-comparison-note">Всего шесть вариантов: мужской и женский для RU, EN, ES. Нейроозвучка через OpenAI использует твой собственный API-ключ, может тарифицироваться провайдером и передаёт текст для синтеза. Без неё используются лучшие доступные голоса устройства.</div>
     <div class="voice-panel-grid" style="display:none" aria-hidden="true">
      <div class="voice-control-card"><h4>РУССКИЙ ГОЛОС</h4><label class="label" for="voiceRuSelect">Доступный голос устройства</label><select class="select" id="voiceRuSelect"><option value="">Автовыбор русского голоса</option></select><button class="btn secondary" id="testVoiceRu" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateRuVal">0.97×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.97" id="voiceRateRu" style="width:100%"><div class="small muted">Тембр <b id="voicePitchRuVal">0.96</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.96" id="voicePitchRu" style="width:100%"></div>
      <div class="voice-control-card"><h4>АНГЛИЙСКИЙ ГОЛОС</h4><label class="label" for="voiceEnSelect">Голос устройства</label><select class="select" id="voiceEnSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEn" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEnVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEn" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEnVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEn" style="width:100%"></div>
@@ -1742,7 +1742,7 @@ $('saveApi').onclick=async()=>{
  const provider=$('apiProvider').value,model=$('apiModel').value.trim(),key=provider==='ollama'?'':$('apiKey').value.trim(),endpoint=$('apiEndpoint').value.trim();
  if(!model)return toast('Укажи точный ID модели из каталога провайдера.');if(provider!=='ollama'&&!key)return toast('Введи API-ключ провайдера.');if(provider==='custom'&&!/^https:\/\//i.test(endpoint))return toast('Пользовательский endpoint должен начинаться с HTTPS.');if(provider==='ollama'&&location.hostname!== '127.0.0.1'&&location.hostname!=='localhost')return toast('Ollama доступна только при локальном запуске на компьютере.');
  $('saveApi').disabled=true;
- try{await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};$('apiKey').value='';$('apiKey').type='password';$('toggleApiKey').textContent='◉';apiStatus(`Шлюз настроен: ${provider} · ${model}. Ключ хранится только в памяти текущей сессии сервера.`,true);renderAll();toast('Провайдер подключён к серверу ARCHANGEL.');}
+ try{await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};$('apiKey').value='';$('apiKey').type='password';$('toggleApiKey').textContent='◉';apiStatus(`Шлюз настроен: ${provider} · ${model}. Ключ хранится только в памяти текущей сессии сервера.`,true);renderAll();updateVoiceCatalog();toast('Провайдер подключён к серверу ARCHANGEL.');}
  catch(e){apiStatus('Ошибка настройки: '+e.message,false);toast(e.message)}finally{$('saveApi').disabled=false;}
 };
 $('disconnectApi').onclick=async()=>{
@@ -1754,7 +1754,7 @@ $('disconnectApi').onclick=async()=>{
   api={protocol:'chat',endpoint:'/api/chat',model:'',key:'',provider:null};
   $('apiKey').value='';$('apiModel').value='';
   apiStatus('Провайдер отключён. Сервер подтвердил удаление ключа из памяти.',false);
-  renderAll();toast('Подключение отключено, ключ удалён из RAM сервера.');
+  renderAll();updateVoiceCatalog();stopVoicePlayback(false);toast('Подключение отключено, ключ удалён из RAM сервера.');
  }catch(e){apiStatus('Не удалось подтвердить отключение: '+e.message,false);toast('Отключение не подтверждено. Проверь окно сервера ARCHANGEL.');}
  finally{button.disabled=false;}
 };
@@ -1924,11 +1924,11 @@ function updateVoiceChoiceUI(){
   if(badge)badge.textContent=(key==='ru'?'Профиль: ':key==='es'?'Perfil: ':'Profile: ')+(g==='female'?labelFemale:labelMale);
   for(const x of ['male','female'])document.querySelectorAll(`[data-voice-preview="${key}:${x}"]`).forEach(b=>{b.classList.toggle('is-selected',x===g);b.setAttribute('aria-pressed',String(x===g));});
   for(const [suffix,gender] of [['MaleName','male'],['FemaleName','female']]){
-   const v=findGenderVoice(locale,gender),el=$(`voice${cap}${suffix}`);
-   if(el)el.textContent=actualProfileNote(locale,gender,v);
+   const v=findGenderVoice(locale,gender),el=$(`voice${cap}${suffix}`),neural=api.provider==='openai'&&api.key==='server-configured';
+   if(el)el.textContent=neural?'Нейросетевой голос · OpenAI':actualProfileNote(locale,gender,v);
    for(const kind of ['voice-preview','voice-use']){
     const button=document.querySelector(`[data-${kind}="${key}:${gender}"]`);
-    if(button){button.disabled=!v;button.title=v?'Прослушать или выбрать: '+v.name:'Такого голоса нет в системе или браузере';}
+    if(button){button.disabled=!(v||neural);button.title=neural?'Нейроголос: выбор и прослушивание':v?'Прослушать или выбрать: '+v.name:'Голос этого типа недоступен на устройстве';}
    }
   }
  }
@@ -1949,8 +1949,14 @@ function updateVoiceCatalog(){
 function outputLocale(text,forced){if(forced)return forced;const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;if(state.prefs.language==='es')return'es-ES';if(state.prefs.language==='en')return'en-US';const value=String(text||'').toLowerCase();const ru=(value.match(/[а-яё]/g)||[]).length;const esMarks=(value.match(/[áéíóúüñ¿¡]/g)||[]).length;const esWords=(value.match(/\b(hola|gracias|por favor|buenos|buenas|usted|tarea|solución|analizar|puedes|quieres|sistema|respuesta)\b/g)||[]).length;const en=(value.match(/[a-z]/g)||[]).length;if(ru>Math.max(en,esMarks+esWords*3))return'ru-RU';if(esMarks+esWords*3>0&&esMarks+esWords*3>=en*.12)return'es-ES';return'en-US';}
 function chosenVoice(locale){const key=localeKey(locale),c=VOICE_LANGS[key],voices=speechVoices(),selected=$(c.select)?.value||state.prefs[c.voiceKey];if(selected){const v=voices.find(x=>(x.voiceURI||x.name)===selected&&String(x.lang||'').toLowerCase().startsWith(c.prefix));if(v)return v;}const g=state.prefs[c.genderKey]||'male';const profile=findGenderVoice(locale,g);if(profile)return profile;return voices.filter(v=>(v.lang||'').toLowerCase().startsWith(c.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;}
 function voiceSample(locale){const k=localeKey(locale);return k==='ru'?'Здравствуйте. Я Архангел. Я внимательно разберу задачу, проверю детали и предложу точное решение.':k==='es'?'Hola. Soy Archangel. Analizaré la tarea con atención, comprobaré los detalles y te propondré una solución precisa.':'Hello. I am Archangel. I will examine the task carefully, verify the details, and give you a precise solution.';}
-function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice){toast('Этот голос не найден на устройстве.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice.voiceURI||voice.name;const select=$(cfg.select);if(select)select.value=voice.voiceURI||voice.name;save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);}
-for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice){toast('Голос этого типа пока не установлен на устройстве.');return;}applyVoiceGender(locale,gender);stopVoicePlayback();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
+function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice&&!(api.provider==='openai'&&api.key==='server-configured')){toast('Этот голос не найден на устройстве.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice?(voice.voiceURI||voice.name):'';const select=$(cfg.select);if(select)select.value=voice?(voice.voiceURI||voice.name):'';save();updateVoiceChoiceUI();toast('Голос выбран: '+(voice?.name||'нейросетевой профиль'));}
+function previewDeviceVoice(locale,gender,voice){
+ if(!voice||!('speechSynthesis' in window))return toast('Голос устройства недоступен.');
+ stopVoicePlayback();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=.98;u.pitch=1;u.volume=1;
+ u.onerror=()=>toast('Не удалось воспроизвести системный голос.');
+ speechSynthesis.speak(u);
+}
+for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice&&!(api.provider==='openai'&&api.key==='server-configured')){toast('Голос этого типа пока не установлен на устройстве.');return;}applyVoiceGender(locale,gender);if(api.provider==='openai'&&api.key==='server-configured'){playNeuralVoice(voiceSample(locale),locale,gender).then(ok=>{if(!ok&&voice)previewDeviceVoice(locale,gender,voice);});return;}previewDeviceVoice(locale,gender,voice);});
 for(const b of document.querySelectorAll('[data-voice-use]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voiceUse.split(':');applyVoiceGender(VOICE_LANGS[key].locale,gender);});
 for(const key of ['ru','en','es']){
  const c=VOICE_LANGS[key],cap=key==='ru'?'Ru':key==='en'?'En':'Es';
@@ -1970,9 +1976,41 @@ for(const key of ['ru','en','es']){
 }
 
 let voicePlaybackEpoch=0;
+let neuralAudio=null,neuralAudioUrl='',neuralRequest=null;
+function clearNeuralPlayback(){
+ if(neuralRequest){try{neuralRequest.abort()}catch{}neuralRequest=null;}
+ if(neuralAudio){try{neuralAudio.pause();neuralAudio.src=''}catch{}neuralAudio=null;}
+ if(neuralAudioUrl){URL.revokeObjectURL(neuralAudioUrl);neuralAudioUrl='';}
+}
+async function playNeuralVoice(text,locale,gender){
+ if(api.provider!=='openai'||api.key!=='server-configured')return false;
+ const clean=String(text||'').replace(/`{3}[\s\S]*?`{3}/g,'фрагмент кода').replace(/https?:\/\/\S+/g,'ссылка').trim().slice(0,1200);
+ if(!clean)return false;
+ stopVoicePlayback(false);
+ const epoch=voicePlaybackEpoch,controller=new AbortController();neuralRequest=controller;
+ const status=$('voiceCatalogStatus');if(status)status.textContent='Подготавливается естественная нейроозвучка…';
+ try{
+  const res=await fetch('/api/tts',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean,language:localeKey(locale),gender}),signal:controller.signal});
+  if(!res.ok){let obj={};try{obj=await res.json()}catch{}throw Error(obj.error||('HTTP '+res.status));}
+  const blob=await res.blob();if(blob.size>3*1024*1024||!blob.size)throw Error('Не удалось получить звуковой файл.');
+  if(epoch!==voicePlaybackEpoch)return true;
+  neuralRequest=null;neuralAudioUrl=URL.createObjectURL(blob);const audio=new Audio(neuralAudioUrl);neuralAudio=audio;
+  audio.onended=()=>{if(epoch===voicePlaybackEpoch){clearNeuralPlayback();if(status)status.textContent='Нейроозвучка завершена.';}};
+  audio.onerror=()=>{if(epoch===voicePlaybackEpoch){clearNeuralPlayback();toast('Ошибка воспроизведения нейроголоса.');}};
+  await audio.play();
+  if(status)status.textContent='Нейроголос · '+locale+' · '+(gender==='female'?'женский':'мужской');
+  return true;
+ }catch(e){
+  if(epoch!==voicePlaybackEpoch)return true;
+  clearNeuralPlayback();
+  if(status)status.textContent='Нейроозвучка недоступна: '+(e?.message||'ошибка')+'. Пробуем голос устройства.';
+  return false;
+ }
+}
 function stopVoicePlayback(resumeMic=true){
  const wasSpeaking=voiceSpeaking;
  voicePlaybackEpoch++;
+ clearNeuralPlayback();
  voiceSpeaking=false;
  if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch{}
  if(resumeMic&&wasSpeaking&&voiceWake&&recognition){
@@ -1987,7 +2025,7 @@ function stopVoicePlayback(resumeMic=true){
 $('stopSpeaking')?.addEventListener('click',()=>{stopVoicePlayback();const label=$('voiceCatalogStatus');if(label)label.textContent='Озвучка остановлена.';});
 $('autoSpeak')?.addEventListener('change',()=>{state.prefs.autoSpeak=$('autoSpeak').checked;save();syncSpeakerButton();if(!state.prefs.autoSpeak)stopVoicePlayback();toast(state.prefs.autoSpeak?'Озвучка включена':'Озвучка выключена');});
 function splitSpeechText(text,max=220){const out=[];let rest=String(text||'').replace(/\s+/g,' ').trim();while(rest.length>max){let cut=-1;for(const re of [/[.!?。！？;:](?=\s)/g,/,\s/g,/\s/g]){let m;while((m=re.exec(rest))!==null)if(m.index>max*.55&&m.index<max)cut=m.index+m[0].length;if(cut>0)break;}if(cut<1)cut=max;out.push(rest.slice(0,cut).trim());rest=rest.slice(cut).trim();}if(rest)out.push(rest);return out;}
-function speak(text,forcedLocale){
+function speakDevice(text,forcedLocale){
  if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
   toast('Браузер не поддерживает синтез речи.');return false;
  }
@@ -2047,6 +2085,15 @@ function speak(text,forcedLocale){
  }
  next();
  return true;
+}
+function speakDevice(text,forcedLocale){
+ const locale=outputLocale(String(text||''),forcedLocale);
+ if(api.provider==='openai'&&api.key==='server-configured'){
+  const g=state.prefs[VOICE_LANGS[localeKey(locale)].genderKey]||'male';
+  playNeuralVoice(text,locale,g).then(ok=>{if(!ok)speakDevice(text,forcedLocale);});
+  return true;
+ }
+ return speakDevice(text,forcedLocale);
 }
 $('playLastAnswer')?.addEventListener('click',()=>{
  const last=[...state.messages].reverse().find(m=>m.role==='assistant'&&String(m.text||'').trim()&&!/^(Ошибка подключения|Генерация остановлена)/i.test(m.text));

@@ -63,6 +63,21 @@ class GatewaySecurityTests(unittest.TestCase):
         )
         self.assertEqual(status, 403, body)
 
+    def test_neural_tts_requires_session_key(self):
+        origin = f"http://127.0.0.1:{self.port}"
+        status, body, hdr = self.request(
+            "/api/tts", "POST",
+            {"text": "Hello", "language": "en", "gender": "female"}, origin=origin)
+        self.assertEqual(status, 409, body)
+        self.assertIn("application/json", hdr.get("Content-Type", ""))
+
+    def test_cross_origin_tts_blocked(self):
+        status, body, _ = self.request(
+            "/api/tts", "POST",
+            {"text": "Hello", "language": "en", "gender": "female"},
+            origin="https://attacker.example")
+        self.assertEqual(status, 403, body)
+
     def test_bad_provider_and_invalid_model(self):
         origin = f"http://127.0.0.1:{self.port}"
         status, _, _ = self.request(
