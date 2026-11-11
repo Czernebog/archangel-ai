@@ -59,6 +59,12 @@ PROVIDERS = {
     'openai': 'https://api.openai.com/v1/chat/completions',
 }
 
+def _openai_reasoning_model(model):
+    """Avoid unsupported sampling parameters on OpenAI reasoning model families."""
+    return bool(re.match(r'^(?:o1|o3|o4)(?:-|$)|^gpt-(?:5|6)(?:[.-]|$)',
+                         str(model or '').lower()))
+
+
 class Handler(SimpleHTTPRequestHandler):
     server_version = 'ARCHANGEL'
     sys_version = ''
@@ -578,9 +584,17 @@ class Handler(SimpleHTTPRequestHandler):
         temperature = data.get('temperature', 0.35)
         if not isinstance(temperature, (int, float)) or not (0 <= float(temperature) <= 2):
             return self._json(400, {'error': 'Температура должна быть числом от 0 до 2.'})
-        payload = {'model': cfg['model'], 'messages': messages, 'stream': True, 'temperature': float(temperature)}
-        if isinstance(data.get('max_tokens'), int):
-            payload['max_tokens'] = max(1, min(data['max_tokens'], 32768))
+        mode = data.get('mode', 'balanced')
+        if mode not in ('balanced', 'deep'):
+            return self._json(400, {'error': 'Некорректный режим ответа.'})
+        payload = {'model': cfg['model'], 'messages': messages, 'stream': True}
+        budget = max(1, min(data.get('max_tokens', 4096), 16384)) if type(data.get('max_tokens', 4096)) is int else 4096
+        if cfg['provider'] == 'openai' and _openai_reasoning_model(cfg['model']):
+            payload['max_completion_tokens'] = budget
+            payload['reasoning_effort'] = 'high' if mode == 'deep' else 'medium'
+        else:
+            payload['temperature'] = float(temperature)
+            payload['max_tokens'] = budget
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'text/event-stream, application/json',
