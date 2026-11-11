@@ -338,7 +338,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '4.15.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '5.0.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
@@ -598,7 +598,7 @@ class Handler(SimpleHTTPRequestHandler):
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'text/event-stream, application/json',
-            'User-Agent': 'ARCHANGEL-AI/4.15',
+            'User-Agent': 'ARCHANGEL-AI/5.0',
         }
         if cfg['api_key']:
             headers['Authorization'] = 'Bearer ' + cfg['api_key']
@@ -833,7 +833,7 @@ def main():
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     PORT = int(server.server_address[1])
     url = f'http://{HOST}:{PORT}'
-    print('\nARCHANGEL AI 4.15 | CZERNEBOG', flush=True)
+    print('\nARCHANGEL AI 5.0 | CZERNEBOG', flush=True)
     if TUNNEL_MODE:
         print(f'Локальный шлюз доступен только на {url}; публичный вход идёт через HTTPS-туннель.', flush=True)
         print('Сессии изолированы; переписки на сервере не сохраняются.', flush=True)
