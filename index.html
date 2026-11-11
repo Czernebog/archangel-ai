@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ARCHANGEL">
 <meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="ARCHANGEL">
 <link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="/icons/icon.svg?v=411">
-<title>ARCHANGEL AI ПОМОЩЬ</title>
+<title>ARCHANGEL AI</title>
 
 
 
@@ -869,12 +869,102 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
  #page-chat #sendButton{min-width:42px!important}
 }
 </style>
+<style id="archangel-5-design">
+/* ARCHANGEL 5: restrained Grok-inspired chat workspace, own black/white identity. */
+:root{--line:#262626;--line2:#393939;--radius:18px}
+.app{grid-template-columns:244px minmax(0,1fr)}
+.sidebar{background:#070707;border-right:1px solid #252525}
+.sidebar .nav button,.sidebar .nav-settings button{font-size:13px}
+.sidebar .nav button.active,.sidebar .nav-settings button.active{background:#f4f4f4;color:#050505}
+.brand{background:#090909;border:1px solid #252525;min-height:96px;border-radius:14px}
+.main{background:#080808}
+.topbar{border-bottom:1px solid #242424;background:rgba(8,8,8,.95);min-height:65px}
+.top-title{font-size:14px;font-weight:700;letter-spacing:.01em}
+.content:has(#page-chat.active){padding:0!important;min-height:0;overflow:hidden}
+#page-chat.page.active{display:flex;flex-direction:column;height:100%;max-width:none;margin:0;min-height:0}
+#page-chat>.page-head{display:none}
+#page-chat .chat-layout{display:flex!important;flex:1 1 auto;min-height:0;gap:0!important}
+#page-chat .chat-aside{display:none!important}
+#page-chat .chat-card{border:0!important;border-radius:0!important;box-shadow:none!important;background:#080808!important;display:flex;flex:1;min-height:0;height:100%;max-width:none;overflow:hidden}
+#page-chat .chat-top{border-bottom:1px solid #222;min-height:69px;flex:none;gap:12px;padding:12px clamp(16px,4vw,54px)!important}
+.chat-heading>b{font-size:15px!important;font-weight:780;letter-spacing:.11em}
+.chat-heading-ai{font-size:10px;border:1px solid #777;padding:2px 5px;border-radius:5px;margin-left:2px;letter-spacing:0}
+.chat-heading .small{font-size:11px;margin-top:3px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:340px}
+#page-chat .chat-top .row.chat-commands{gap:8px;display:flex;align-items:center;min-width:0}
+#page-chat .chat-top #chatModelBadge{display:none}
+.brain-modes{display:flex;align-items:center;gap:3px;padding:3px;border:1px solid #353535;border-radius:12px;background:#111;white-space:nowrap}
+.brain-mode{background:none;color:#aaa;border:0;padding:8px 12px;border-radius:9px;font-size:12px;font-weight:650;cursor:pointer;min-height:35px;touch-action:manipulation}
+.brain-mode.is-active{background:#f1f1f1;color:#0a0a0a}
+.brain-mode:focus-visible,.arch-starter:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#page-chat .chat-top .tiny-btn{min-width:40px;min-height:40px;border-radius:11px;font-size:17px}
+#page-chat .messages{width:100%;max-width:100%;margin:0 auto;padding:26px clamp(14px,9vw,140px) 42px!important;min-height:0;scrollbar-width:thin;overscroll-behavior-y:contain;gap:18px}
+#page-chat .message{max-width:min(800px,88%);font-size:14px;line-height:1.7;border:0;border-radius:16px}
+#page-chat .message.assistant{background:transparent!important;box-shadow:none!important;border:0!important;align-self:stretch;max-width:100%;padding:10px 2px}
+#page-chat .message.user{background:#1c1c1c!important;color:#f4f4f4!important;border:1px solid #383838!important;align-self:flex-end;border-radius:20px 20px 6px 20px;padding:13px 17px;max-width:min(700px,83%)}
+#page-chat .message.assistant .meta{font-weight:800;color:#bdbdbd;letter-spacing:.1em;font-size:10px;opacity:1}
+#page-chat .message.user .meta{color:#eee;opacity:.66}
+#page-chat .chat-input-wrap{flex:none;margin:0 auto;border-top:0!important;width:min(990px,100%);padding:10px 18px 18px!important;background:#080808!important;position:relative}
+#page-chat .composer{border:1px solid #383838;border-radius:21px;padding:7px 8px 7px 10px;background:#141414;display:flex;align-items:flex-end;gap:9px;box-shadow:0 12px 50px rgba(0,0,0,.22)}
+#page-chat .composer:focus-within{border-color:#8b8b8b}
+#page-chat #chatInput{background:transparent;border:0!important;box-shadow:none!important;padding:11px 6px;min-height:48px;max-height:180px;color:#fff;font-size:15px;resize:none;outline:0;flex:1}
+#page-chat .compose-tools{display:flex;gap:6px}
+#page-chat .compose-tools .icon-btn{background:#202020;border:1px solid #393939;color:white;width:42px!important;min-width:42px!important;min-height:42px!important;height:42px!important;border-radius:13px}
+#page-chat #sendButton{width:46px!important;min-width:46px!important;min-height:46px!important;height:46px!important;border-radius:14px;background:white;color:black;border:0;font-size:18px}
+#page-chat #sendButton.is-stop{background:#303030;color:white;border:1px solid #777}
+#page-chat button:active{transform:scale(.97)}
+#page-chat .chat-input-wrap>.between{padding:0 6px;margin-top:8px!important}
+#page-chat #tokenHint{font-size:11px;color:#aaa}
+#page-chat .welcome{margin:auto;text-align:center;max-width:600px;padding:24px 8px}
+#page-chat .welcome img{width:112px;max-width:40%;border:0;background:transparent;padding:0}
+#page-chat .welcome h2{font-size:clamp(22px,3.6vw,35px);font-weight:720;letter-spacing:-.045em;margin:12px 0}
+#page-chat .welcome p{font-size:13px;color:#aaa;line-height:1.65}
+.arch-starters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:24px}
+.arch-starter{background:#111;border:1px solid #3b3b3b;border-radius:13px;color:#e8e8e8;font-weight:600;font-size:12px;padding:12px 14px;min-height:44px;touch-action:manipulation}
+.arch-starter:hover{border-color:#777;background:#1c1c1c}
+#page-chat .message-copy{margin-top:14px}
+@media(min-width:1200px){.app{grid-template-columns:264px minmax(0,1fr)}}
+@media(max-width:760px){
+ .app{display:block}
+ .main{min-height:0!important;height:100dvh!important;overflow:hidden}
+ .topbar{height:55px!important;min-height:55px!important;flex:none;padding:0 12px!important}
+ .top-sub{display:none}
+ .content:has(#page-chat.active){padding:0!important;flex:1;min-height:0}
+ #page-chat .chat-top{min-height:60px!important;padding:8px 12px!important;gap:6px}
+ .chat-heading>b{font-size:12px!important}
+ .chat-heading .small{font-size:10px;max-width:125px;white-space:nowrap}
+ #page-chat .chat-top .row.chat-commands{gap:5px}
+ .brain-modes{padding:2px;gap:1px;border-radius:9px}
+ .brain-mode{padding:7px 9px;font-size:11px;min-height:34px}
+ #page-chat .chat-top .tiny-btn{min-width:36px;min-height:36px;height:36px;padding:0 4px}
+ #page-chat .messages{padding:14px 14px 20px!important;gap:12px;scroll-padding-bottom:10px}
+ #page-chat .message{font-size:14px;max-width:94%}
+ #page-chat .message.user{max-width:90%;padding:10px 12px}
+ #page-chat .message.assistant{padding:8px 0}
+ #page-chat .chat-input-wrap{width:100%;padding:8px 9px calc(10px + env(safe-area-inset-bottom))!important}
+ #page-chat .composer{gap:6px;padding:5px 6px;border-radius:17px}
+ #page-chat #chatInput{min-height:43px!important;height:auto;font-size:16px!important;max-height:32dvh;padding:9px 3px}
+ #page-chat .compose-tools{gap:4px!important}
+ #page-chat .compose-tools .icon-btn{width:38px!important;min-width:38px!important;height:42px!important;min-height:42px!important;border-radius:11px}
+ #page-chat #sendButton{height:43px!important;min-height:43px!important;min-width:43px!important;width:43px!important;border-radius:11px}
+ #page-chat .welcome{padding:12px 4px}
+ #page-chat .welcome img{width:84px}
+ #page-chat .welcome p.footnote{display:none}
+ #page-chat .welcome .arch-starters{gap:7px;margin-top:15px}
+ .arch-starter{font-size:11px;padding:10px 11px;min-height:42px}
+}
+@media(max-width:400px){
+ .chat-heading .small{display:none}
+ #page-chat .chat-top .tiny-btn{min-width:34px}
+ .brain-mode{padding:6px 7px}
+}
+@media(prefers-reduced-motion:reduce){#page-chat .messages{scroll-behavior:auto}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 4.15</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 5.0</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -905,7 +995,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 4.20</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 5.0</div>
   </div>
 </aside>
 <main class="main">
@@ -921,7 +1011,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div><b style="font-size:12px">Текущий чат</b><div class="small muted" id="chatModeLine">Локальный интеллектуальный режим</div></div><div class="row"><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div class="chat-heading"><b>ARCHANGEL <span class="chat-heading-ai">AI</span></b><div class="small muted" id="chatModeLine">Подключи модель для полного режима ИИ</div></div><div class="row chat-commands"><div class="brain-modes" role="group" aria-label="Глубина ответа"><button type="button" class="brain-mode is-active" data-brain-mode="balanced" aria-pressed="true" title="Быстрые и точные ответы">Быстро</button><button type="button" class="brain-mode" data-brain-mode="deep" aria-pressed="false" title="Подробные ответы с дополнительной проверкой">Глубоко</button></div><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
  <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted voice-status" id="voiceState" role="status" aria-live="polite">Микрофон выключен</div><p class="footnote" style="margin-top:10px">Нажми значок микрофона рядом с полем сообщения, чтобы включить или выключить распознавание речи. Никакие специальные слова не нужны. Значок динамика управляет озвучкой ответов. Браузер может передавать речь своему сервису распознавания.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
@@ -1036,8 +1126,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 4.15.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 4.13.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 5.0.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 5.0.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1072,7 +1162,7 @@ window.addEventListener('error',event=>{if(event.target&&event.target!==window)r
 window.addEventListener('unhandledrejection',event=>reportBootError(event.reason));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8), now=()=>new Date().toLocaleString('ru-RU');
 const DBKEY='archangel_onefile_v1';const volatileStore=new Map();function storageGet(k){try{return localStorage.getItem(k)??volatileStore.get(k)??null}catch(e){return volatileStore.get(k)??null}}function storageSet(k,v){try{localStorage.setItem(k,v);volatileStore.delete(k);return true}catch(e){volatileStore.set(k,String(v));return false}}function storageRemove(k){try{localStorage.removeItem(k)}catch(e){}volatileStore.delete(k)}
-let state={history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',autoSpeak:false,voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};
+let state={history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{brainMode:'balanced',tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',autoSpeak:false,voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};
 let api={protocol:'chat',endpoint:'https://api.openai.com/v1/chat/completions',model:'',key:''}, pendingFiles=[], recognition=null, voiceWake=false, voiceActive=false, lastMath='';
 function load(){
  try{
@@ -1779,7 +1869,9 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
  }
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
- const requestBody=JSON.stringify({messages,temperature:.25,max_tokens:4096});
+ const deep=state.prefs.brainMode==='deep';
+ if(deep)messages[0].content+=' Для сложных вопросов используй более подробный анализ и самопроверку: перепроверь расчёты, предположения и соответствие ответа вопросу. Не выдумывай выполнение инструментов.';
+ const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
  let response;try{response=await fetch('/api/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:requestBody,signal:controller.signal});}catch(e){if(e.name==='AbortError')throw e;throw Error('Не удалось связаться с локальным шлюзом. Проверь, что окно сервера открыто: '+e.message)}
@@ -1816,7 +1908,8 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
   processEvent();
  }finally{try{await reader.cancel()}catch{}try{reader.releaseLock()}catch{}}
  if(answer)emit();
- if(!answer.trim())throw Error('Модель вернула пустой ответ. Проверь модель и её лимиты, затем повтори запрос.');return answer;
+ if(!answer.trim())throw Error('Модель вернула пустой ответ. Проверь модель и её лимиты, затем повтори запрос.');
+ return answer;
 };
 sendChat=async function(){
  const q=$('chatInput').value.trim();if(activeController){activeController.abort();return;}if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;
@@ -2086,7 +2179,7 @@ function speakDevice(text,forcedLocale){
  next();
  return true;
 }
-function speakDevice(text,forcedLocale){
+function speak(text,forcedLocale){
  const locale=outputLocale(String(text||''),forcedLocale);
  if(api.provider==='openai'&&api.key==='server-configured'){
   const g=state.prefs[VOICE_LANGS[localeKey(locale)].genderKey]||'male';
@@ -2210,7 +2303,7 @@ async function initializeArchangel(){
  setBootCaption('ЗАГРУЗКА ЛОКАЛЬНОГО ПРОФИЛЯ');
  load();
  setBootCaption('ПОДГОТОВКА ИНТЕРФЕЙСА');
- restorePrefs();updateVoiceCatalog();renderAll();restoreChat();setVoiceUI();syncSpeakerButton();updateVoiceValueLabels();if(window.matchMedia('(max-width:760px)').matches)go('chat');
+ restorePrefs();syncBrainMode();updateVoiceCatalog();renderAll();restoreChat();setVoiceUI();syncSpeakerButton();updateVoiceValueLabels();if(window.matchMedia('(max-width:760px)').matches)go('chat');
  if(!SR&&$('voiceSupportBadge'))$('voiceSupportBadge').textContent='НЕТ API';
  setBootCaption('ПРОВЕРКА ЛОКАЛЬНОГО ШЛЮЗА');
  if(localGateway()){
@@ -2231,6 +2324,40 @@ async function initializeArchangel(){
  document.body.classList.add('app-ready');
 }
 $('bootRetry')?.addEventListener('click',()=>location.reload());
+// Focused interface: fast/deep response modes and helpful empty-chat actions.
+function syncBrainMode(){
+ const selected=state.prefs.brainMode==='deep'?'deep':'balanced';
+ for(const button of document.querySelectorAll('[data-brain-mode]')){
+  const active=button.dataset.brainMode===selected;
+  button.classList.toggle('is-active',active);
+  button.setAttribute('aria-pressed',String(active));
+ }
+}
+document.querySelectorAll('[data-brain-mode]').forEach(button=>button.addEventListener('click',()=>{
+ const selected=button.dataset.brainMode==='deep'?'deep':'balanced';
+ if(state.prefs.brainMode===selected)return;
+ state.prefs.brainMode=selected;save();syncBrainMode();
+ toast(selected==='deep'?'Подробный режим включён':'Быстрый режим включён');
+}));
+function installWelcomeActions(){
+ const area=$('messages')?.querySelector('.welcome');
+ if(!area||area.querySelector('.arch-starters'))return;
+ const group=document.createElement('div');group.className='arch-starters';
+ const entries=[['Объяснить тему','Помоги разобраться в сложной теме простыми словами.'],['Составить план','Помоги составить чёткий пошаговый план.'],['Продумать идею','Помоги развить мою идею и сравнить варианты.']];
+ for(const [label,prompt] of entries){
+  const button=document.createElement('button');button.type='button';button.className='arch-starter';button.textContent=label;button.dataset.prompt=prompt;group.append(button);
+ }
+ area.append(group);
+}
+$('messages')?.addEventListener('click',event=>{
+ const button=event.target.closest('.arch-starter');
+ if(!button)return;
+ const input=$('chatInput');input.value=button.dataset.prompt||'';input.dispatchEvent(new Event('input',{bubbles:true}));
+ if(window.innerWidth>760)input.focus();
+});
+const originalRestoreChat52=restoreChat;
+restoreChat=function(){originalRestoreChat52();installWelcomeActions();};
+syncBrainMode();
 initializeArchangel().catch(reportBootError);
 
 </script>

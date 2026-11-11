@@ -59,6 +59,12 @@ PROVIDERS = {
     'openai': 'https://api.openai.com/v1/chat/completions',
 }
 
+def _openai_reasoning_model(model):
+    """Avoid unsupported sampling parameters on OpenAI reasoning model families."""
+    return bool(re.match(r'^(?:o1|o3|o4)(?:-|$)|^gpt-(?:5|6)(?:[.-]|$)',
+                         str(model or '').lower()))
+
+
 class Handler(SimpleHTTPRequestHandler):
     server_version = 'ARCHANGEL'
     sys_version = ''
@@ -332,7 +338,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '4.15.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '5.0.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
@@ -578,13 +584,21 @@ class Handler(SimpleHTTPRequestHandler):
         temperature = data.get('temperature', 0.35)
         if not isinstance(temperature, (int, float)) or not (0 <= float(temperature) <= 2):
             return self._json(400, {'error': 'Температура должна быть числом от 0 до 2.'})
-        payload = {'model': cfg['model'], 'messages': messages, 'stream': True, 'temperature': float(temperature)}
-        if isinstance(data.get('max_tokens'), int):
-            payload['max_tokens'] = max(1, min(data['max_tokens'], 32768))
+        mode = data.get('mode', 'balanced')
+        if mode not in ('balanced', 'deep'):
+            return self._json(400, {'error': 'Некорректный режим ответа.'})
+        payload = {'model': cfg['model'], 'messages': messages, 'stream': True}
+        budget = max(1, min(data.get('max_tokens', 4096), 16384)) if type(data.get('max_tokens', 4096)) is int else 4096
+        if cfg['provider'] == 'openai' and _openai_reasoning_model(cfg['model']):
+            payload['max_completion_tokens'] = budget
+            payload['reasoning_effort'] = 'high' if mode == 'deep' else 'medium'
+        else:
+            payload['temperature'] = float(temperature)
+            payload['max_tokens'] = budget
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'text/event-stream, application/json',
-            'User-Agent': 'ARCHANGEL-AI/4.15',
+            'User-Agent': 'ARCHANGEL-AI/5.0',
         }
         if cfg['api_key']:
             headers['Authorization'] = 'Bearer ' + cfg['api_key']
@@ -819,7 +833,7 @@ def main():
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     PORT = int(server.server_address[1])
     url = f'http://{HOST}:{PORT}'
-    print('\nARCHANGEL AI 4.15 | CZERNEBOG', flush=True)
+    print('\nARCHANGEL AI 5.0 | CZERNEBOG', flush=True)
     if TUNNEL_MODE:
         print(f'Локальный шлюз доступен только на {url}; публичный вход идёт через HTTPS-туннель.', flush=True)
         print('Сессии изолированы; переписки на сервере не сохраняются.', flush=True)
