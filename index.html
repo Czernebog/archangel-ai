@@ -1831,7 +1831,7 @@ function updateVoiceCatalog(){
  updateVoiceChoiceUI();
 }
 function outputLocale(text,forced){if(forced)return forced;const mode=$('voiceOutputLanguage')?.value||state.prefs.voiceOutputLanguage||'auto';if(mode!=='auto')return mode;if(state.prefs.language==='es')return'es-ES';if(state.prefs.language==='en')return'en-US';const value=String(text||'').toLowerCase();const ru=(value.match(/[а-яё]/g)||[]).length;const esMarks=(value.match(/[áéíóúüñ¿¡]/g)||[]).length;const esWords=(value.match(/\b(hola|gracias|por favor|buenos|buenas|usted|tarea|solución|analizar|puedes|quieres|sistema|respuesta)\b/g)||[]).length;const en=(value.match(/[a-z]/g)||[]).length;if(ru>Math.max(en,esMarks+esWords*3))return'ru-RU';if(esMarks+esWords*3>0&&esMarks+esWords*3>=en*.12)return'es-ES';return'en-US';}
-function chosenVoice(locale){const key=localeKey(locale),c=VOICE_LANGS[key],voices=speechVoices(),selected=$(c.select)?.value||state.prefs[c.voiceKey];if(selected){const v=voices.find(x=>(x.voiceURI||x.name)===selected);if(v)return v;}const g=state.prefs[c.genderKey]||'male';const profile=findGenderVoice(locale,g);if(profile)return profile;return voices.filter(v=>(v.lang||'').toLowerCase().startsWith(c.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;}
+function chosenVoice(locale){const key=localeKey(locale),c=VOICE_LANGS[key],voices=speechVoices(),selected=$(c.select)?.value||state.prefs[c.voiceKey];if(selected){const v=voices.find(x=>(x.voiceURI||x.name)===selected&&String(x.lang||'').toLowerCase().startsWith(c.prefix));if(v)return v;}const g=state.prefs[c.genderKey]||'male';const profile=findGenderVoice(locale,g);if(profile)return profile;return voices.filter(v=>(v.lang||'').toLowerCase().startsWith(c.prefix)).sort((a,b)=>voiceQualityScore(b)-voiceQualityScore(a)||a.name.localeCompare(b.name))[0]||null;}
 function voiceSample(locale){const k=localeKey(locale);return k==='ru'?'Здравствуйте. Я Архангел. Я внимательно разберу задачу, проверю детали и предложу точное решение.':k==='es'?'Hola. Soy Archangel. Analizaré la tarea con atención, comprobaré los detalles y te propondré una solución precisa.':'Hello. I am Archangel. I will examine the task carefully, verify the details, and give you a precise solution.';}
 function applyVoiceGender(locale,gender){const key=localeKey(locale),cfg=VOICE_LANGS[key],voice=findGenderVoice(locale,gender);if(!voice){toast('Такой голос не найден автоматически. Выбери доступный вариант в списке вручную.');return;}state.prefs[cfg.genderKey]=gender;state.prefs[cfg.voiceKey]=voice.voiceURI||voice.name;const select=$(cfg.select);if(select)select.value=voice.voiceURI||voice.name;save();updateVoiceChoiceUI();toast(`Выбран голос: ${voice.name}`);}
 for(const b of document.querySelectorAll('[data-voice-preview]'))b.addEventListener('click',()=>{const [key,gender]=b.dataset.voicePreview.split(':');const locale=VOICE_LANGS[key].locale,voice=findGenderVoice(locale,gender);if(!voice){toast('Голос этого типа не найден в системе. Выбери доступный голос вручную ниже.');return;}stopVoicePlayback();const u=new SpeechSynthesisUtterance(voiceSample(locale));u.lang=locale;u.voice=voice;u.rate=+( $(VOICE_LANGS[key].rate)?.value)||.98;u.pitch=voiceProfilePitch(locale,gender,+( $(VOICE_LANGS[key].pitch)?.value)||.97);u.volume=1;const status=$('voiceCatalogStatus');if(status)status.textContent=`Прослушивание: ${voice.name} · ${voice.lang}`;speechSynthesis.speak(u);});
@@ -1871,7 +1871,71 @@ function stopVoicePlayback(){
 $('stopSpeaking')?.addEventListener('click',()=>{stopVoicePlayback();const label=$('voiceCatalogStatus');if(label)label.textContent='Озвучка остановлена.';});
 $('autoSpeak')?.addEventListener('change',()=>{state.prefs.autoSpeak=$('autoSpeak').checked;save();syncSpeakerButton();if(!state.prefs.autoSpeak)stopVoicePlayback();toast(state.prefs.autoSpeak?'Озвучка включена':'Озвучка выключена');});
 function splitSpeechText(text,max=220){const out=[];let rest=String(text||'').replace(/\s+/g,' ').trim();while(rest.length>max){let cut=-1;for(const re of [/[.!?。！？;:](?=\s)/g,/,\s/g,/\s/g]){let m;while((m=re.exec(rest))!==null)if(m.index>max*.55&&m.index<max)cut=m.index+m[0].length;if(cut>0)break;}if(cut<1)cut=max;out.push(rest.slice(0,cut).trim());rest=rest.slice(cut).trim();}if(rest)out.push(rest);return out;}
-function speak(text,forcedLocale){if(!('speechSynthesis'in window))return;const clean=String(text||'').replace(/https?:\/\/\S+/g,'').replace(/```[\s\S]*?```/g,'').replace(/\n{2,}/g,'. ').replace(/\s+/g,' ').trim();if(!clean)return;stopVoicePlayback();const locale=outputLocale(clean,forcedLocale),key=localeKey(locale),cfg=VOICE_LANGS[key],voice=chosenVoice(locale),rate=+$((cfg&&$(cfg.rate))?.value)||.98,pitch=+$((cfg&&$(cfg.pitch))?.value)||.97;const pieces=splitSpeechText(clean);const playback=voicePlaybackEpoch;let index=0;const status=$('voiceCatalogStatus');if(status)status.textContent=`Озвучка: ${voice?voice.name+' · '+voice.lang:'системный голос · '+locale}. Фрагмент ${pieces.length} · скорость ${rate.toFixed(2)}×.`;const resume=voiceWake&&!!recognition;if(resume){voiceSpeaking=true;try{recognition.stop()}catch{}}function next(){if(playback!==voicePlaybackEpoch)return;if(index>=pieces.length){voiceSpeaking=false;if(resume&&voiceWake)setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550);return;}const u=new SpeechSynthesisUtterance(pieces[index++]);u.lang=locale;if(voice)u.voice=voice;u.rate=rate;u.pitch=voiceProfilePitch(locale,state.prefs[cfg.genderKey]||'male',pitch);u.volume=1;u.onend=next;u.onerror=()=>{if(playback!==voicePlaybackEpoch)return;voiceSpeaking=false;if(resume&&voiceWake&&recognition)setTimeout(()=>{try{recognition.start()}catch{}},550);};speechSynthesis.speak(u);}next();}
+function speak(text,forcedLocale){
+ if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
+  toast('Браузер не поддерживает синтез речи.');return false;
+ }
+ const clean=String(text||'')
+  .replace(/https?:\/\/\S+/g,'ссылка')
+  .replace(/```[\s\S]*?```/g,'фрагмент кода пропущен')
+  .replace(/\\(?:frac|sqrt|left|right|mathrm|text)\b/g,' ')
+  .replace(/\$\$?|\\\(|\\\)|\\\[|\\\]/g,' ')
+  .replace(/[*#_]/g,' ').replace(/\n{2,}/g,'. ').replace(/\s+/g,' ').trim().slice(0,6000);
+ if(!clean)return false;
+ stopVoicePlayback();
+ const synth=window.speechSynthesis,locale=outputLocale(clean,forcedLocale),key=localeKey(locale),cfg=VOICE_LANGS[key];
+ const voice=chosenVoice(locale),rate=Number($(cfg.rate)?.value)||.98,pitch=Number($(cfg.pitch)?.value)||.97;
+ const pieces=splitSpeechText(clean,170),playback=voicePlaybackEpoch,status=$('voiceCatalogStatus');
+ let index=0,started=false,finished=false,currentTimer=null;
+ const resume=voiceWake&&!!recognition;
+ const show=msg=>{if(status)status.textContent=msg;};
+ if(resume){voiceSpeaking=true;try{recognition.stop()}catch{}}
+ show('Подготовка озвучки на '+locale+'…');
+ function finish(error){
+  if(finished||playback!==voicePlaybackEpoch)return;
+  finished=true;if(currentTimer!==null)clearTimeout(currentTimer);
+  voiceSpeaking=false;
+  if(error){show(error);toast(error);}
+  else show('Озвучка завершена.');
+  if(resume&&voiceWake&&recognition){
+   setTimeout(()=>{if(voiceWake&&!voiceSpeaking&&recognition)try{recognition.start()}catch{}},550);
+  }
+  setVoiceUI();
+ }
+ function next(){
+  if(finished||playback!==voicePlaybackEpoch)return;
+  if(currentTimer!==null){clearTimeout(currentTimer);currentTimer=null;}
+  if(index>=pieces.length){finish();return;}
+  let u;
+  try{u=new SpeechSynthesisUtterance(pieces[index++]);}
+  catch{finish('Озвучка недоступна на этом устройстве.');return;}
+  u.lang=locale;if(voice)u.voice=voice;
+  u.rate=rate;u.pitch=pitch;u.volume=1;
+  u.onstart=()=>{if(playback!==voicePlaybackEpoch)return;started=true;voiceSpeaking=true;setVoiceUI();show('Воспроизведение · '+(voice?.name||'голос устройства')+' · '+locale);};
+  u.onend=()=>{if(playback===voicePlaybackEpoch)next();};
+  u.onerror=e=>{
+   if(playback!==voicePlaybackEpoch)return;
+   // Mobile browsers sometimes report "interrupted" when playback is cancelled by the user.
+   if(e.error==='interrupted'||e.error==='canceled'){finish();return;}
+   finish('Не удалось воспроизвести звук. В настройках нажми «Прослушать последний ответ» и проверь громкость телефона.');
+  };
+  try{
+   synth.speak(u);
+   if(synth.paused)try{synth.resume()}catch{}
+   currentTimer=setTimeout(()=>{
+    if(playback!==voicePlaybackEpoch||finished)return;
+    if(!started&&!synth.speaking)finish('Мобильный браузер заблокировал автоматическую озвучку. Нажми «Прослушать последний ответ» в настройках.');
+   },2300);
+  }catch{finish('Озвучка не запустилась. Попробуй прослушать ответ вручную в настройках.');}
+ }
+ next();
+ return true;
+}
+$('playLastAnswer')?.addEventListener('click',()=>{
+ const last=[...state.messages].reverse().find(m=>m.role==='assistant'&&String(m.text||'').trim()&&!/^(Ошибка подключения|Генерация остановлена)/i.test(m.text));
+ if(!last){toast('Сначала получи ответ ИИ, затем прослушай его.');return;}
+ speak(String(last.text));
+});
 // Persist the selected interface and all three voice profiles.
 const oldRestorePrefs=restorePrefs;restorePrefs=function(){oldRestorePrefs();for(const k of ['interfaceLanguage','voiceEsVoice','voiceEsGender','voiceRateEs','voicePitchEs'])if(state.prefs[k]!==undefined&&$(k))$(k).value=state.prefs[k];if($('interfaceLanguage'))$('interfaceLanguage').value=state.prefs.interfaceLanguage||'ru';if($('autoSpeak'))$('autoSpeak').checked=!!state.prefs.autoSpeak;if($('voiceEsSelect'))$('voiceEsSelect').value=state.prefs.voiceEsVoice||'';applyInterfaceLanguage();updateVoiceCatalog();updateVoiceValueLabels();};
 $('savePrefs').onclick=()=>{for(const k of ['tone','detail','language','voiceLanguage','voiceOutputLanguage','answerStyle'])state.prefs[k]=$(k).value;state.prefs.interfaceLanguage=$('interfaceLanguage').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;state.prefs.autoSpeak=!!$('autoSpeak')?.checked;syncSpeakerButton();for(const k of Object.keys(VOICE_LANGS)){const c=VOICE_LANGS[k];state.prefs[c.voiceKey]=$(c.select)?.value||'';state.prefs[c.rate]=+$(c.rate).value;state.prefs[c.pitch]=+$(c.pitch).value;}for(const [id,key] of [['voiceRateEs','voiceRateEs'],['voicePitchEs','voicePitchEs']])state.prefs[key]=+$(id).value;save();applyInterfaceLanguage();updateVoiceValueLabels();toast(state.prefs.interfaceLanguage==='en'?'Settings saved':state.prefs.interfaceLanguage==='es'?'Ajustes guardados':'Настройки сохранены');};
