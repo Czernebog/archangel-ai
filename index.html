@@ -1017,12 +1017,37 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
  #page-chat .composer{grid-template-rows:minmax(60px,auto) auto!important}
 }
 </style>
+<style id="archangel-six-finish">
+/* ARCHANGEL 6.0: black-and-white surfaces and accessible controls. */
+:root{color-scheme:dark;--bg:#080808;--text:#fff;--line:#363636}
+body,.main,.sidebar,.content{background:#080808!important;color:#fff!important}
+.topbar,#page-chat .chat-top{background:#090909!important;border-color:#333!important}
+#page-chat .chat-card,#page-chat .messages,#page-chat .chat-input-wrap{background:#080808!important}
+#page-chat .composer{background:#111!important;border:1px solid #626262!important}
+#page-chat .composer:focus-within{border-color:#fff!important;box-shadow:0 0 0 1px #fff}
+#page-chat .composer #chatInput{background:#111!important;color:#fff!important}
+#page-chat .composer #chatInput::placeholder{color:#aaa!important}
+#page-chat .brain-mode.is-active,#page-chat #sendButton{background:#fff!important;color:#000!important}
+#page-chat #sendButton.is-stop{background:#222!important;color:#fff!important}
+#page-chat button,.voice-choice,.sidebar button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .12s,opacity .12s,transform .12s}
+#page-chat button:active:not(:disabled),.voice-choice:active:not(:disabled){transform:scale(.98)}
+#page-chat button:focus-visible,.voice-choice:focus-visible,.sidebar button:focus-visible{outline:2px solid #fff!important;outline-offset:3px}
+button:disabled{opacity:.5}
+#voiceStart.listening{background:#fff!important;color:#000!important;border-color:#fff!important}
+#page-chat .messages{scrollbar-color:#777 #080808!important}
+#page-chat .message.user{background:#1a1a1a!important;color:#fff!important}
+#page-chat .message.assistant{background:transparent!important}
+.voice-audition-grid-three .voice-choice{min-height:64px!important;border:1px solid #515151!important;background:#131313!important}
+.voice-audition-grid-three .voice-choice.is-selected,.voice-audition-grid-three .voice-choice[aria-pressed="true"]{border-color:#fff!important;background:#262626!important}
+@media(max-width:760px){#page-chat .composer{margin:0!important}#page-chat .composer .compose-tools .icon-btn{min-width:44px!important;min-height:44px!important}#page-chat .composer #sendButton{min-width:46px!important;min-height:46px!important}}
+@media(prefers-reduced-motion:reduce){#page-chat button,.voice-choice,.sidebar button{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 5.2</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.0</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1053,7 +1078,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 5.2</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.0</div>
   </div>
 </aside>
 <main class="main">
@@ -1184,8 +1209,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 5.2.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 5.2.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.0.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.0.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1639,7 +1664,7 @@ function stopRecognition(){
 }
 function startRecognition(){
  if(voiceWake)return;
- if(!SR){toast('В этом браузере нет распознавания речи. Попробуй Chrome или Edge.');return;}
+ if(!SR){toast('В этом браузере недоступно распознавание речи. Проверь браузер и его поддержку микрофона.');return;}
  if(!window.isSecureContext){toast('Для микрофона открой сайт через HTTPS.');return;}
  stopRecognition();
  let instance;
@@ -1647,29 +1672,28 @@ function startRecognition(){
   instance=new SR();
   instance.lang=$('voiceLanguage')?.value||'ru-RU';
   instance.continuous=true;
-  instance.interimResults=false;
+  instance.interimResults=true;
   instance.maxAlternatives=1;
   recognition=instance;
   instance.onresult=e=>{
    if(!voiceWake||recognition!==instance||voiceSpeaking)return;
-   let heard='';
-   for(let j=e.resultIndex;j<e.results.length;j++)if(e.results[j].isFinal)heard+=(e.results[j][0]?.transcript||'')+' ';
-   heard=heard.trim();
-   if(!heard||activeController)return;
-   const input=$('chatInput'),hadDraft=!!input.value.trim();
-   if(!hadDraft)voiceDraftManaged=true;
-   input.value=(hadDraft?input.value.trim()+' ':'')+heard;
-   input.value=input.value.slice(0,12000);
-   if(recognitionCommitTimer!==null)clearTimeout(recognitionCommitTimer);
-   if(voiceDraftManaged){
-    recognitionCommitTimer=setTimeout(()=>{
-     recognitionCommitTimer=null;
-     if(voiceWake&&!activeController&&voiceDraftManaged&&input.value.trim()){
-      voiceDraftManaged=false;
-      sendChat();
-     }
-    },1150);
+   let finalText='',interimText='';
+   for(let j=e.resultIndex;j<e.results.length;j++){
+    const candidate=e.results[j][0]?.transcript||'';
+    if(e.results[j].isFinal)finalText+=candidate+' ';
+    else interimText+=candidate+' ';
    }
+   if(!finalText.trim()&&!interimText.trim())return;
+   const input=$('chatInput');
+   if(finalText.trim()){
+    input.value=(input.value.trim()?input.value.trim()+' ':'')+finalText.trim();
+    input.value=input.value.slice(0,12000);
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+   }
+   const status=$('voiceState');
+   if(status)status.textContent=interimText.trim()?'Слышу: '+interimText.trim().slice(0,130):'Речь распознана. Проверь текст и нажми отправить.';
+   // Silence is not consent to send dictated messages.
+
   };
   instance.onerror=e=>{
    if(recognition!==instance||!voiceWake)return;
@@ -1698,8 +1722,8 @@ function startRecognition(){
     }
    },550);
   };
-  instance.start();
   voiceWake=true;voiceActive=true;
+  instance.start();
   setVoiceUI();
  }catch(e){
   stopRecognition();
