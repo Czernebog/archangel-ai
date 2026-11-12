@@ -1952,7 +1952,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
- if(deep)messages[0].content+=' При сложной задаче определи условия и ограничения, проверь ключевые промежуточные вычисления и альтернативные объяснения; сделай компактный проверяемый вывод. При анализе изображений не угадывай нечёткие символы. При поиске ошибок сначала определи воспроизводимую причину, затем исправление и тест. При недостатке данных прямо обозначь неопределённость. Не выдавай внутренние рассуждения и не выдумывай использование инструментов.';
+ if(deep)messages[0].content+=' Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
  const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
@@ -2163,6 +2163,21 @@ async function playNeuralVoice(text,locale,gender){
  if(!clean)return false;
  stopVoicePlayback(false);
  const epoch=voicePlaybackEpoch,controller=new AbortController();neuralRequest=controller;
+ const microphoneWasActive=voiceWake&&!!recognition;
+ if(microphoneWasActive){
+  voiceSpeaking=true;
+  try{recognition.stop()}catch{}
+  setVoiceUI();
+ }
+ const resumeMic=()=>{
+  if(epoch!==voicePlaybackEpoch)return;
+  voiceSpeaking=false;setVoiceUI();
+  if(microphoneWasActive&&voiceWake&&recognition){
+   setTimeout(()=>{if(epoch===voicePlaybackEpoch&&voiceWake&&!voiceSpeaking&&recognition){
+    try{recognition.start()}catch(e){if(e.name!=='InvalidStateError')setVoiceUI();}
+   }},600);
+  }
+ };
  const status=$('voiceCatalogStatus');if(status)status.textContent='Подготавливается естественная нейроозвучка…';
  try{
   const res=await fetch('/api/tts',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean,language:localeKey(locale),gender}),signal:controller.signal});
@@ -2170,14 +2185,15 @@ async function playNeuralVoice(text,locale,gender){
   const blob=await res.blob();if(blob.size>3*1024*1024||!blob.size)throw Error('Не удалось получить звуковой файл.');
   if(epoch!==voicePlaybackEpoch)return true;
   neuralRequest=null;neuralAudioUrl=URL.createObjectURL(blob);const audio=new Audio(neuralAudioUrl);neuralAudio=audio;
-  audio.onended=()=>{if(epoch===voicePlaybackEpoch){clearNeuralPlayback();if(status)status.textContent='Нейроозвучка завершена.';}};
-  audio.onerror=()=>{if(epoch===voicePlaybackEpoch){clearNeuralPlayback();toast('Ошибка воспроизведения нейроголоса.');}};
+  audio.onended=()=>{if(epoch===voicePlaybackEpoch){clearNeuralPlayback();resumeMic();if(status)status.textContent='Нейроозвучка завершена.';}};
+  audio.onerror=()=>{if(epoch===voicePlaybackEpoch){clearNeuralPlayback();resumeMic();toast('Ошибка воспроизведения нейроголоса.');}};
   await audio.play();
   if(status)status.textContent='Нейроголос · '+locale+' · '+(gender==='female'?'женский':'мужской');
   return true;
  }catch(e){
   if(epoch!==voicePlaybackEpoch)return true;
   clearNeuralPlayback();
+  resumeMic();
   if(status)status.textContent='Нейроозвучка недоступна: '+(e?.message||'ошибка')+'. Пробуем голос устройства.';
   return false;
  }
@@ -2265,7 +2281,7 @@ function speak(text,forcedLocale){
  const locale=outputLocale(String(text||''),forcedLocale);
  if(api.provider==='openai'&&api.key==='server-configured'){
   const g=state.prefs[VOICE_LANGS[localeKey(locale)].genderKey]||'male';
-  playNeuralVoice(text,locale,g).then(ok=>{if(!ok)speakDevice(text,forcedLocale);});
+  playNeuralVoice(text,locale,g).then(ok=>{if(!ok)speakDevice(text,forcedLocale);}).catch(()=>speakDevice(text,forcedLocale));
   return true;
  }
  return speakDevice(text,forcedLocale);
