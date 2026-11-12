@@ -180,6 +180,8 @@ class Handler(SimpleHTTPRequestHandler):
                      ('chat-ip', ip, 40, 60.0, 0.0)),
             'config': (('config-session', self.session_id, 8, 60.0, 0.0),
                        ('config-ip', ip, 32, 60.0, 0.0)),
+            'purge': (('purge-session', self.session_id, 4, 60.0, 0.0),
+                       ('purge-ip', ip, 16, 60.0, 0.0)),
             'disconnect': (('disconnect-session', self.session_id, 8, 60.0, 0.0),
                            ('disconnect-ip', ip, 32, 60.0, 0.0)),
             'extract': (('extract-session', self.session_id, 10, 60.0, 0.0),
@@ -258,6 +260,13 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' " + INLINE_SCRIPT_HASHES + "; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src " + connect_sources + "; media-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none'")
         if PUBLIC_MODE or self.headers.get('X-Forwarded-Proto', '').split(',')[0].strip().lower() == 'https':
             self.send_header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+        if getattr(self, 'clear_session_cookie', False):
+            secure = PUBLIC_MODE or self.headers.get('X-Forwarded-Proto', '').split(',')[0].strip().lower() == 'https'
+            cookie = 'archangel_session=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict'
+            if secure:
+                cookie += '; Secure'
+            self.send_header('Set-Cookie', cookie)
+            self.new_session_cookie = None
         if getattr(self, 'new_session_cookie', None):
             secure = PUBLIC_MODE or (self.headers.get('X-Forwarded-Proto', '').split(',')[0].strip().lower() == 'https')
             cookie = f"archangel_session={self.new_session_cookie}; Path=/; Max-Age={SESSION_TTL}; HttpOnly; SameSite=Strict"
@@ -338,7 +347,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '5.0.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '5.1.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
@@ -380,7 +389,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         action = {'/api/config': 'config', '/api/disconnect': 'disconnect',
-                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/extract': 'extract', '/api/math': 'math'}.get(self.path)
+                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/purge': 'purge', '/api/extract': 'extract', '/api/math': 'math'}.get(self.path)
         if not action:
             return self._json(404, {'error': 'Маршрут не найден.'})
         if not self._require_site_password(): return
@@ -390,6 +399,7 @@ class Handler(SimpleHTTPRequestHandler):
             if not self._verify_request(): return
             if not self._check_anti_spam(action): return
             chat_slot_acquired = (action == 'chat')
+            if action == 'purge': return self._purge()
             if action == 'config': return self._configure()
             if action == 'disconnect': return self._disconnect()
             if action == 'chat': return self._chat()
@@ -413,6 +423,24 @@ class Handler(SimpleHTTPRequestHandler):
                             ACTIVE_CHAT_IPS[active_ip] = remaining
                         else:
                             ACTIVE_CHAT_IPS.pop(active_ip, None)
+
+    def _purge(self):
+        """Destroy this browser session's in-memory provider config and cookie.
+
+        History, files and notes are browser-side; the client must clear those itself.
+        """
+        data = self._read_json(max_bytes=1024)
+        if data.get('confirm') != 'DELETE_ARCHANGEL_SESSION':
+            return self._json(400, {'error': 'Нужно подтвердить удаление сессии.'})
+        with LOCK:
+            SESSIONS.pop(self.session_id, None)
+            ACTIVE_CHATS.discard(self.session_id)
+            for key in tuple(RATE_WINDOWS):
+                if len(key) > 1 and key[1] == self.session_id:
+                    RATE_WINDOWS.pop(key, None)
+        self.clear_session_cookie = True
+        self._json(200, {'ok': True, 'sessionDestroyed': True,
+                         'keyStored': False, 'serverHistoryStored': False})
 
     def _disconnect(self):
         with LOCK:
