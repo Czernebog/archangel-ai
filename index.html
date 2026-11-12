@@ -959,12 +959,70 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 }
 @media(prefers-reduced-motion:reduce){#page-chat .messages{scroll-behavior:auto}}
 </style>
+<style id="archangel-52-scroll-compose">
+/* ARCHANGEL 5.2: the message list is the single independent vertical scroller. */
+#page-chat.active{min-height:0!important;overflow:hidden!important}
+#page-chat .chat-layout,#page-chat .chat-card{min-height:0!important;height:100%;overflow:hidden!important}
+#page-chat .messages{
+ display:flex;flex-direction:column;flex:1 1 0!important;
+ min-height:0!important;max-height:none!important;
+ overflow-y:auto!important;overflow-x:hidden!important;
+ overscroll-behavior-y:auto!important;scroll-behavior:auto!important;
+ scrollbar-width:thin;scrollbar-color:#767676 #101010;
+ touch-action:pan-y;
+}
+#page-chat .messages::-webkit-scrollbar{width:10px}
+#page-chat .messages::-webkit-scrollbar-thumb{background:#666;border-radius:20px;border:2px solid #101010}
+#page-chat .messages::-webkit-scrollbar-track{background:#101010}
+#page-chat .chat-input-wrap{width:min(1100px,100%)!important;flex:0 0 auto!important}
+#page-chat .composer{
+ display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+ grid-template-rows:minmax(94px,auto) auto!important;
+ column-gap:10px!important;row-gap:7px!important;
+ align-items:end!important;padding:10px 12px!important;
+ border-radius:20px!important;
+}
+#page-chat .composer #chatInput{
+ grid-row:1!important;grid-column:1/-1!important;
+ display:block!important;box-sizing:border-box!important;
+ width:100%!important;min-width:0!important;
+ min-height:94px!important;max-height:280px!important;
+ padding:10px 12px!important;resize:vertical!important;
+ overflow-y:auto!important;line-height:1.55!important;
+}
+#page-chat .composer .compose-tools{grid-row:2!important;grid-column:1!important;justify-self:start}
+#page-chat .composer #sendButton{grid-row:2!important;grid-column:2!important;justify-self:end}
+#page-chat .composer:focus-within{border-color:#d0d0d0!important}
+#page-chat .message.assistant .answer-formatted pre{overflow-x:auto;max-width:100%;overscroll-behavior-x:contain}
+#page-chat .message{overflow-wrap:anywhere}
+@media(max-width:760px){
+ #page-chat .chat-input-wrap{width:100%!important;padding:6px 8px calc(8px + env(safe-area-inset-bottom))!important}
+ #page-chat .composer{
+  grid-template-rows:minmax(74px,auto) auto!important;
+  padding:7px 9px!important;gap:4px 7px!important;
+  border-radius:16px!important;
+ }
+ #page-chat .composer #chatInput{
+  min-height:74px!important;max-height:34dvh!important;
+  padding:8px 6px!important;font-size:16px!important;
+  resize:none!important;
+ }
+ #page-chat .messages::-webkit-scrollbar{width:5px}
+ #page-chat .messages{padding-inline:14px!important}
+ #page-chat .composer .compose-tools .icon-btn{min-width:44px!important;width:44px!important;min-height:44px!important;height:44px!important}
+ #page-chat .composer #sendButton{min-width:46px!important;width:46px!important;height:46px!important;min-height:46px!important}
+}
+@media(max-height:650px) and (max-width:760px){
+ #page-chat .composer #chatInput{min-height:60px!important}
+ #page-chat .composer{grid-template-rows:minmax(60px,auto) auto!important}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 5.1</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 5.2</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -995,7 +1053,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 5.1</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 5.2</div>
   </div>
 </aside>
 <main class="main">
@@ -1126,8 +1184,8 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
    <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 5.1.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 5.1.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 5.2.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 5.2.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1850,7 +1908,7 @@ $('disconnectApi').onclick=async()=>{
 };
 // Build an OpenAI-compatible conversation and consume server-sent token events.
 modelRequest=async function(q,files=[],onDelta=()=>{}){
- const history=state.messages.slice(0,-1).slice(-22).filter(m=>m.role==='user'||m.role==='assistant').map(m=>({role:m.role,text:String(m.text||'').slice(0,6500)}));
+ const history=state.messages.slice(0,-1).filter(m=>m.role==='user'||m.role==='assistant').slice(-28).map(m=>({role:m.role,text:String(m.text||'').slice(0,6500)}));
  const prompt=[];if(q)prompt.push(q);
  for(const f of files){if(f.kind==='text')prompt.push(`\n--- НАЧАЛО ДАННЫХ ПРИЛОЖЕННОГО ФАЙЛА: ${f.name} ---\n${f.text||'(текст не извлечён)'}\n--- КОНЕЦ ДАННЫХ ФАЙЛА ---`);}
  const promptText=prompt.join('\n\n')||(files.some(f=>f.kind==='audio')?'Расшифруй и проанализируй прикреплённую аудиодорожку. Если слова неразборчивы, скажи об этом.':'Рассмотри приложенные изображения и внимательно прочитай видимый текст, математические символы и формулы.');
@@ -1870,7 +1928,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
- if(deep)messages[0].content+=' Для сложных вопросов используй более подробный анализ и самопроверку: перепроверь расчёты, предположения и соответствие ответа вопросу. Не выдумывай выполнение инструментов.';
+ if(deep)messages[0].content+=' При сложной задаче определи условия и ограничения, проверь ключевые промежуточные вычисления и альтернативные объяснения; сделай компактный проверяемый вывод. При анализе изображений не угадывай нечёткие символы. При поиске ошибок сначала определи воспроизводимую причину, затем исправление и тест. При недостатке данных прямо обозначь неопределённость. Не выдавай внутренние рассуждения и не выдумывай использование инструментов.';
  const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
@@ -2470,8 +2528,9 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
  const input=document.getElementById('chatInput');
  const messages=document.getElementById('messages');
  if(input){
-   const sizeInput=()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,180)+'px'};
+   const sizeInput=()=>{input.style.height='auto';const maximum=window.innerWidth<=760?Math.min(240,Math.round(window.innerHeight*.34)):280;input.style.height=Math.max(window.innerWidth<=760?74:94,Math.min(input.scrollHeight,maximum))+'px'};
    input.addEventListener('input',sizeInput);
+   window.addEventListener('resize',sizeInput,{passive:true});
    const send=document.getElementById('sendButton');
    send?.addEventListener('click',()=>requestAnimationFrame(sizeInput));
    input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey)requestAnimationFrame(sizeInput)});
@@ -2499,6 +2558,27 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
    });
  }
  if(messages){new MutationObserver(addCopyButtons).observe(messages,{childList:true,subtree:false});addCopyButtons()}
+ // Keep mouse-wheel and trackpad scrolling inside the actual message list.
+ // No global interception: inputs, modals and code blocks retain native behavior.
+ const chatCard=document.querySelector('#page-chat .chat-card');
+ if(chatCard&&messages){
+   chatCard.addEventListener('wheel',event=>{
+     if(event.ctrlKey||event.metaKey||event.defaultPrevented)return;
+     if(event.target.closest('.chat-input-wrap,textarea,input,select,[role="dialog"],.modal'))return;
+     if(event.target.closest('pre,[data-wheel-native]'))return;
+     if(Math.abs(event.deltaX)>Math.abs(event.deltaY))return;
+     const factor=event.deltaMode===1?16:event.deltaMode===2?messages.clientHeight:1;
+     const delta=event.deltaY*factor;
+     if(!delta)return;
+     const max=Math.max(0,messages.scrollHeight-messages.clientHeight);
+     if(max<=1)return;
+     const next=Math.max(0,Math.min(max,messages.scrollTop+delta));
+     if(Math.abs(next-messages.scrollTop)<.5)return;
+     messages.scrollTop=next;
+     event.preventDefault();
+   },{passive:false});
+ }
+
  document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&!e.shiftKey){
    e.preventDefault();
