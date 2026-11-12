@@ -127,7 +127,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=focused&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.1.0", self.html)
+        self.assertIn("VERSION 6.2.0", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
