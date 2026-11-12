@@ -964,7 +964,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 5.0</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · WEB EDITION 5.1</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -995,7 +995,7 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 5.0</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 5.1</div>
   </div>
 </aside>
 <main class="main">
@@ -1122,12 +1122,12 @@ button,.btn,.mobile-tab,.recent-open{touch-action:manipulation}
   </div>
   <div class="card" id="settings-data">
    <div class="between"><h3 class="section-title">Данные и резервная копия</h3><span class="badge">На устройстве</span></div>
-   <div class="row" style="flex-wrap:wrap"><button class="btn secondary" id="exportBackup">Экспорт JSON</button><button class="btn secondary" id="importBackup">Импорт JSON</button><button class="btn danger" id="wipeData">Удалить все данные</button></div>
-   <p class="footnote">Резервная копия включает настройки, заметки, задачи, историю и текстовые материалы библиотеки. Бинарные оригиналы файлов скачиваются из библиотеки отдельно. API-ключ никогда не экспортируется.</p>
+   <div class="row" style="flex-wrap:wrap"><button class="btn secondary" id="exportBackup">Экспорт JSON</button><button class="btn secondary" id="importBackup">Импорт JSON</button><button class="btn danger" id="deleteAllChats" type="button">Удалить историю и переписки</button><button class="btn danger" id="wipeData" type="button">Полный сброс данных</button></div>
+   <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 5.0.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 5.0.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 5.1.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 5.1.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1459,7 +1459,7 @@ function apiStatus(message,connected=false){$('apiStatus').textContent=message;$
 $('savePrefs').onclick=()=>{state.prefs.tone=$('tone').value;state.prefs.detail=$('detail').value;state.prefs.language=$('language').value;state.prefs.confirmHighRisk=$('confirmHighRisk').checked;state.prefs.answerStyle=$('answerStyle').value;state.prefs.voiceLanguage=$('voiceLanguage').value;state.prefs.voiceOutputLanguage=$('voiceOutputLanguage').value;state.prefs.voiceRuVoice=$('voiceRuSelect').value;state.prefs.voiceEnVoice=$('voiceEnSelect').value;state.prefs.voiceRateRu=+$('voiceRateRu').value;state.prefs.voicePitchRu=+$('voicePitchRu').value;state.prefs.voiceRateEn=+$('voiceRateEn').value;state.prefs.voicePitchEn=+$('voicePitchEn').value;state.prefs.voiceRate=state.prefs.voiceRateRu;state.prefs.voicePitch=state.prefs.voicePitchRu;save();updateVoiceValueLabels();toast('Настройки сохранены')};function restorePrefs(){for(const k of ['tone','detail','language','answerStyle','voiceLanguage','voiceOutputLanguage','voiceRuVoice','voiceEnVoice','voiceRuGender','voiceEnGender','voiceRateRu','voicePitchRu','voiceRateEn','voicePitchEn','voiceRate','voicePitch','confirmHighRisk'])if(state.prefs[k]!==undefined&&$(k))$(k).type==='checkbox'?$(k).checked=state.prefs[k]:$(k).value=state.prefs[k];if(state.prefs.voiceRateRu===undefined&&state.prefs.voiceRate!==undefined&&$('voiceRateRu'))$('voiceRateRu').value=state.prefs.voiceRate;if(state.prefs.voicePitchRu===undefined&&state.prefs.voicePitch!==undefined&&$('voicePitchRu'))$('voicePitchRu').value=state.prefs.voicePitch;updateVoiceValueLabels()}
 $('exportBackup').onclick=()=>{const snapshot={...state,history:state.history.slice(0,240),notes:state.notes.slice(0,100),tasks:state.tasks.slice(0,200),library:state.library.slice(0,80)};const data={version:'4.7.0',exportedAt:new Date().toISOString(),state:snapshot,notice:'Резервная копия не содержит бинарные оригиналы файлов библиотеки и API-ключи.'};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'archangel-backup-4.2.json')};
 $('importBackup').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{try{if(!i.files?.[0])return;const d=JSON.parse(await i.files[0].text()),src=d?.state;if(!src||typeof src!=='object'||Array.isArray(src))throw Error('В резервной копии не найден объект state.');if(!confirm('Заменить текущие заметки, задачи, историю и настройки этой резервной копией? Оригиналы файлов и API-ключи не импортируются.'))return;const arr=(key,limit)=>Array.isArray(src[key])?src[key].filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,limit):[];const prefs=src.prefs&&typeof src.prefs==='object'&&!Array.isArray(src.prefs)?src.prefs:{};const plugins=src.plugins&&typeof src.plugins==='object'&&!Array.isArray(src.plugins)?src.plugins:{};const next={history:arr('history',240),notes:arr('notes',100),tasks:arr('tasks',200),library:arr('library',80).map(x=>({...x,originalMissing:true})),messages:arr('messages',60).filter(x=>['user','assistant'].includes(x.role)),chats:arr('chats',60),activeChatId:typeof src.activeChatId==='string'?src.activeChatId:null,prefs:{...state.prefs},plugins:{...state.plugins}};for(const [k,v] of Object.entries(prefs))if(Object.prototype.hasOwnProperty.call(next.prefs,k)&&typeof v===typeof next.prefs[k]&&(typeof v!=='number'||Number.isFinite(v)))next.prefs[k]=v;for(const [k,v] of Object.entries(plugins))if(Object.prototype.hasOwnProperty.call(next.plugins,k)&&typeof v==='boolean')next.plugins[k]=v;state=next;normalizeConversations();save();restorePrefs();renderAll();restoreChat();renderRecentChats();toast('Резервная копия импортирована. Бинарные оригиналы файлов не входят в JSON.')}catch(e){toast('Не удалось импортировать JSON: '+e.message)}finally{i.value=''}};i.click()};
-$('wipeData').onclick=async()=>{if(!confirm('Удалить все данные ARCHANGEL в этом браузере, включая библиотеку файлов и настройки? Это действие необратимо.'))return;await clearLibraryAssets();storageRemove(DBKEY);for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_asset_'))volatileStore.delete(key);state={history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',autoSpeak:false,voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}};renderAll();restorePrefs();toast('Все локальные данные и оригиналы файлов удалены.');};
+// The destructive controls are installed after the conversation persistence wrappers.
 function downloadBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
 // Voice input and device voices. Microphone starts only after the user's click.
 // Declare the voice map before any timers, callbacks or preference restore can run.
@@ -2263,8 +2263,79 @@ $('newRecentChat').addEventListener('click',newRecentChat);
 // Existing clear button becomes a new dialog action, preserving earlier conversations.
 $('clearChat').onclick=newRecentChat;
 // On full data reset, remove the list from the visible sidebar as well.
-const previousWipe42=$('wipeData').onclick;
-$('wipeData').onclick=async function(...args){await previousWipe42.apply(this,args);renderRecentChats();};
+// Single authoritative privacy controls. Never call save() with stale messages.
+const DEFAULT_PRIVATE_STATE=JSON.parse(JSON.stringify({history:[],notes:[],tasks:[],library:[],messages:[],chats:[],activeChatId:null,plugins:{search:true,math:true,code:true,library:true,voice:true,vision:true},prefs:{brainMode:'balanced',tone:'focused',detail:'balanced',language:'ru',voiceLanguage:'ru-RU',voiceOutputLanguage:'auto',voiceRuVoice:'',voiceEnVoice:'',voiceRuGender:'male',voiceEnGender:'male',voiceRate:.97,voicePitch:.96,voiceRateRu:.97,voicePitchRu:.96,voiceRateEn:.98,voicePitchEn:.97,voiceEsVoice:'',voiceEsGender:'male',autoSpeak:false,voiceRateEs:.98,voicePitchEs:.97,interfaceLanguage:'ru',answerStyle:'balanced',confirmHighRisk:true}}));
+let privacyOperation=false;
+const privacyChannel=typeof BroadcastChannel==='function'?new BroadcastChannel('archangel-private-data-v1'):null;
+function resetChatMemory(){
+ state.history=[];state.chats=[];state.messages=[];state.activeChatId=null;
+ pendingFiles=[];$('chatInput').value='';renderAttach();restoreChat();renderRecentChats();renderHistory();renderStats();
+}
+function applyPrivateChangeAcrossTabs(kind){
+ if(privacyOperation)return;
+ resetChatMemory();
+ if(kind==='all'){state=JSON.parse(JSON.stringify(DEFAULT_PRIVATE_STATE));api={protocol:'chat',endpoint:'/api/chat',model:'',key:''};restorePrefs();}
+ renderAll();
+ // Do not auto-save: it might recreate deleted browser data.
+}
+if(privacyChannel)privacyChannel.addEventListener('message',event=>{
+ if(event.data?.kind==='chats'||event.data?.kind==='all')applyPrivateChangeAcrossTabs(event.data.kind);
+});
+window.addEventListener('storage',event=>{
+ if(event.key===DBKEY&&event.newValue===null)applyPrivateChangeAcrossTabs('all');
+});
+$('deleteAllChats').onclick=()=>{
+ if(privacyOperation)return;
+ if(activeController){toast('Сначала останови генерацию, затем повтори удаление.');return;}
+ if(!confirm('Навсегда удалить ВСЕ переписки, сообщения и историю действий ARCHANGEL в этом браузере? Настройки, файлы и заметки останутся.'))return;
+ privacyOperation=true;
+ try{
+  resetChatMemory();
+  if(!save())throw Error('Браузер не подтвердил сохранение очищенного профиля.');
+  privacyChannel?.postMessage({kind:'chats'});
+  toast('История и все переписки удалены в этом браузере.');
+ }catch(error){toast('Не удалось закончить удаление: '+error.message);}
+ finally{privacyOperation=false;}
+};
+async function erasePrivateFiles(){
+ // Fail loudly: do not report full deletion if IndexedDB is blocked by other tabs.
+ const db=await openAssetDB();
+ await new Promise((resolve,reject)=>{
+  const tx=db.transaction('files','readwrite');
+  tx.objectStore('files').clear();
+  tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||Error('Не удалось удалить файлы.'));
+  tx.onabort=()=>reject(tx.error||Error('Хранилище отклонило удаление.'));
+ });
+ db.close();assetDBPromise=null;
+}
+$('wipeData').onclick=async()=>{
+ if(privacyOperation)return;
+ if(activeController){toast('Сначала останови генерацию, затем повтори удаление.');return;}
+ if(!confirm('ПОЛНЫЙ СБРОС: удалить все переписки, историю, файлы, заметки и настройки этого браузера, а также отключить API в текущей серверной сессии? Это нельзя отменить.'))return;
+ privacyOperation=true;$('wipeData').disabled=true;
+ const issues=[];
+ try{
+  stopVoicePlayback(false);
+  if(voiceWake&&typeof stopRecognition==='function')stopRecognition();
+  try{await erasePrivateFiles()}catch(e){issues.push('Файлы: '+e.message);}
+  try{await fetch('/api/purge',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirm:'DELETE_ARCHANGEL_SESSION'})}).then(async r=>{if(!r.ok)throw Error('HTTP '+r.status);});}
+  catch(e){issues.push('Серверная сессия: '+e.message);}
+  resetChatMemory();
+  state=JSON.parse(JSON.stringify(DEFAULT_PRIVATE_STATE));
+  api={protocol:'chat',endpoint:'/api/chat',model:'',key:''};
+  for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_'))volatileStore.delete(key);
+  try{
+   for(let i=localStorage.length-1;i>=0;i--){
+    const key=localStorage.key(i);
+    if(key&&(key===DBKEY||key.startsWith('archangel_')))localStorage.removeItem(key);
+   }
+   if(localStorage.getItem(DBKEY)!==null)throw Error('Профиль остался в localStorage');
+  }catch(e){issues.push('Профиль браузера: '+e.message);}
+  restorePrefs();renderAll();restoreChat();renderRecentChats();updateVoiceCatalog();syncBrainMode();
+  privacyChannel?.postMessage({kind:'all'});
+  toast(issues.length?'Часть данных не удалось удалить. '+issues.join('; ').slice(0,190):'Все данные Архангела в этом браузере удалены; сессия отключена.');
+ }finally{privacyOperation=false;$('wipeData').disabled=false;}
+};
 
 
 // ARCHANGEL 4.4 — accessible mobile navigation, drawer and active tab state.
