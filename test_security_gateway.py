@@ -86,6 +86,47 @@ class GatewaySecurityTests(unittest.TestCase):
             with self.subTest(model=model):
                 self.assertFalse(server._openai_reasoning_model(model))
 
+    def test_session_purge_expires_cookie_and_deletes_key(self):
+        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        conn.request("GET", "/")
+        response = conn.getresponse()
+        cookie = response.getheader("Set-Cookie")
+        response.read()
+        conn.close()
+        self.assertIsNotNone(cookie)
+        token = cookie.split(";", 1)[0].split("=", 1)[1]
+        with server.LOCK:
+            self.assertIn(token, server.SESSIONS)
+            server.SESSIONS[token]["config"] = {
+                "provider": "openai", "model": "sample",
+                "api_key": "private-key", "endpoint": server.PROVIDERS["openai"]}
+        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        payload = json.dumps({"confirm": "DELETE_ARCHANGEL_SESSION"})
+        conn.request("POST", "/api/purge", body=payload,
+                     headers={"Content-Type": "application/json",
+                              "Origin": f"http://127.0.0.1:{self.port}",
+                              "Cookie": cookie.split(";", 1)[0]})
+        response = conn.getresponse()
+        status = response.status
+        data = json.loads(response.read())
+        deleted_cookie = response.getheader("Set-Cookie", "")
+        conn.close()
+        self.assertEqual(status, 200)
+        self.assertTrue(data["sessionDestroyed"])
+        self.assertIn("Max-Age=0", deleted_cookie)
+        with server.LOCK:
+            self.assertNotIn(token, server.SESSIONS)
+
+    def test_purge_requires_confirmation_and_origin(self):
+        origin = f"http://127.0.0.1:{self.port}"
+        status, _, _ = self.request("/api/purge", "POST",
+                                    {"confirm": "no"}, origin=origin)
+        self.assertEqual(status, 400)
+        status, _, _ = self.request("/api/purge", "POST",
+                                    {"confirm": "DELETE_ARCHANGEL_SESSION"},
+                                    origin="https://attacker.example")
+        self.assertEqual(status, 403)
+
     def test_bad_provider_and_invalid_model(self):
         origin = f"http://127.0.0.1:{self.port}"
         status, _, _ = self.request(
