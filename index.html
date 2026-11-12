@@ -2274,7 +2274,7 @@ function resetChatMemory(){
 function applyPrivateChangeAcrossTabs(kind){
  if(privacyOperation)return;
  resetChatMemory();
- if(kind==='all'){state=JSON.parse(JSON.stringify(DEFAULT_PRIVATE_STATE));api={protocol:'chat',endpoint:'/api/chat',model:'',key:''};restorePrefs();}
+ if(kind==='all'){state=JSON.parse(JSON.stringify(DEFAULT_PRIVATE_STATE));api={protocol:'chat',endpoint:'/api/chat',model:'',key:''};restorePrefs();if(typeof apiStatus==='function')apiStatus('Данные очищены в другой вкладке.',false);}
  renderAll();
  // Do not auto-save: it might recreate deleted browser data.
 }
@@ -2332,6 +2332,7 @@ $('wipeData').onclick=async()=>{
    if(localStorage.getItem(DBKEY)!==null)throw Error('Профиль остался в localStorage');
   }catch(e){issues.push('Профиль браузера: '+e.message);}
   restorePrefs();renderAll();restoreChat();renderRecentChats();updateVoiceCatalog();syncBrainMode();
+  if(typeof apiStatus==='function')apiStatus('Сессия очищена. Подключи модель заново, если потребуется.',false);
   privacyChannel?.postMessage({kind:'all'});
   toast(issues.length?'Часть данных не удалось удалить. '+issues.join('; ').slice(0,190):'Все данные Архангела в этом браузере удалены; сессия отключена.');
  }finally{privacyOperation=false;$('wipeData').disabled=false;}
