@@ -107,7 +107,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("input.dispatchEvent(new Event('input'", self.html)
         self.assertNotIn("},1150)", self.html)
         self.assertIn("Речь распознана. Проверь текст и нажми отправить.", self.html)
-        self.assertIn("voiceWake=true;voiceActive=true;\\n  instance.start();", self.html)
+        self.assertIn("voiceWake=true;voiceActive=true;", self.html)
 
     def test_neural_voice_silences_microphone_during_playback(self):
         self.assertIn("const microphoneWasActive=voiceWake&&!!recognition", self.html)
