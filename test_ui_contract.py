@@ -81,6 +81,20 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("DELETE_ARCHANGEL_SESSION", self.html)
         self.assertNotIn("const previousWipe42=", self.html)
 
+    def test_scroll_and_extended_composer(self):
+        self.assertIn('archangel-52-scroll-compose', self.html)
+        self.assertIn("chatCard.addEventListener('wheel'", self.html)
+        self.assertIn("event.preventDefault()", self.html)
+        self.assertIn("overflow-y:auto!important", self.html)
+        self.assertIn("grid-template-rows:minmax(94px,auto)", self.html)
+        self.assertIn("grid-column:1/-1!important", self.html)
+        self.assertIn("input.style.height=Math.max(", self.html)
+
+    def test_advanced_context_remains_bounded(self):
+        self.assertIn("slice(-28)", self.html)
+        self.assertIn("mode:deep?'deep':'balanced'", self.html)
+        self.assertIn("не выдумывай использование инструментов", self.html)
+
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
         self.assertIn('aria-label="Отправить сообщение"', self.html)
