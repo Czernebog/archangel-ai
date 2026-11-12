@@ -1150,12 +1150,31 @@ button:disabled{opacity:.5}
  #page-chat .brain-mode{min-width:0;padding-inline:9px!important}
 }
 </style>
+<style id="archangel-63-privacy-voice">
+/* 6.3: legacy compatibility controls are never visible or focusable. */
+#settings-voice .arch-legacy-voice-controls,
+#settings-voice .arch-legacy-voice-controls[hidden],
+#settings-voice .arch-legacy-voice-controls * {display:none!important;visibility:hidden!important}
+#settings-voice .arch-russian-voice{max-width:100%;overflow:hidden}
+#settings-voice .arch-voice-profile{min-width:0}
+#settings-voice .voice-actions{display:flex;flex-wrap:wrap;align-items:center}
+#settings-voice .voice-actions .btn{flex:0 1 auto}
+#page-history #clearHistory{background:#fff;color:#080808;border-color:#fff;font-weight:700}
+#page-history .lead{max-width:72ch}
+#settings-voice button:focus-visible,#page-history button:focus-visible{outline:2px solid white;outline-offset:3px}
+@media(max-width:760px){
+ #settings-voice .arch-voice-preview{width:100%}
+ #page-history #clearHistory{width:100%;min-height:46px;white-space:normal}
+ #page-history .page-head{display:flex;flex-direction:column;align-items:stretch}
+ #settings-voice .voice-actions .btn{width:100%;min-height:46px}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.2</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.3</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1186,7 +1205,7 @@ button:disabled{opacity:.5}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.2</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.3</div>
   </div>
 </aside>
 <main class="main">
@@ -1217,7 +1236,7 @@ button:disabled{opacity:.5}
  <div id="libraryList" class="list" style="margin-top:13px"><div class="empty">Библиотека пуста. Добавь файлы для локального поиска.</div></div>
 </section>
 <section class="page" id="page-history">
- <div class="page-head"><div><div class="eyebrow">Журнал действий</div><h1 class="h1">История</h1><div class="lead">Поиски, запросы и вычисления сохраняются локально. Можно открыть результат повторно или удалить отдельную запись.</div></div><button class="btn danger" id="clearHistory">Очистить всю историю</button></div><div class="between" style="margin-bottom:10px"><span class="small muted" id="historyCount">0 записей</span><input class="input" style="max-width:260px" id="historyFilter" placeholder="Поиск по истории"></div><div id="historyList" class="list"><div class="empty">История пока пуста.</div></div>
+ <div class="page-head"><div><div class="eyebrow">Журнал действий</div><h1 class="h1">История</h1><div class="lead">Здесь находятся записи действий и сохранённые диалоги. Кнопка удаления очистит всю историю, переписки и сообщения ИИ в этом браузере, но сохранит файлы, задачи и настройки.</div></div><button class="btn danger" id="clearHistory" type="button">Удалить историю и все переписки</button></div><div class="between" style="margin-bottom:10px"><span class="small muted" id="historyCount">0 записей</span><input class="input" style="max-width:260px" id="historyFilter" placeholder="Поиск по истории"></div><div id="historyList" class="list"><div class="empty">История пока пуста.</div></div>
 </section>
 <section class="page" id="page-tasks">
  <div class="page-head"><div><div class="eyebrow">Личная организация</div><h1 class="h1">Задачи и заметки</h1><div class="lead">Фиксируй действия и знания. Данные остаются в локальном хранилище браузера.</div></div></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><h3 class="section-title">Новая задача</h3><div class="stack"><input id="taskTitle" class="input" placeholder="Название задачи"><textarea id="taskDesc" class="textarea" style="min-height:70px" placeholder="Описание или критерий готовности"></textarea><div class="row"><select id="taskPriority" class="select"><option value="Обычный">Обычный приоритет</option><option value="Высокий">Высокий приоритет</option><option value="Критический">Критический приоритет</option></select><button class="btn" id="addTask">Добавить</button></div></div><div class="divider"></div><h3 class="section-title">Активные задачи</h3><div id="taskList" class="list"><div class="empty">Нет задач.</div></div></div><div class="card"><h3 class="section-title">Новая заметка</h3><div class="stack"><input id="noteTitle" class="input" placeholder="Заголовок заметки"><textarea id="noteBody" class="textarea" placeholder="Текст заметки"></textarea><button class="btn" id="addNote">Сохранить заметку</button></div><div class="divider"></div><h3 class="section-title">Сохранённые заметки</h3><div id="noteList" class="list"><div class="empty">Заметок пока нет.</div></div></div></div>
@@ -1292,7 +1311,7 @@ button:disabled{opacity:.5}
      <div class="small muted" id="voiceRuFemaleName">Ищем русский женский голос устройства…</div>
     </div>
     <div class="voice-comparison-note">Нейроозвучка синтезируется с помощью OpenAI по личному API-ключу и может оплачиваться отдельно. Текст ответа передаётся сервису для генерации речи. Без API используется синтез речи браузера, если доступен.</div>
-    <div class="voice-panel-grid" style="display:none" aria-hidden="true">
+    <div class="voice-panel-grid arch-legacy-voice-controls" hidden inert aria-hidden="true">
      <div class="voice-control-card"><h4>РУССКИЙ ГОЛОС</h4><label class="label" for="voiceRuSelect">Доступный голос устройства</label><select class="select" id="voiceRuSelect"><option value="">Автовыбор русского голоса</option></select><button class="btn secondary" id="testVoiceRu" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateRuVal">0.94×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.94" id="voiceRateRu" style="width:100%"><div class="small muted">Тембр <b id="voicePitchRuVal">1.02</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="1.02" id="voicePitchRu" style="width:100%"></div>
      <div class="voice-control-card"><h4>АНГЛИЙСКИЙ ГОЛОС</h4><label class="label" for="voiceEnSelect">Голос устройства</label><select class="select" id="voiceEnSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEn" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEnVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEn" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEnVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEn" style="width:100%"></div>
      <div class="voice-control-card"><h4>ИСПАНСКИЙ ГОЛОС</h4><label class="label" for="voiceEsSelect">Голос устройства</label><select class="select" id="voiceEsSelect"><option value="">Автоматический выбор</option></select><button class="btn secondary" id="testVoiceEs" type="button" style="margin-top:8px;min-height:42px">▶ Прослушать доступный голос</button><div class="small muted" style="margin-top:8px">Скорость <b id="voiceRateEsVal">0.98×</b></div><input type="range" min="0.75" max="1.12" step="0.02" value="0.98" id="voiceRateEs" style="width:100%"><div class="small muted">Тембр <b id="voicePitchEsVal">0.97</b></div><input type="range" min="0.65" max="1.1" step="0.02" value="0.97" id="voicePitchEs" style="width:100%"></div>
@@ -1308,8 +1327,8 @@ button:disabled{opacity:.5}
    <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.2.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.2.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.3.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.3.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1387,7 +1406,8 @@ function renderAll(){renderStats();renderHistory();renderLibrary();renderTasks()
 function renderStats(){$('statHistory').textContent=state.history.length;$('statFiles').textContent=state.library.length;$('statTasks').textContent=state.tasks.filter(t=>!t.done).length}
 function renderRecent(){const el=$('overviewRecent');if(!state.history.length){el.innerHTML='<div class="empty">Пока нет активности. Начни с диалога или локального поиска.</div>';return}el.innerHTML=state.history.slice(0,4).map(h=>`<div class="item"><span class="ico">${h.type==='search'?'⌕':h.type==='math'?'∑':'◷'}</span><div class="item-body"><div class="item-title">${esc(h.title)}</div><div class="item-desc">${esc(h.date)} · ${esc(h.type)}</div></div></div>`).join('')}
 function renderHistory(){const q=($('historyFilter')?.value||'').toLowerCase();const rows=state.history.filter(h=>(h.title+' '+h.content+' '+h.type).toLowerCase().includes(q));$('historyCount').textContent=`${rows.length} / ${state.history.length} записей`;const el=$('historyList');if(!rows.length){el.innerHTML='<div class="empty">Нет записей истории.</div>';return}el.innerHTML=rows.map(h=>`<div class="item"><span class="ico">${h.type==='search'?'⌕':h.type==='math'?'∑':h.type==='chat'?'◉':'◷'}</span><div class="item-body"><div class="item-title">${esc(h.title)}</div><div class="item-desc">${esc(h.date)} · ${esc(h.type)}${h.content?' · '+esc(h.content.slice(0,180)):''}</div></div><div class="item-actions"><button class="tiny-btn" title="Повторить" data-repeat="${h.id}">↻</button><button class="tiny-btn" title="Удалить запись" data-del-history="${h.id}">×</button></div></div>`).join('');el.querySelectorAll('[data-del-history]').forEach(b=>b.onclick=()=>{state.history=state.history.filter(x=>x.id!==b.dataset.delHistory);save();renderAll()});el.querySelectorAll('[data-repeat]').forEach(b=>b.onclick=()=>{const h=state.history.find(x=>x.id===b.dataset.repeat);if(h){$('searchQuery').value=h.title;go(h.type==='search'?'search':'chat');$('chatInput').value=h.title}})}
-$('historyFilter').addEventListener('input',renderHistory);$('clearHistory').onclick=()=>{if(confirm('Удалить всю историю запросов? Это действие нельзя отменить.')){state.history=[];save();renderAll();toast('История очищена')}};
+$('historyFilter').addEventListener('input',renderHistory);// The history page uses the same verified destructive action as Settings; no partial deletion.
+$('clearHistory').onclick=()=>$('deleteAllChats')?.click();
 function renderLibrary(){const q=($('libraryFilter')?.value||'').toLowerCase();const rows=state.library.filter(f=>(f.name+' '+f.type+' '+(f.text||'')).toLowerCase().includes(q));const el=$('libraryList');if(!rows.length){el.innerHTML='<div class="empty">Нет файлов. Добавь документы в библиотеку.</div>';return}el.innerHTML=rows.map(f=>`<div class="item"><span class="ico">${f.type==='image'?'▧':f.type==='pdf'?'▤':'▣'}</span><div class="item-body"><div class="item-title">${esc(f.name)}</div><div class="item-desc">${esc(f.type.toUpperCase())} · ${Math.max(1,Math.round((f.size||0)/1024))} КБ · ${esc(f.date)}<br>${f.text?esc(f.text.slice(0,150)):'Файл сохранён. Текстовый индекс недоступен для этого формата.'}</div></div><div class="item-actions"><button class="tiny-btn" title="${f.originalMissing?'Оригинал не вошёл в JSON-резервную копию':'Скачать оригинал'}" data-download-file="${f.id}">↓</button><button class="tiny-btn" title="Открыть индекс" data-open-file="${f.id}">↗</button><button class="tiny-btn" title="Удалить" data-del-file="${f.id}">×</button></div></div>`).join('');el.querySelectorAll('[data-del-file]').forEach(b=>b.onclick=async()=>{await deleteLibraryAsset(b.dataset.delFile);state.library=state.library.filter(f=>f.id!==b.dataset.delFile);save();renderAll();toast('Файл удалён из библиотеки')});el.querySelectorAll('[data-download-file]').forEach(b=>b.onclick=async()=>{try{const f=await getLibraryAsset(b.dataset.downloadFile);if(!f)return toast('Оригинальный файл не найден. В JSON-резервной копии хранятся только текст и метаданные.');downloadBlob(f.blob,f.name)}catch(e){toast('Не удалось получить оригинальный файл')}});el.querySelectorAll('[data-open-file]').forEach(b=>b.onclick=()=>{const f=state.library.find(x=>x.id===b.dataset.openFile);showModal(f.name,`<div class="result">${esc(f.text||'Предпросмотр текста недоступен для этого формата. Файл зарегистрирован в библиотеке.')}</div>`)})}
 $('libraryFilter').addEventListener('input',renderLibrary);$('importFiles').onclick=()=>$('filePicker').click();
 let assetDBPromise;function openAssetDB(){if(assetDBPromise)return assetDBPromise;assetDBPromise=new Promise((resolve,reject)=>{if(!('indexedDB'in window))return reject(Error('IndexedDB недоступен'));const req=indexedDB.open('archangel_assets_v1',1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||Error('Не удалось открыть файловое хранилище'));req.onblocked=()=>reject(Error('Файловое хранилище занято другой вкладкой. Закрой старые вкладки ARCHANGEL и повтори попытку.'));}).catch(e=>{assetDBPromise=null;throw e});return assetDBPromise}
