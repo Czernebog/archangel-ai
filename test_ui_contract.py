@@ -98,7 +98,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.0.0', self.html)
+        self.assertIn('VERSION 6.1.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -114,6 +114,15 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("voiceSpeaking=true", self.html)
         self.assertIn("audio.onended=()=>", self.html)
         self.assertIn("resumeMic();", self.html)
+
+    def test_mobile_layout_and_keyboard_fit(self):
+        self.assertIn('archangel-61-mobile-fit', self.html)
+        self.assertIn('body.arch-keyboard-open .mobile-tabbar{display:none!important}', self.html)
+        self.assertIn('visualViewport', self.html)
+        self.assertIn('keyboardOpen=focused&&covered>110', self.html)
+        self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
+        self.assertIn("max-height:min(20dvh,112px)", self.html)
+        self.assertIn("VERSION 6.1.0", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
