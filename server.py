@@ -40,7 +40,7 @@ SITE_PASSWORD = os.environ.get('ARCHANGEL_SITE_PASSWORD', '')
 MAX_ACTIVE_CHATS = 40
 MAX_ACTIVE_CHATS_PER_IP = 4
 MAX_UPSTREAM_RESPONSE = 4 * 1024 * 1024  # Reject unbounded provider output.
-MAX_TTS_TEXT = 1200
+MAX_TTS_TEXT = 2400
 MAX_TTS_AUDIO = 3 * 1024 * 1024
 DEFAULT_CONFIG = {'provider': None, 'model': None, 'api_key': None, 'endpoint': None}
 SESSIONS = {}
@@ -347,7 +347,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '6.1.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '6.2.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
@@ -517,17 +517,22 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(409, {'error': 'Нейроголос доступен с личным OpenAI API-ключом в настройках ИИ. Используется обычная озвучка устройства.'})
         raw_text, language, gender = data.get('text'), data.get('language'), data.get('gender')
         if not isinstance(raw_text, str) or not raw_text.strip() or len(raw_text) > MAX_TTS_TEXT:
-            return self._json(400, {'error': 'Для озвучки нужен текст до 1200 символов.'})
-        if language not in ('ru', 'en', 'es') or gender not in ('male', 'female'):
-            return self._json(400, {'error': 'Укажи один из трёх языков и мужской или женский голос.'})
-        # Curated voice pairs, not an arbitrary client-selected upstream voice.
-        voice = 'onyx' if gender == 'male' else 'nova'
-        langs = {'ru': 'Russian', 'en': 'English', 'es': 'Spanish'}
-        instructions = ('Speak naturally in ' + langs[language] +
-                        '. Be clear, warm and expressive, with realistic pauses. '
-                        'Read only the supplied text. Do not add anything.')
+            return self._json(400, {'error': 'Для озвучки нужен текст до 2400 символов.'})
+        if language != 'ru' or gender != 'female':
+            return self._json(400, {'error': 'ARCHANGEL поддерживает только русский женский голос.'})
+        # Shimmer: a single stable voice profile, with explicit Russian delivery.
+        # Native speakers may hear accents; the API voices are optimized for English.
+        voice = 'shimmer'
+        instructions = (
+            'Говори только по-русски, естественным взрослым женским голосом. '
+            'Произноси слова отчётливо, с мягкой уверенной интонацией и спокойным темпом. '
+            'Делай короткие смысловые паузы между предложениями, '
+            'не торопись и не меняй язык при чтении иностранных названий. '
+            'Произноси математические формулы разборчиво, '
+            'выполняй только озвучивание переданного текста, ничего не добавляй.'
+        )
         payload = json.dumps({'model': 'gpt-4o-mini-tts', 'voice': voice, 'input': raw_text,
-                              'instructions': instructions, 'response_format': 'mp3'}, ensure_ascii=False).encode('utf-8')
+                              'instructions': instructions, 'speed': 0.92, 'response_format': 'mp3'}, ensure_ascii=False).encode('utf-8')
         req = urllib.request.Request(
             'https://api.openai.com/v1/audio/speech', data=payload, method='POST',
             headers={'Authorization': 'Bearer ' + cfg['api_key'],

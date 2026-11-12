@@ -45,12 +45,17 @@ class UIContractTests(unittest.TestCase):
             with self.subTest(id=id_):
                 self.assertEqual(self.parser.ids.get(id_), 1)
 
-    def test_only_six_voice_choices(self):
-        expected = {f"{language}:{gender}" for language in ("ru", "en", "es")
-                    for gender in ("male", "female")}
-        self.assertEqual(set(self.parser.voice_buttons), expected)
-        self.assertEqual(len(self.parser.voice_buttons), len(expected))
-        self.assertNotIn("data-voice-use=", self.html)
+    def test_only_russian_female_voice_choice(self):
+        self.assertEqual(self.parser.voice_buttons, ["ru:female"])
+        self.assertNotIn('data-voice-preview="ru:male"', self.html)
+        self.assertNotIn('data-voice-preview="en:', self.html)
+        self.assertNotIn('data-voice-preview="es:', self.html)
+        self.assertIn('id="voiceRuFemaleName"', self.html)
+        self.assertIn('archangel-62-voice-ui', self.html)
+        self.assertIn("state.prefs.voiceRuGender='female'", self.html)
+        self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
+        self.assertIn("VERSION 6.2.0", self.html)
+        self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
         self.assertEqual({mode for mode, _ in self.parser.brain_buttons},
@@ -63,7 +68,7 @@ class UIContractTests(unittest.TestCase):
         # A second speakDevice definition previously caused infinite recursion.
         self.assertEqual(len(re.findall(r"function speakDevice\(text,forcedLocale\)", self.html)), 1)
         self.assertIn("function speak(text,forcedLocale)", self.html)
-        self.assertIn("playNeuralVoice(text,locale,g)", self.html)
+        self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
 
     def test_no_external_script_or_frame_embedding(self):
         scripts = re.findall(r"<script\b[^>]*>", self.html, flags=re.I)
@@ -98,7 +103,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.1.0', self.html)
+        self.assertIn('VERSION 6.2.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -122,7 +127,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=focused&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.1.0", self.html)
+        self.assertIn("VERSION 6.2.0", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
