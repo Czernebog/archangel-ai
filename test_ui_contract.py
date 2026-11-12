@@ -98,7 +98,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.0.0', self.html)
+        self.assertIn('VERSION 6.1.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
