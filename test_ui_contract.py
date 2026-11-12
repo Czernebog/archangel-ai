@@ -68,7 +68,7 @@ class UIContractTests(unittest.TestCase):
         # A second speakDevice definition previously caused infinite recursion.
         self.assertEqual(len(re.findall(r"function speakDevice\(text,forcedLocale\)", self.html)), 1)
         self.assertIn("function speak(text,forcedLocale)", self.html)
-        self.assertIn("playNeuralVoice(text,locale,g)", self.html)
+        self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
 
     def test_no_external_script_or_frame_embedding(self):
         scripts = re.findall(r"<script\b[^>]*>", self.html, flags=re.I)
