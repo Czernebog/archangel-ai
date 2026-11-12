@@ -127,6 +127,14 @@ class GatewaySecurityTests(unittest.TestCase):
                                     origin="https://attacker.example")
         self.assertEqual(status, 403)
 
+    def test_voice_policy_is_russian_female(self):
+        self.assertEqual(server.MAX_TTS_TEXT, 2400)
+        import inspect
+        source = inspect.getsource(server.Handler._tts)
+        self.assertIn("language != 'ru' or gender != 'female'", source)
+        self.assertIn("voice = 'shimmer'", source)
+        self.assertIn("'speed': 0.92", source)
+
     def test_bad_provider_and_invalid_model(self):
         origin = f"http://127.0.0.1:{self.port}"
         status, _, _ = self.request(
