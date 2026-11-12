@@ -54,7 +54,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-62-voice-ui', self.html)
         self.assertIn("state.prefs.voiceRuGender='female'", self.html)
         self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
-        self.assertIn("VERSION 6.2.0", self.html)
+        self.assertIn("VERSION 6.3.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
@@ -103,7 +103,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.2.0', self.html)
+        self.assertIn('VERSION 6.3.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -127,7 +127,19 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=focused&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.2.0", self.html)
+        self.assertIn("VERSION 6.3.0", self.html)
+
+    def test_history_delete_erases_chats_and_action_history(self):
+        self.assertIn('id="clearHistory" type="button">Удалить историю и все переписки', self.html)
+        self.assertIn("$('clearHistory').onclick=()=>$('deleteAllChats')?.click()", self.html)
+        self.assertIn("state.history=[];state.chats=[];state.messages=[];state.activeChatId=null", self.html)
+        self.assertIn("privacyChannel?.postMessage({kind:'chats'})", self.html)
+        self.assertIn('archangel-63-privacy-voice', self.html)
+
+    def test_legacy_voice_controls_are_inert_and_hidden(self):
+        self.assertIn('class="voice-panel-grid arch-legacy-voice-controls" hidden inert', self.html)
+        self.assertIn('.arch-legacy-voice-controls[hidden]', self.html)
+        self.assertEqual(self.parser.voice_buttons, ["ru:female"])
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
