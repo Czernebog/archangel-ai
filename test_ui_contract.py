@@ -93,7 +93,27 @@ class UIContractTests(unittest.TestCase):
     def test_advanced_context_remains_bounded(self):
         self.assertIn("slice(-28)", self.html)
         self.assertIn("mode:deep?'deep':'balanced'", self.html)
-        self.assertIn("не выдумывай использование инструментов", self.html)
+        self.assertIn("Отличай доказанное от предположений.", self.html)
+
+    def test_final_monochrome_release_and_loader(self):
+        self.assertIn('archangel-six-finish', self.html)
+        self.assertIn('ARCHANGEL 6.0', self.html)
+        self.assertIn('VERSION 6.0.0', self.html)
+        self.assertIn('color-scheme:dark', self.html)
+        self.assertIn('focus-visible', self.html)
+
+    def test_microphone_dictation_is_not_sent_without_confirming(self):
+        self.assertIn('instance.interimResults=true', self.html)
+        self.assertIn("input.dispatchEvent(new Event('input'", self.html)
+        self.assertNotIn("},1150)", self.html)
+        self.assertIn("Речь распознана. Проверь текст и нажми отправить.", self.html)
+        self.assertIn("voiceWake=true;voiceActive=true;", self.html)
+
+    def test_neural_voice_silences_microphone_during_playback(self):
+        self.assertIn("const microphoneWasActive=voiceWake&&!!recognition", self.html)
+        self.assertIn("voiceSpeaking=true", self.html)
+        self.assertIn("audio.onended=()=>", self.html)
+        self.assertIn("resumeMic();", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
