@@ -71,6 +71,16 @@ class UIContractTests(unittest.TestCase):
         self.assertTrue(all(" src=" not in script.lower() for script in scripts))
         self.assertNotIn("<iframe", self.html.lower())
 
+    def test_privacy_controls_and_session_purge(self):
+        self.assertEqual(self.parser.ids.get("deleteAllChats"), 1)
+        self.assertEqual(self.parser.ids.get("wipeData"), 1)
+        self.assertIn("function resetChatMemory()", self.html)
+        self.assertIn("state.chats=[];state.messages=[];state.activeChatId=null", self.html)
+        self.assertIn("privacyChannel?.postMessage({kind:'all'})", self.html)
+        self.assertIn("fetch('/api/purge'", self.html)
+        self.assertIn("DELETE_ARCHANGEL_SESSION", self.html)
+        self.assertNotIn("const previousWipe42=", self.html)
+
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
         self.assertIn('aria-label="Отправить сообщение"', self.html)
