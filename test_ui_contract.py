@@ -44,8 +44,21 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("link.rel='noopener noreferrer'", self.html)
         self.assertIn("link.textContent=row.title||u.hostname", self.html)
         self.assertIn("ВНЕШНИЕ ПОИСКОВЫЕ ДАННЫЕ", self.html)
-        self.assertIn("if(needsWeb)", self.html)
+        self.assertIn("if(needsWeb&&!needsResearch)", self.html)
         self.assertIn("if(webSources.length)answer+=", self.html)
+
+    def test_deep_research_and_python_ast_ui(self):
+        self.assertEqual(self.parser.ids.get("runResearch"), 1)
+        self.assertEqual(self.parser.ids.get("researchDepth"), 1)
+        self.assertEqual(self.parser.ids.get("researchResults"), 1)
+        self.assertEqual(self.parser.ids.get("analyzePythonAST"), 1)
+        self.assertIn("gatewayJSON('/api/research',{q:query,depth})", self.html)
+        self.assertIn("gatewayJSON('/api/code-analyze',{language:'Python',source})", self.html)
+        self.assertIn("link.rel='noopener noreferrer'", self.html)
+        self.assertIn("title.rel='noopener noreferrer'", self.html)
+        self.assertIn("if(needsResearch)", self.html)
+        self.assertIn("read?'Страница прочитана", self.html)
+        self.assertIn('archangel-73-research-layout', self.html)
 
     def test_unique_critical_controls(self):
         for id_ in (
