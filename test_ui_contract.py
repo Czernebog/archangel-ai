@@ -88,7 +88,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-62-voice-ui', self.html)
         self.assertIn("state.prefs.voiceRuGender='female'", self.html)
         self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
@@ -144,7 +144,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 7.1.0', self.html)
+        self.assertIn('VERSION 7.2.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -178,7 +178,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=focused&&obscured>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
 
     def test_history_delete_erases_chats_and_action_history(self):
         self.assertIn('id="clearHistory" type="button">Очистить всю историю', self.html)
@@ -199,7 +199,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('flex-direction:column!important', self.html)
         self.assertIn("button.textContent='⧉ Копировать'", self.html)
         self.assertIn("button.setAttribute('aria-label','Копировать ответ ARCHANGEL')", self.html)
-        self.assertIn('VERSION 7.1.0', self.html)
+        self.assertIn('VERSION 7.2.0', self.html)
 
     def test_mobile_drawer_has_no_redundant_close_button(self):
         self.assertNotIn('id="mobileClose"', self.html)
@@ -216,7 +216,7 @@ class UIContractTests(unittest.TestCase):
             with self.subTest(file=name):
                 self.assertNotIn("chatgpt", Path(name).read_text("utf-8").lower())
         self.assertIn("ARCHANGEL AI", self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
 
     def test_final_workspace_navigation_performance(self):
         self.assertIn('archangel-72-navigation-performance', self.html)
@@ -261,7 +261,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('visible=viewport?.height||window.innerHeight', self.html)
         self.assertIn("scheduleViewport", self.html)
         self.assertIn("input.style.height=Math.max(minimum,Math.min(input.scrollHeight,maximum))+'px'", self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
 
     def test_message_send_releases_composer_height(self):
         self.assertIn("document.body.classList.toggle('arch-keyboard-open',keyboardOpen)", self.html)
@@ -281,7 +281,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("Удалить только этот чат", self.html)
         self.assertNotIn('id="wipeData"', self.html)
         self.assertIn('archangel-68-chats', self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
 
     def test_release_7_searchable_chat_and_reduced_dom_work(self):
         self.assertIn('id="recentChatFilter"', self.html)
@@ -292,7 +292,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("const nearBottom=pane.scrollHeight-pane.scrollTop-pane.clientHeight<140", self.html)
         self.assertIn("if(nearBottom)pane.scrollTop=pane.scrollHeight", self.html)
         self.assertIn('archangel-seven-finish', self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
         self.assertNotIn("chatgpt", self.html.lower())
 
     def test_ios_visual_viewport_page_offset_follows_keyboard(self):
@@ -307,7 +307,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("height:var(--arch-visual-height,100dvh)!important", self.html)
         self.assertIn("body.arch-keyboard-open .mobile-tabbar{display:none!important}", self.html)
         self.assertIn("body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important;border:0!important", self.html)
-        self.assertIn("VERSION 7.1.0", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
 
     def test_streaming_appends_only_new_text(self):
         self.assertIn("const liveText=document.createTextNode('');body.append(liveText);", self.html)
