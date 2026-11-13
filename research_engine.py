@@ -209,7 +209,8 @@ def research(query, api_key, depth='quick', search=search_web, reader=read_publi
         try:
             text, title = reader(indexed[index]['url'])
             return index, text, title
-        except (OSError, ValueError, UnicodeError, TimeoutError, ssl.SSLError):
+        except Exception:
+            # An individual unreachable, malformed or blocked page must not fail the entire research.
             return index, '', ''
     with ThreadPoolExecutor(max_workers=4) as pool:
         for index, text, title in pool.map(load, range(min(page_limit, len(indexed)))):
