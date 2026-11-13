@@ -12,6 +12,9 @@ on:
       - 'test_ui_contract.py'
       - 'web_search.py'
       - 'test_web_search.py'
+      - 'research_engine.py'
+      - 'code_analyzer.py'
+      - 'test_research_engine.py'
       - 'requirements.txt'
       - '.github/workflows/quality-checks.yml'
   pull_request:
@@ -23,6 +26,9 @@ on:
       - 'test_ui_contract.py'
       - 'web_search.py'
       - 'test_web_search.py'
+      - 'research_engine.py'
+      - 'code_analyzer.py'
+      - 'test_research_engine.py'
       - '.github/workflows/quality-checks.yml'
   workflow_dispatch:
 
@@ -42,9 +48,9 @@ jobs:
       - name: Install runtime dependencies
         run: python -m pip install -r requirements.txt
       - name: Python syntax checks
-        run: python -m py_compile server.py math_engine.py test_math_engine.py test_security_gateway.py test_ui_contract.py web_search.py test_web_search.py
+        run: python -m py_compile server.py math_engine.py test_math_engine.py test_security_gateway.py test_ui_contract.py web_search.py test_web_search.py research_engine.py code_analyzer.py test_research_engine.py
       - name: Math engine regression tests
-        run: python -m unittest -v test_math_engine test_security_gateway test_ui_contract test_web_search
+        run: python -m unittest -v test_math_engine test_security_gateway test_ui_contract test_web_search test_research_engine
       - name: Validate inline JavaScript syntax
         run: |
           python - <<'PY'
