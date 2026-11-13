@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ARCHANGEL AI 4.1 lightweight web gateway with isolated browser sessions."""
+"""ARCHANGEL AI 6.6 web gateway with isolated browser sessions."""
 from __future__ import annotations
 import base64, json, mimetypes, os, re, sys, threading, urllib.request, urllib.error, zipfile, webbrowser, subprocess, ipaddress, shutil, secrets, time, hmac
 import hashlib
@@ -325,7 +325,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def _allowed_static_path(self, path):
         clean = path.split('?', 1)[0]
-        if clean in ('/', '/index.html', '/index.html', '/robots.txt', '/manifest.webmanifest', '/sw.js'):
+        if clean in ('/', '/index.html', '/robots.txt', '/manifest.webmanifest', '/sw.js'):
             return True
         if clean.startswith('/icons/') and clean.count('/') == 2:
             candidate = (ROOT / clean.lstrip('/')).resolve()
@@ -349,7 +349,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '6.5.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '6.6.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
@@ -633,7 +633,7 @@ class Handler(SimpleHTTPRequestHandler):
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'text/event-stream, application/json',
-            'User-Agent': 'ARCHANGEL-AI/5.0',
+            'User-Agent': 'ARCHANGEL-AI/6.6',
         }
         if cfg['api_key']:
             headers['Authorization'] = 'Bearer ' + cfg['api_key']
@@ -664,7 +664,8 @@ class Handler(SimpleHTTPRequestHandler):
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/event-stream; charset=utf-8')
-        self.send_header('Cache-Control', 'no-cache, no-transform')
+        self.send_header('Cache-Control', 'private, no-store, no-transform')
+        self.send_header('Pragma', 'no-cache')
         self.send_header('X-Accel-Buffering', 'no')
         self.send_header('Connection', 'close')
         self.close_connection = True
