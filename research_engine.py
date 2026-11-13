@@ -168,7 +168,7 @@ def research(query, api_key, depth='quick', search=search_web, reader=read_publi
     seen = set()
     for q in queries:
         try:
-            matches = search(q[:250], api_key)
+            matches = search(q[:250], api_key, count=8)
         except (WebSearchError, ValueError):
             if not indexed:
                 raise
