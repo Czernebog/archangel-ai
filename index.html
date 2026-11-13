@@ -1169,12 +1169,35 @@ button:disabled{opacity:.5}
  #settings-voice .voice-actions .btn{width:100%;min-height:46px}
 }
 </style>
+<style id="archangel-64-copy-right">
+/* Position copy affordances at the right edge without crowding the message. */
+#page-chat .message.assistant{min-width:0;max-width:100%;position:relative}
+#page-chat .message.assistant .message-copy{
+ align-self:flex-end!important;display:inline-flex!important;justify-content:center!important;
+ align-items:center!important;gap:6px!important;flex:0 0 auto!important;
+ width:auto!important;max-width:max-content!important;min-width:0!important;
+ min-height:36px!important;height:auto!important;padding:7px 11px!important;
+ margin:10px 0 0 auto!important;border-radius:10px!important;font-size:12px!important;
+ letter-spacing:0!important;white-space:nowrap!important;box-shadow:none!important;
+}
+#page-chat .message.assistant .message-copy:focus-visible{outline:2px solid white;outline-offset:3px}
+#page-chat .chat-top .chat-commands{justify-content:flex-end;min-width:0}
+#page-chat .chat-top #copyLastAnswer{margin-left:auto!important;flex:0 0 40px!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;display:inline-flex;align-items:center;justify-content:center}
+#page-chat .messages .message.assistant .answer-formatted{max-width:100%;min-width:0}
+@media(max-width:760px){
+ #page-chat .message.assistant .message-copy{min-height:36px!important;padding:6px 10px!important;font-size:11px!important;margin:8px 0 0 auto!important}
+ #page-chat .chat-top #copyLastAnswer{flex-basis:38px!important;width:38px!important;min-width:38px!important;height:38px!important;min-height:38px!important}
+ #page-chat .chat-top .chat-commands{justify-content:flex-end!important}
+ #page-chat .chat-top .brain-modes{margin-right:auto}
+}
+@media(prefers-reduced-motion:reduce){#page-chat .message-copy{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.3</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.4</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1205,7 +1228,7 @@ button:disabled{opacity:.5}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.3</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.4</div>
   </div>
 </aside>
 <main class="main">
@@ -1327,8 +1350,8 @@ button:disabled{opacity:.5}
    <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.3.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.3.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.4.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.4.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -2725,15 +2748,15 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
      if(!body)return;
      const button=document.createElement('button');
      button.type='button';button.className='message-copy';
-     button.textContent='⧉ Копировать ответ';
+     button.textContent='⧉ Копировать';
      button.setAttribute('aria-label','Копировать ответ ARCHANGEL');
      button.addEventListener('click',async()=>{
        const content=body.textContent||'';
        try{
          await navigator.clipboard.writeText(content);
          button.textContent='✓ Скопировано';
-         setTimeout(()=>{button.textContent='⧉ Копировать ответ'},1600);
-       }catch(_){button.textContent='Не удалось скопировать';setTimeout(()=>{button.textContent='⧉ Копировать ответ'},1600);}
+         setTimeout(()=>{button.textContent='⧉ Копировать'},1600);
+       }catch(_){button.textContent='Не удалось скопировать';setTimeout(()=>{button.textContent='⧉ Копировать'},1600);}
      });
      message.appendChild(button);
    });
