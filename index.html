@@ -1383,8 +1383,38 @@ button:disabled{opacity:.5}
  #page-search .searchbar .input{min-width:0}
 }
 </style>
+<style id="archangel-72-ux-hardening">
+/* Cleaner keyboard/touch affordances without overriding existing viewport fixes. */
+:where(.page button,.page input,.page textarea,.page select,.page a,.sidebar button,.mobile-tabbar button):focus-visible{
+ outline:2px solid #fff!important;outline-offset:3px!important;
+}
+.page .btn,.page .tiny-btn,.page .icon-btn,.sidebar button{touch-action:manipulation}
+.page input,.page select,.page textarea{max-width:100%;min-width:0}
+.page .item-body,.page .item-title,.page .item-desc{min-width:0;overflow-wrap:anywhere}
+.page a{overflow-wrap:anywhere}
+#page-code .codearea{tab-size:2;min-height:220px;line-height:1.55}
+#page-code #codeResult{white-space:pre-wrap;overflow-wrap:anywhere}
+#page-search .research-result{border-left:2px solid #eee}
+#page-search .research-pane{max-width:100%}
+#page-search :where(#runResearch,#runWebSearch){min-height:44px}
+.arch-offline-banner{position:fixed;z-index:2000;left:50%;top:max(10px,env(safe-area-inset-top));transform:translateX(-50%);max-width:min(560px,calc(100vw - 20px));width:max-content;padding:10px 15px;border:1px solid #fff;border-radius:11px;background:#fff;color:#000;box-shadow:0 10px 30px #0009;font-size:13px;font-weight:650;text-align:center}
+.arch-offline-banner[hidden]{display:none!important}
+@media(max-width:760px){
+ .page-head{flex-wrap:wrap}
+ #page-search .searchbar{display:flex;gap:8px;flex-wrap:wrap}
+ #page-search #searchQuery{flex:1 1 180px!important;font-size:16px}
+ #page-search #runSearch{min-height:44px}
+ #page-code .codearea{min-height:180px}
+ #page-code .card>.row{gap:7px}
+ #page-code .card>.row button{flex:1 1 138px}
+ #page-search .research-pane .between{align-items:stretch}
+ #page-chat .chat-jump-latest{max-width:calc(100vw - 24px)}
+}
+@media(prefers-reduced-motion:reduce){.arch-offline-banner{transition:none!important}}
+</style>
 </head>
 <body>
+<div id="archOfflineBanner" class="arch-offline-banner" role="status" aria-live="polite" hidden>Нет соединения с интернетом. Локальные данные доступны.</div>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
@@ -3222,6 +3252,26 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
  document.querySelectorAll('[data-page],[data-go],[data-mobile-page]').forEach(el=>el.addEventListener('click',schedule,{passive:true}));
  window.addEventListener('resize',schedule,{passive:true});
  schedule();
+})();
+</script>
+<script id="archangel-72-network-ux">
+(()=>{
+ const banner=document.getElementById('archOfflineBanner');
+ if(!banner)return;
+ let hadOutage=false;
+ const sync=()=>{
+  const offline=navigator.onLine===false;
+  banner.hidden=!offline;
+  if(offline)hadOutage=true;
+  if(!offline&&hadOutage){
+   hadOutage=false;
+   const toast=document.getElementById('toast');
+   if(toast){toast.textContent='Соединение восстановлено';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200);}
+  }
+ };
+ window.addEventListener('online',sync,{passive:true});
+ window.addEventListener('offline',sync,{passive:true});
+ sync();
 })();
 </script>
 </body></html>
