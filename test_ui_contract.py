@@ -124,7 +124,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-61-mobile-fit', self.html)
         self.assertIn('body.arch-keyboard-open .mobile-tabbar{display:none!important}', self.html)
         self.assertIn('visualViewport', self.html)
-        self.assertIn('keyboardOpen=focused&&covered>110', self.html)
+        self.assertIn('keyboardOpen=document.activeElement===input&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
         self.assertIn("VERSION 6.7.0", self.html)
