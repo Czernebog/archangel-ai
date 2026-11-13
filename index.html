@@ -1552,7 +1552,7 @@ function save(){
  }catch(e){if(!storageWarningShown){storageWarningShown=true;toast('Не удалось сохранить профиль: '+(e.message||'недостаточно места'));}return false}
 }
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
-function record(type,title,content=''){const h={id:uid(),type,title:String(title).slice(0,500),content:String(content).slice(0,5000),time:Date.now(),date:now(),chatId:type==='chat'?state.activeChatId:null};state.history.unshift(h);state.history=state.history.slice(0,300);save();renderAll();return h}
+function record(type,title,content=''){const h={id:uid(),type,title:String(title).slice(0,500),content:String(content).slice(0,5000),time:Date.now(),date:now(),chatId:type==='chat'?state.activeChatId:null};state.history.unshift(h);state.history=state.history.slice(0,300);save();renderStats();renderRecent();if($('page-history')?.classList.contains('active'))renderHistory();return h}
 function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+page).classList.add('active');document.querySelectorAll('#navigation button[data-page],.nav-settings button[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const secondary=['search','history'];$('toolsNav').open=secondary.includes(page);const labels={overview:'Главная',chat:'Чат с ИИ',search:'Поиск',library:'Мои файлы',history:'История',tasks:'Задачи и заметки',math:'МАТЕМАТИКА',code:'АНАЛИЗ КОДА',plugins:'МОДУЛИ',settings:'Настройки'};$('topTitle').textContent=labels[page]||'ARCHANGEL';$('sidebar').classList.remove('open');if(page==='chat'&&window.innerWidth>760)setTimeout(()=>$('chatInput').focus(),50);renderAll()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
 document.querySelectorAll('[data-settings-jump]').forEach(b=>b.addEventListener('click',()=>{const target=$(b.dataset.settingsJump);if(target){target.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('[data-settings-jump]').forEach(x=>x.classList.toggle('active',x===b));}}));// The accessible mobile navigation controller below owns this button.
@@ -2282,12 +2282,22 @@ sendChat=async function(){
  try{
   if(api.key==='server-configured'){
    thinking.remove();const el=document.createElement('div');el.className='message assistant';const meta=document.createElement('div');meta.className='meta';meta.textContent='АРХАНГЕЛ';body=document.createElement('div');body.textContent='';el.append(meta,body);$('messages').appendChild(el);
-   answer=await modelRequest(q,files,value=>{
-    const pane=$('messages');
-    const nearBottom=pane.scrollHeight-pane.scrollTop-pane.clientHeight<140;
-    body.textContent=value;
-    if(nearBottom)pane.scrollTop=pane.scrollHeight;
-   });
+   let pendingText='',renderFrame=0;
+   const scheduleText=value=>{
+    pendingText=value;
+    if(renderFrame)return;
+    renderFrame=requestAnimationFrame(()=>{
+     renderFrame=0;
+     if(!body?.isConnected)return;
+     const pane=$('messages');
+     const nearBottom=pane.scrollHeight-pane.scrollTop-pane.clientHeight<140;
+     body.textContent=pendingText;
+     if(nearBottom)pane.scrollTop=pane.scrollHeight;
+    });
+   };
+   try{answer=await modelRequest(q,files,scheduleText);}
+   finally{if(renderFrame)cancelAnimationFrame(renderFrame);}
+   body.textContent=answer;
   }else{
    thinking.remove();answer=localAnswer(q);if(files.some(f=>f.kind==='image'))answer+='\n\nИзображение приложено, но для смыслового анализа подключи vision-модель.';if(files.some(f=>f.kind==='audio'))answer+='\n\nАудиодорожка приложена, но анализ звука требует подключённой модели OpenRouter с поддержкой аудиовхода.';addMessage('assistant',answer);
   }
@@ -2628,7 +2638,11 @@ function saveCurrentConversation(){
  return true;
 }
 function renderRecentChats(){
- const el=$('recentChatsList');if(!el)return;el.replaceChildren();
+ const el=$('recentChatsList');if(!el)return;
+ const filterKey=String($('recentChatFilter')?.value||'').trim().toLocaleLowerCase('ru');
+ const signature=filterKey+'\u0000'+String(state.activeChatId||'')+'\u0000'+(Array.isArray(state.chats)?state.chats.map(c=>c.id+'|'+c.updated+'|'+c.title).join('\u0001'):'');
+ if(el.dataset.renderSignature===signature)return;
+ el.dataset.renderSignature=signature;el.replaceChildren();
  const filter=String($('recentChatFilter')?.value||'').trim().toLocaleLowerCase('ru');
  const all=Array.isArray(state.chats)?state.chats:[];
  const list=filter?all.filter(c=>String(c.title||'').toLocaleLowerCase('ru').includes(filter)):all;
