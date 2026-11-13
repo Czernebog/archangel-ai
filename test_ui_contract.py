@@ -54,7 +54,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-62-voice-ui', self.html)
         self.assertIn("state.prefs.voiceRuGender='female'", self.html)
         self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
-        self.assertIn("VERSION 6.7.0", self.html)
+        self.assertIn("VERSION 6.8.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
@@ -76,14 +76,14 @@ class UIContractTests(unittest.TestCase):
         self.assertTrue(all(" src=" not in script.lower() for script in scripts))
         self.assertNotIn("<iframe", self.html.lower())
 
-    def test_privacy_controls_and_session_purge(self):
+    def test_history_controls_preserve_non_chat_data(self):
         self.assertEqual(self.parser.ids.get("deleteAllChats"), 1)
-        self.assertEqual(self.parser.ids.get("wipeData"), 1)
+        self.assertIsNone(self.parser.ids.get("wipeData"))
         self.assertIn("function resetChatMemory()", self.html)
         self.assertIn("state.chats=[];state.messages=[];state.activeChatId=null", self.html)
-        self.assertIn("privacyChannel?.postMessage({kind:'all'})", self.html)
-        self.assertIn("fetch('/api/purge'", self.html)
-        self.assertIn("DELETE_ARCHANGEL_SESSION", self.html)
+        self.assertIn("privacyChannel?.postMessage({kind:'chats'})", self.html)
+        self.assertNotIn("fetch('/api/purge'", self.html)
+        self.assertNotIn("DELETE_ARCHANGEL_SESSION", self.html)
         self.assertNotIn("const previousWipe42=", self.html)
 
     def test_scroll_and_extended_composer(self):
@@ -103,7 +103,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.7.0', self.html)
+        self.assertIn('VERSION 6.8.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -127,10 +127,10 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=document.activeElement===input&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.7.0", self.html)
+        self.assertIn("VERSION 6.8.0", self.html)
 
     def test_history_delete_erases_chats_and_action_history(self):
-        self.assertIn('id="clearHistory" type="button">Удалить историю и все переписки', self.html)
+        self.assertIn('id="clearHistory" type="button">Очистить всю историю', self.html)
         self.assertIn("$('clearHistory').onclick=()=>$('deleteAllChats')?.click()", self.html)
         self.assertIn("state.history=[];state.chats=[];state.messages=[];state.activeChatId=null", self.html)
         self.assertIn("privacyChannel?.postMessage({kind:'chats'})", self.html)
@@ -148,7 +148,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('flex-direction:column!important', self.html)
         self.assertIn("button.textContent='⧉ Копировать'", self.html)
         self.assertIn("button.setAttribute('aria-label','Копировать ответ ARCHANGEL')", self.html)
-        self.assertIn('VERSION 6.7.0', self.html)
+        self.assertIn('VERSION 6.8.0', self.html)
 
     def test_mobile_drawer_has_no_redundant_close_button(self):
         self.assertNotIn('id="mobileClose"', self.html)
@@ -165,7 +165,7 @@ class UIContractTests(unittest.TestCase):
             with self.subTest(file=name):
                 self.assertNotIn("chatgpt", Path(name).read_text("utf-8").lower())
         self.assertIn("ARCHANGEL AI", self.html)
-        self.assertIn("VERSION 6.7.0", self.html)
+        self.assertIn("VERSION 6.8.0", self.html)
 
     def test_ui_performance_size_and_unique_ids(self):
         # An explicit first-party HTML budget is measured in UTF-8 bytes.
@@ -195,12 +195,27 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('visible=viewport?.height||window.innerHeight', self.html)
         self.assertIn("scheduleViewport", self.html)
         self.assertIn("input.style.height=Math.max(minimum,Math.min(input.scrollHeight,maximum))+'px'", self.html)
-        self.assertIn("VERSION 6.7.0", self.html)
+        self.assertIn("VERSION 6.8.0", self.html)
 
     def test_message_send_releases_composer_height(self):
         self.assertIn("document.body.classList.toggle('arch-keyboard-open',keyboardOpen)", self.html)
         self.assertIn("$('chatInput').dispatchEvent(new Event('input',{bubbles:true}))", self.html)
         self.assertIn("if(window.innerWidth>760)$('chatInput').focus()", self.html)
+
+    def test_independent_chats_and_individual_deletion(self):
+        self.assertIn("state.chats.unshift({id,title:'Новый чат',draft:'',updated:Date.now(),messages:[]})", self.html)
+        self.assertIn("state.activeChatId=id;state.messages=[]", self.html)
+        self.assertIn("state.chats=state.chats.filter(x=>x.id!==id)", self.html)
+        self.assertIn("state.history=state.history.filter(h=>h.chatId!==id)", self.html)
+        self.assertIn("privacyChannel?.postMessage({kind:'delete-chat',id})", self.html)
+        self.assertIn("c.draft=String($('chatInput')?.value||'').slice(0,12000)", self.html)
+        self.assertIn("c.draft||''", self.html)
+        self.assertIn("type==='chat'?state.activeChatId:null", self.html)
+        self.assertIn("Создать отдельный чат", self.html)
+        self.assertIn("Удалить только этот чат", self.html)
+        self.assertNotIn('id="wipeData"', self.html)
+        self.assertIn('archangel-68-chats', self.html)
+        self.assertIn("VERSION 6.8.0", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
