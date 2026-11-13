@@ -243,6 +243,11 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important;border:0!important", self.html)
         self.assertIn("VERSION 7.1.0", self.html)
 
+    def test_assistant_identity_remains_archangel(self):
+        self.assertIn('Ты — ARCHANGEL AI (Архангел)', self.html)
+        self.assertIn('Никогда не представляйся Полиной, Polina', self.html)
+        self.assertIn('При вопросе о твоём имени отвечай только', self.html)
+
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
         self.assertIn('aria-label="Отправить сообщение"', self.html)
