@@ -9,6 +9,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 from http.cookies import SimpleCookie
 from xml.etree import ElementTree as ET
+from web_search import search_web, WebSearchError
 
 ROOT = Path(__file__).resolve().parent
 
@@ -42,6 +43,8 @@ MAX_ACTIVE_CHATS_PER_IP = 4
 MAX_UPSTREAM_RESPONSE = 4 * 1024 * 1024  # Reject unbounded provider output.
 MAX_TTS_TEXT = 2400
 MAX_TTS_AUDIO = 3 * 1024 * 1024
+# Server-only search key, never part of browser state.
+BRAVE_SEARCH_API_KEY = os.environ.get('BRAVE_SEARCH_API_KEY', '').strip()
 DEFAULT_CONFIG = {'provider': None, 'model': None, 'api_key': None, 'endpoint': None}
 SESSIONS = {}
 # Sliding-window request timestamps and in-flight chat guards are RAM-only.
@@ -212,6 +215,8 @@ class Handler(SimpleHTTPRequestHandler):
                     ('tts-ip', ip, 16, 60.0, 0.0)),
             'math': (('math-session', self.session_id, 12, 60.0, 0.4),
                      ('math-ip', ip, 40, 60.0, 0.0)),
+            'web-search': (('web-search-session', self.session_id, 8, 60.0, 2.0),
+                           ('web-search-ip', ip, 20, 60.0, 0.0)),
         }
         specs = policies[action]
         now = time.monotonic()
@@ -374,6 +379,7 @@ class Handler(SimpleHTTPRequestHandler):
             data = {'ok': True, 'version': '7.1.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
+                     'webSearchAvailable': bool(BRAVE_SEARCH_API_KEY),
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
                     'antiSpam': {'enabled': True, 'chatPerSessionPerMinute': 10, 'chatCooldownSeconds': 2.5, 'maxConcurrentPerSession': 1, 'maxConcurrentPerIp': MAX_ACTIVE_CHATS_PER_IP, 'oneChatAtATime': True}}
             return self._json(200, data)
@@ -413,7 +419,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         action = {'/api/config': 'config', '/api/disconnect': 'disconnect',
-                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/purge': 'purge', '/api/extract': 'extract', '/api/math': 'math'}.get(self.path)
+                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/purge': 'purge', '/api/extract': 'extract', '/api/math': 'math', '/api/web-search': 'web-search'}.get(self.path)
         if not action:
             return self._json(404, {'error': 'Маршрут не найден.'})
         if not self._require_site_password(): return
@@ -430,6 +436,7 @@ class Handler(SimpleHTTPRequestHandler):
             if action == 'tts': return self._tts()
             if action == 'extract': return self._extract()
             if action == 'math': return self._math()
+            if action == 'web-search': return self._web_search()
         except (ValueError, json.JSONDecodeError) as e:
             return self._json(400, {'error': str(e)})
         except BrokenPipeError:
@@ -528,6 +535,19 @@ class Handler(SimpleHTTPRequestHandler):
         value = json.loads(self.rfile.read(n).decode('utf-8'))
         if not isinstance(value, dict): raise ValueError('Тело запроса должно быть JSON-объектом.')
         return value
+
+    def _web_search(self):
+        """Read-only search against a fixed provider endpoint; never fetch result pages."""
+        data = self._read_json(max_bytes=4 * 1024)
+        query = data.get('q')
+        if not isinstance(query, str) or not query.strip() or len(query) > 250 or len(query.split()) > 40:
+            return self._json(400, {'error': 'Укажи запрос до 250 символов и 40 слов.'})
+        try:
+            results = search_web(query, BRAVE_SEARCH_API_KEY)
+        except WebSearchError as exc:
+            return self._json(503, {'error': str(exc)})
+        return self._json(200, {'ok': True, 'provider': 'Brave Search', 'results': results,
+                                'query': query.strip(), 'sourceType': 'web-index'})
 
     def _tts(self):
         """Opt-in neural speech with this browser session's own OpenAI key.
