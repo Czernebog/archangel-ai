@@ -240,7 +240,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("top:var(--arch-visual-top,0px)!important", self.html)
         self.assertIn("height:var(--arch-visual-height,100dvh)!important", self.html)
         self.assertIn("body.arch-keyboard-open .mobile-tabbar{display:none!important}", self.html)
-        self.assertIn("body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important}", self.html)
+        self.assertIn("body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important;border:0!important", self.html)
         self.assertIn("VERSION 7.1.0", self.html)
 
     def test_html_language_and_accessibility(self):
