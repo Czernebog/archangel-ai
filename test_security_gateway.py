@@ -224,6 +224,29 @@ class GatewaySecurityTests(unittest.TestCase):
                                     origin="https://untrusted.example")
         self.assertEqual(status, 403)
 
+    def test_research_concurrency_limits_and_slot_cleanup(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        self.assertEqual(server.MAX_ACTIVE_RESEARCH, 6)
+        self.assertEqual(server.MAX_ACTIVE_RESEARCH_PER_IP, 2)
+        with server.LOCK:
+            server.ACTIVE_RESEARCH.clear()
+            server.ACTIVE_RESEARCH_IPS.clear()
+        origin = f"http://127.0.0.1:{self.port}"
+        with patch.object(server, "research", return_value={
+            "query": "safe research", "depth": "quick",
+            "indexedCount": 0, "readCount": 0, "sources": [],
+        }):
+            status, raw, headers = self.request("/api/research", "POST",
+                                                {"q": "safe research", "depth": "quick"},
+                                                origin=origin)
+            self.assertEqual(status, 200)
+            self.assertIn("no-store", headers.get("Cache-Control", ""))
+            self.assertEqual(json.loads(raw)["indexedCount"], 0)
+        with server.LOCK:
+            self.assertEqual(server.ACTIVE_RESEARCH, set())
+            self.assertEqual(server.ACTIVE_RESEARCH_IPS, {})
+
     def test_voice_policy_is_russian_female(self):
         self.assertEqual(server.MAX_TTS_TEXT, 2400)
         import inspect
