@@ -57,6 +57,11 @@ AUTH_FAILURE_WINDOW = 300.0
 AUTH_FAILURE_LIMIT = 8
 ACTIVE_CHATS = set()
 ACTIVE_CHAT_IPS = {}
+# Bound concurrent research jobs: each may make three searches and fetch multiple pages.
+ACTIVE_RESEARCH = set()
+ACTIVE_RESEARCH_IPS = {}
+MAX_ACTIVE_RESEARCH = 6
+MAX_ACTIVE_RESEARCH_PER_IP = 2
 RATE_LAST_CLEAN = 0.0
 LOCK = threading.RLock()
 
@@ -238,6 +243,14 @@ class Handler(SimpleHTTPRequestHandler):
                     status = 503
                 elif ACTIVE_CHAT_IPS.get(ip, 0) >= MAX_ACTIVE_CHATS_PER_IP:
                     rejected = (5, 'С этого подключения уже выполняется несколько запросов. Дождись освобождения места.')
+            elif action == 'research':
+                if self.session_id in ACTIVE_RESEARCH:
+                    rejected = (8, 'Исследование уже выполняется в этой сессии.')
+                elif len(ACTIVE_RESEARCH) >= MAX_ACTIVE_RESEARCH:
+                    rejected = (15, 'Сервер исследований занят. Повтори позже.')
+                    status = 503
+                elif ACTIVE_RESEARCH_IPS.get(ip, 0) >= MAX_ACTIVE_RESEARCH_PER_IP:
+                    rejected = (8, 'С этого подключения выполняется слишком много исследований.')
 
             # Opportunistic cleanup bounds RAM use on a public instance.
             if now - RATE_LAST_CLEAN > 120 or len(RATE_WINDOWS) > 12000:
@@ -272,6 +285,9 @@ class Handler(SimpleHTTPRequestHandler):
                 if action == 'chat':
                     ACTIVE_CHATS.add(self.session_id)
                     ACTIVE_CHAT_IPS[ip] = ACTIVE_CHAT_IPS.get(ip, 0) + 1
+                elif action == 'research':
+                    ACTIVE_RESEARCH.add(self.session_id)
+                    ACTIVE_RESEARCH_IPS[ip] = ACTIVE_RESEARCH_IPS.get(ip, 0) + 1
 
         if rejected:
             self._reject_rate_limit(rejected[0], rejected[1], status=status)
@@ -431,10 +447,12 @@ class Handler(SimpleHTTPRequestHandler):
         if not self._require_site_password(): return
         self._ensure_session()
         chat_slot_acquired = False
+        research_slot_acquired = False
         try:
             if not self._verify_request(): return
             if not self._check_anti_spam(action): return
             chat_slot_acquired = (action == 'chat')
+            research_slot_acquired = (action == 'research')
             if action == 'purge': return self._purge()
             if action == 'config': return self._configure()
             if action == 'disconnect': return self._disconnect()
@@ -452,6 +470,16 @@ class Handler(SimpleHTTPRequestHandler):
         except Exception:
             return self._json(500, {'error': 'Внутренняя ошибка шлюза. Проверь соединение и повтори попытку.'})
         finally:
+            if research_slot_acquired:
+                with LOCK:
+                    ACTIVE_RESEARCH.discard(self.session_id)
+                    active_ip = getattr(self, 'client_identity', None)
+                    if active_ip:
+                        remaining = ACTIVE_RESEARCH_IPS.get(active_ip, 0) - 1
+                        if remaining > 0:
+                            ACTIVE_RESEARCH_IPS[active_ip] = remaining
+                        else:
+                            ACTIVE_RESEARCH_IPS.pop(active_ip, None)
             if chat_slot_acquired:
                 with LOCK:
                     ACTIVE_CHATS.discard(self.session_id)
