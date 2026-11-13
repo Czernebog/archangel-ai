@@ -186,6 +186,44 @@ class GatewaySecurityTests(unittest.TestCase):
                                     origin="https://attacker.example")
         self.assertEqual(status, 403)
 
+    def test_research_and_code_analysis_endpoints_are_same_origin(self):
+        from unittest.mock import patch
+        origin = f"http://127.0.0.1:{self.port}"
+        with patch.object(server, "research", return_value={
+            "query": "test topic", "depth": "quick", "indexedCount": 1,
+            "readCount": 0, "sources": [{"url": "https://example.org",
+                                        "title": "Example", "description": "description",
+                                        "text": "", "read": False}],
+        }):
+            status, raw, headers = self.request("/api/research", "POST",
+                                                 {"q": "test topic", "depth": "quick"}, origin=origin)
+            self.assertEqual(status, 200)
+            self.assertIn("no-store", headers.get("Cache-Control", ""))
+            self.assertEqual(json.loads(raw)["indexedCount"], 1)
+        status, _, _ = self.request("/api/research", "POST",
+                                    {"q": "test"}, origin="https://untrusted.example")
+        self.assertEqual(status, 403)
+        status, _, _ = self.request("/api/research", "POST",
+                                    {"q": "a" * 221, "depth": "quick"}, origin=origin)
+        self.assertEqual(status, 400)
+
+        status, raw, _ = self.request("/api/code-analyze", "POST",
+                                      {"language": "Python", "source": "def add(x):\\n    return x + 1"},
+                                      origin=origin)
+        self.assertEqual(status, 200)
+        self.assertTrue(json.loads(raw)["ok"])
+        status, raw, _ = self.request("/api/code-analyze", "POST",
+                                      {"language": "Python", "source": "def bad(:"}, origin=origin)
+        self.assertEqual(status, 200)
+        self.assertFalse(json.loads(raw)["ok"])
+        status, _, _ = self.request("/api/code-analyze", "POST",
+                                    {"language": "JavaScript", "source": "alert(1)"}, origin=origin)
+        self.assertEqual(status, 400)
+        status, _, _ = self.request("/api/code-analyze", "POST",
+                                    {"language": "Python", "source": "pass"},
+                                    origin="https://untrusted.example")
+        self.assertEqual(status, 403)
+
     def test_voice_policy_is_russian_female(self):
         self.assertEqual(server.MAX_TTS_TEXT, 2400)
         import inspect
