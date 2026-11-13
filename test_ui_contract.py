@@ -37,6 +37,16 @@ class UIContractTests(unittest.TestCase):
         cls.parser = UIParser()
         cls.parser.feed(cls.html)
 
+    def test_web_search_is_opt_in_and_sanitizes_links(self):
+        self.assertEqual(self.parser.ids.get("runWebSearch"), 1)
+        self.assertEqual(self.parser.ids.get("webSearchResults"), 1)
+        self.assertIn("gatewayJSON('/api/web-search',{q})", self.html)
+        self.assertIn("link.rel='noopener noreferrer'", self.html)
+        self.assertIn("link.textContent=row.title||u.hostname", self.html)
+        self.assertIn("ВНЕШНИЕ ПОИСКОВЫЕ ДАННЫЕ", self.html)
+        self.assertIn("if(needsWeb)", self.html)
+        self.assertIn("if(webSources.length)answer+=", self.html)
+
     def test_unique_critical_controls(self):
         for id_ in (
             "chatInput", "sendButton", "clearChat", "messages", "sidebar",
