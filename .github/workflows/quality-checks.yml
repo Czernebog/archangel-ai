@@ -8,6 +8,8 @@ on:
       - 'server.py'
       - 'math_engine.py'
       - 'test_math_engine.py'
+      - 'test_security_gateway.py'
+      - 'test_ui_contract.py'
       - 'requirements.txt'
       - '.github/workflows/quality-checks.yml'
   pull_request:
