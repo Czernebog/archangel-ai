@@ -25,6 +25,10 @@ class PageReader(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.parts = []
+        self.length = 0
+        self.article_parts = []
+        self.article_length = 0
+        self.article_depth = 0
         self.excluded = 0
         self.title_parts = []
         self.in_title = False
@@ -35,6 +39,8 @@ class PageReader(HTMLParser):
             self.excluded += 1
         if tag == 'title':
             self.in_title = True
+        if tag in ('main', 'article'):
+            self.article_depth += 1
         if tag in ('p', 'h1', 'h2', 'h3', 'h4', 'li', 'article', 'main', 'section', 'br'):
             self.parts.append(' ')
 
@@ -44,6 +50,8 @@ class PageReader(HTMLParser):
             self.excluded = max(0, self.excluded - 1)
         if tag == 'title':
             self.in_title = False
+        if tag in ('main', 'article'):
+            self.article_depth = max(0, self.article_depth - 1)
         if tag in ('p', 'article', 'li', 'section'):
             self.parts.append(' ')
 
@@ -52,11 +60,19 @@ class PageReader(HTMLParser):
             return
         if self.in_title:
             self.title_parts.append(data)
-        elif sum(map(len, self.parts)) < MAX_PAGE_TEXT * 2:
-            self.parts.append(data)
+        else:
+            if self.length < MAX_PAGE_TEXT * 2:
+                piece = data[:MAX_PAGE_TEXT * 2 - self.length]
+                self.parts.append(piece)
+                self.length += len(piece)
+            if self.article_depth and self.article_length < MAX_PAGE_TEXT * 2:
+                piece = data[:MAX_PAGE_TEXT * 2 - self.article_length]
+                self.article_parts.append(piece)
+                self.article_length += len(piece)
 
     def result(self):
-        text = re.sub(r'\s+', ' ', ''.join(self.parts)).strip()
+        article = re.sub(r'\s+', ' ', ''.join(self.article_parts)).strip()
+        text = article if len(article) > 220 else re.sub(r'\s+', ' ', ''.join(self.parts)).strip()
         return text[:MAX_PAGE_TEXT], clean_excerpt(''.join(self.title_parts), 160)
 
 
