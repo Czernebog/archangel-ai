@@ -55,6 +55,14 @@ class GatewaySecurityTests(unittest.TestCase):
         self.assertIn("HttpOnly", hdr.get("Set-Cookie", ""))
         self.assertIn("SameSite=Strict", hdr.get("Set-Cookie", ""))
 
+    def test_additional_privacy_security_headers(self):
+        status, body, hdr = self.request("/")
+        self.assertEqual(status, 200)
+        self.assertEqual(hdr.get("X-DNS-Prefetch-Control"), "off")
+        self.assertEqual(hdr.get("X-Download-Options"), "noopen")
+        self.assertIn("frame-ancestors 'none'", hdr.get("Content-Security-Policy", ""))
+        self.assertIn("SameSite=Strict", hdr.get("Set-Cookie", ""))
+
     def test_cross_origin_config_blocked(self):
         status, body, _ = self.request(
             "/api/config", "POST",
