@@ -2359,7 +2359,9 @@ sendChat=async function(){
  try{
   if(api.key==='server-configured'){
    thinking.remove();const el=document.createElement('div');el.className='message assistant';const meta=document.createElement('div');meta.className='meta';meta.textContent='АРХАНГЕЛ';body=document.createElement('div');body.textContent='';el.append(meta,body);$('messages').appendChild(el);
-   let pendingText='',renderFrame=0;
+   let pendingText='',renderFrame=0,lastRendered='';
+   // Append new streamed tokens instead of rebuilding the entire text every frame.
+   const liveText=document.createTextNode('');body.append(liveText);
    const scheduleText=value=>{
     pendingText=value;
     if(renderFrame)return;
@@ -2368,7 +2370,9 @@ sendChat=async function(){
      if(!body?.isConnected)return;
      const pane=$('messages');
      const nearBottom=pane.scrollHeight-pane.scrollTop-pane.clientHeight<140;
-     body.textContent=pendingText;
+     if(pendingText.startsWith(lastRendered))liveText.appendData(pendingText.slice(lastRendered.length));
+     else liveText.data=pendingText;
+     lastRendered=pendingText;
      if(nearBottom)pane.scrollTop=pane.scrollHeight;
     });
    };
