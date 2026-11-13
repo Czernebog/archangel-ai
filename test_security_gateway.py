@@ -75,7 +75,8 @@ class GatewaySecurityTests(unittest.TestCase):
         source = inspect.getsource(server.Handler._chat)
         self.assertIn("private, no-store, no-transform", source)
         self.assertIn("Pragma', 'no-cache'", source)
-        self.assertIn("no-follow", source.replace("NoRedirect", "no-follow") if "NoRedirect" in source else "")
+        self.assertIn("class NoRedirect", source)
+        self.assertIn("def redirect_request", source)
 
     def test_cross_origin_config_blocked(self):
         status, body, _ = self.request(
