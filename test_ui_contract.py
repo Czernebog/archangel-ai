@@ -194,6 +194,21 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("ARCHANGEL AI", self.html)
         self.assertIn("VERSION 7.1.0", self.html)
 
+    def test_final_workspace_navigation_performance(self):
+        self.assertIn('archangel-72-navigation-performance', self.html)
+        self.assertIn('archangel-72-chat-navigation', self.html)
+        self.assertIn('id="chatJumpLatest"', self.html)
+        self.assertIn('aria-label="Перейти к последнему сообщению"', self.html)
+        self.assertIn("if($('page-history')?.classList.contains('active'))renderHistory()", self.html)
+        self.assertIn("if($('page-library')?.classList.contains('active'))renderLibrary()", self.html)
+        self.assertIn("if($('page-tasks')?.classList.contains('active')){renderTasks();renderNotes();}", self.html)
+        self.assertIn("if($('page-plugins')?.classList.contains('active'))renderPlugins()", self.html)
+        self.assertIn("setTimeout(renderHistory,120)", self.html)
+        self.assertIn("setTimeout(renderLibrary,120)", self.html)
+        self.assertIn("pane.addEventListener('scroll',schedule,{passive:true})", self.html)
+        self.assertIn("button.hidden=!activePage.classList.contains('active')", self.html)
+        self.assertIn("button.addEventListener('click',()=>", self.html)
+
     def test_ui_performance_size_and_unique_ids(self):
         # An explicit first-party HTML budget is measured in UTF-8 bytes.
         # Actual mobile INP/LCP require a real-device browser test.
