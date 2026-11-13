@@ -12,3 +12,5 @@ services:
         value: "1"
       - key: ARCHANGEL_SITE_PASSWORD
         sync: false
+      - key: BRAVE_SEARCH_API_KEY
+        sync: false
