@@ -71,6 +71,16 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-74-mobile-research', self.html)
         self.assertIn("if(needsWeb&&!needsResearch)", self.html)
 
+    def test_release_72_consistent_and_bounded_requests(self):
+        self.assertIn("const ARCHANGEL_VERSION='7.2.0'", self.html)
+        self.assertIn("VERSION 7.2.0", self.html)
+        self.assertIn("ARCHANGEL AI · WEB APP · 7.2", self.html)
+        self.assertIn("'/api/research':65000", self.html)
+        self.assertIn("'/api/code-analyze':15000", self.html)
+        self.assertIn("signal:controller.signal,cache:'no-store'", self.html)
+        self.assertIn("finally{clearTimeout(timer);}", self.html)
+        self.assertIn("Превышено время ожидания ответа сервера", self.html)
+
     def test_unique_critical_controls(self):
         for id_ in (
             "chatInput", "sendButton", "clearChat", "messages", "sidebar",
