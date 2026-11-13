@@ -1269,12 +1269,24 @@ button:disabled{opacity:.5}
  #page-chat .composer .compose-tools{gap:5px!important}
 }
 </style>
+<style id="archangel-68-chats">
+/* Make individual chat selection and per-chat deletion unambiguous. */
+.recent-head{gap:10px!important}
+.recent-new{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-width:88px!important;min-height:40px!important;height:40px!important;border-color:#777!important;font-size:13px!important;font-weight:700!important;padding:5px 10px!important}
+.recent-row{min-height:49px!important;gap:6px!important;padding:4px 5px!important}
+.recent-open{min-height:42px!important;font-size:13px!important}
+.recent-row.is-current{border-color:#bfbfbf!important}
+.recent-delete{min-height:40px!important;min-width:58px!important;width:auto!important;padding:5px 8px!important;font-size:11px!important;border:1px solid #454545!important}
+.recent-delete:hover,.recent-delete:focus-visible{border-color:#fff!important}
+#page-history #clearHistory{min-height:44px}
+@media(max-width:760px){.recent-new{min-height:44px!important;height:44px!important}.recent-delete{min-height:44px!important;min-width:64px!important}.recent-panel{max-height:42dvh!important}}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.7</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.8</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1298,13 +1310,13 @@ button:disabled{opacity:.5}
   <div class="nav-settings"><button data-page="settings" aria-label="Открыть настройки системы" title="Центр настроек"><span class="ico">⚙</span>Настройки</button></div>
 
   <section class="recent-panel" aria-label="Недавние диалоги">
-    <div class="recent-head"><span class="recent-title" id="recentChatsTitle">Недавние чаты</span><button type="button" class="recent-new" id="newRecentChat" title="Новый чат" aria-label="Новый чат">+</button></div>
+    <div class="recent-head"><span class="recent-title" id="recentChatsTitle">Мои чаты</span><button type="button" class="recent-new" id="newRecentChat" title="Создать отдельный чат" aria-label="Создать отдельный чат">＋ Новый</button></div>
     <div class="recent-list" id="recentChatsList" role="list"><p class="recent-empty">Здесь появятся ваши диалоги.</p></div>
     <div class="recent-privacy" id="recentPrivacy">Диалоги хранятся в этом браузере</div>
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.7</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.8</div>
   </div>
 </aside>
 <main class="main">
@@ -1320,7 +1332,7 @@ button:disabled{opacity:.5}
 </section>
 <section class="page" id="page-chat">
  <div class="page-head"><div><div class="eyebrow">Общение с ИИ</div><h1 class="h1">Чат с Архангелом</h1><div class="lead">Прямой, структурированный стиль. При подключении модели чат умеет анализировать изображения и отвечать на сложные запросы. Без модели активны локальные инструменты.</div></div></div>
- <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div class="chat-heading"><b>ARCHANGEL <span class="chat-heading-ai">AI</span></b><div class="small muted" id="chatModeLine">Подключи модель для полного режима ИИ</div></div><div class="row chat-commands"><div class="brain-modes" role="group" aria-label="Глубина ответа"><button type="button" class="brain-mode is-active" data-brain-mode="balanced" aria-pressed="true" title="Быстрые и точные ответы">Быстро</button><button type="button" class="brain-mode" data-brain-mode="deep" aria-pressed="false" title="Подробные ответы с дополнительной проверкой">Глубоко</button></div><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать новый чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
+ <div class="chat-layout"><div class="card chat-card"><div class="chat-top"><div class="chat-heading"><b>ARCHANGEL <span class="chat-heading-ai">AI</span></b><div class="small muted" id="chatModeLine">Подключи модель для полного режима ИИ</div></div><div class="row chat-commands"><div class="brain-modes" role="group" aria-label="Глубина ответа"><button type="button" class="brain-mode is-active" data-brain-mode="balanced" aria-pressed="true" title="Быстрые и точные ответы">Быстро</button><button type="button" class="brain-mode" data-brain-mode="deep" aria-pressed="false" title="Подробные ответы с дополнительной проверкой">Глубоко</button></div><span class="badge" id="chatModelBadge">Локально</span><button class="tiny-btn" id="copyLastAnswer" type="button" title="Копировать последний ответ" aria-label="Копировать последний ответ">⧉</button><button class="tiny-btn" id="clearChat" title="Новый чат" aria-label="Создать отдельный чат">＋</button></div></div><div class="messages" id="messages"><div class="welcome" id="welcome"><img id="welcomeLogo" alt="Archangel"><h2>Начни разговор</h2><p>Напиши сообщение ниже. Если ИИ-модель ещё не подключена, открой «Настройки» и выбери модель для ответов.</p><div class="row" style="justify-content:center;flex-wrap:wrap;margin-top:15px"><span class="badge">Математика</span><span class="badge">Код</span><span class="badge">Документы</span><span class="badge">Vision AI*</span></div><p class="footnote">* Изображения и аудиодорожки требуют модели с соответствующей поддержкой; для звука используйте OpenRouter. Ограничение аудиофайла — 5 МБ.</p></div></div><div class="chat-input-wrap"><div class="attach-row" id="attachRow"></div><div class="composer"><div class="compose-tools"><button class="icon-btn" id="attachButton" type="button" title="Прикрепить изображение или файл" aria-label="Прикрепить файл">＋</button><button class="icon-btn microphone-toggle" id="voiceStart" type="button" aria-label="Включить микрофон" aria-pressed="false" title="Включить микрофон"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 10a6.5 6.5 0 0 0 13 0M12 16.5v4.5m-4 0h8"/></svg></button></div><textarea id="chatInput" placeholder="Напиши сообщение…"></textarea><button class="send" id="sendButton" title="Отправить" aria-label="Отправить сообщение">➤</button></div><div class="between" style="margin-top:8px"><span class="footnote">Личные сообщения сохраняются только в этом браузере.</span><span class="footnote" id="voiceMicIndicator" aria-live="polite">Микрофон: выкл.</span><span class="footnote" id="tokenHint">Готов</span></div></div></div>
  <aside class="chat-aside"><div class="card"><h3 class="section-title">Голосовое управление</h3><div class="small muted voice-status" id="voiceState" role="status" aria-live="polite">Микрофон выключен</div><p class="footnote" style="margin-top:10px">Нажми значок микрофона рядом с полем сообщения, чтобы диктовать текст на русском языке. Никакие специальные слова не нужны. Значок динамика управляет озвучкой ответов. Браузер может передавать речь своему сервису распознавания.</p></div><div class="card"><div class="between"><h3 class="section-title">Стиль Архангела</h3><span class="badge">Собранный</span></div><div class="small muted">Прямой и требовательный к точности. Не выдумывает факты, отмечает ограничения и предлагает следующий практический шаг.</div><div class="divider"></div><div class="row between"><span class="small">Режим ответа</span><select id="answerStyle" class="select" style="width:125px"><option value="balanced">Сбалансированный</option><option value="concise">Краткий</option><option value="detailed">Подробный</option></select></div></div><div class="card"><h3 class="section-title">Подключение ИИ</h3><div id="apiAsideStatus" class="small muted">Модель не подключена</div><button class="btn secondary" data-go="settings" style="width:100%;margin-top:10px">Настроить модель</button></div></aside></div>
 </section>
 <section class="page" id="page-search">
@@ -1335,7 +1347,7 @@ button:disabled{opacity:.5}
  <div id="libraryList" class="list" style="margin-top:13px"><div class="empty">Библиотека пуста. Добавь файлы для локального поиска.</div></div>
 </section>
 <section class="page" id="page-history">
- <div class="page-head"><div><div class="eyebrow">Журнал действий</div><h1 class="h1">История</h1><div class="lead">Здесь находятся записи действий и сохранённые диалоги. Кнопка удаления очистит всю историю, переписки и сообщения ИИ в этом браузере, но сохранит файлы, задачи и настройки.</div></div><button class="btn danger" id="clearHistory" type="button">Удалить историю и все переписки</button></div><div class="between" style="margin-bottom:10px"><span class="small muted" id="historyCount">0 записей</span><input class="input" style="max-width:260px" id="historyFilter" placeholder="Поиск по истории"></div><div id="historyList" class="list"><div class="empty">История пока пуста.</div></div>
+ <div class="page-head"><div><div class="eyebrow">Журнал действий</div><h1 class="h1">История</h1><div class="lead">Здесь находятся записи действий и сохранённые диалоги. Кнопка удаления очистит всю историю, переписки и сообщения ИИ в этом браузере, но сохранит файлы, задачи и настройки.</div></div><button class="btn danger" id="clearHistory" type="button">Очистить всю историю</button></div><div class="between" style="margin-bottom:10px"><span class="small muted" id="historyCount">0 записей</span><input class="input" style="max-width:260px" id="historyFilter" placeholder="Поиск по истории"></div><div id="historyList" class="list"><div class="empty">История пока пуста.</div></div>
 </section>
 <section class="page" id="page-tasks">
  <div class="page-head"><div><div class="eyebrow">Личная организация</div><h1 class="h1">Задачи и заметки</h1><div class="lead">Фиксируй действия и знания. Данные остаются в локальном хранилище браузера.</div></div></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><h3 class="section-title">Новая задача</h3><div class="stack"><input id="taskTitle" class="input" placeholder="Название задачи"><textarea id="taskDesc" class="textarea" style="min-height:70px" placeholder="Описание или критерий готовности"></textarea><div class="row"><select id="taskPriority" class="select"><option value="Обычный">Обычный приоритет</option><option value="Высокий">Высокий приоритет</option><option value="Критический">Критический приоритет</option></select><button class="btn" id="addTask">Добавить</button></div></div><div class="divider"></div><h3 class="section-title">Активные задачи</h3><div id="taskList" class="list"><div class="empty">Нет задач.</div></div></div><div class="card"><h3 class="section-title">Новая заметка</h3><div class="stack"><input id="noteTitle" class="input" placeholder="Заголовок заметки"><textarea id="noteBody" class="textarea" placeholder="Текст заметки"></textarea><button class="btn" id="addNote">Сохранить заметку</button></div><div class="divider"></div><h3 class="section-title">Сохранённые заметки</h3><div id="noteList" class="list"><div class="empty">Заметок пока нет.</div></div></div></div>
@@ -1422,12 +1434,12 @@ button:disabled{opacity:.5}
   </div>
   <div class="card" id="settings-data">
    <div class="between"><h3 class="section-title">Данные и резервная копия</h3><span class="badge">На устройстве</span></div>
-   <div class="row" style="flex-wrap:wrap"><button class="btn secondary" id="exportBackup">Экспорт JSON</button><button class="btn secondary" id="importBackup">Импорт JSON</button><button class="btn danger" id="deleteAllChats" type="button">Удалить историю и переписки</button><button class="btn danger" id="wipeData" type="button">Полный сброс данных</button></div>
-   <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
+   <div class="row" style="flex-wrap:wrap"><button class="btn secondary" id="exportBackup">Экспорт JSON</button><button class="btn secondary" id="importBackup">Импорт JSON</button><button class="btn danger" id="deleteAllChats" type="button">Очистить всю историю</button></div>
+   <p class="footnote">«Очистить всю историю» удаляет все чаты, сообщения и журнал действий в этом браузере. Файлы, заметки, задачи, настройки и подключение модели сохраняются. Отдельные чаты удаляются кнопкой «Удалить» рядом с каждым названием. Резервные копии и данные внешних ИИ-провайдеров не удаляются.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.7.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.7.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.8.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.8.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -1497,7 +1509,7 @@ function save(){
  }catch(e){if(!storageWarningShown){storageWarningShown=true;toast('Не удалось сохранить профиль: '+(e.message||'недостаточно места'));}return false}
 }
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600)}
-function record(type,title,content=''){const h={id:uid(),type,title:String(title).slice(0,500),content:String(content).slice(0,5000),time:Date.now(),date:now()};state.history.unshift(h);state.history=state.history.slice(0,300);save();renderAll();return h}
+function record(type,title,content=''){const h={id:uid(),type,title:String(title).slice(0,500),content:String(content).slice(0,5000),time:Date.now(),date:now(),chatId:type==='chat'?state.activeChatId:null};state.history.unshift(h);state.history=state.history.slice(0,300);save();renderAll();return h}
 function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+page).classList.add('active');document.querySelectorAll('#navigation button[data-page],.nav-settings button[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const secondary=['search','history'];$('toolsNav').open=secondary.includes(page);const labels={overview:'Главная',chat:'Чат с ИИ',search:'Поиск',library:'Мои файлы',history:'История',tasks:'Задачи и заметки',math:'МАТЕМАТИКА',code:'АНАЛИЗ КОДА',plugins:'МОДУЛИ',settings:'Настройки'};$('topTitle').textContent=labels[page]||'ARCHANGEL';$('sidebar').classList.remove('open');if(page==='chat'&&window.innerWidth>760)setTimeout(()=>$('chatInput').focus(),50);renderAll()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
 document.querySelectorAll('[data-settings-jump]').forEach(b=>b.addEventListener('click',()=>{const target=$(b.dataset.settingsJump);if(target){target.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('[data-settings-jump]').forEach(x=>x.classList.toggle('active',x===b));}}));// The accessible mobile navigation controller below owns this button.
@@ -2179,7 +2191,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
- if(deep)messages[0].content+=' Разделяй факты, расчёты и предположения. Сначала решай основную задачу, затем сверяй каждый пункт запроса с результатом. Для анализа ошибок UI явно проверяй мобильную клавиатуру, динамическую высоту viewport и состояние кнопок. Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
+ if(deep)messages[0].content+=' Используй только сообщения текущего чата как контекст; не смешивай отдельные диалоги. Для сложного вопроса сначала выяви цель, затем проверь каждый существенный пункт ответа, включая фактические ограничения и возможные ошибки. Разделяй факты, расчёты и предположения. Сначала решай основную задачу, затем сверяй каждый пункт запроса с результатом. Для анализа ошибок UI явно проверяй мобильную клавиатуру, динамическую высоту viewport и состояние кнопок. Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
  const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
@@ -2533,12 +2545,12 @@ function applyInterfaceLanguage(){const l=$('interfaceLanguage')?.value||state.p
 const originalGo=go;go=function(page){originalGo(page);applyInterfaceLanguage();};
 
 // ARCHANGEL AI 4.2 — multiple private local conversations; migration from 4.1.
-const MAX_RECENT_CHATS=60;
+const MAX_RECENT_CHATS=1000;
 function safeConversationMessages(messages){return(Array.isArray(messages)?messages:[]).filter(m=>m&&['user','assistant'].includes(m.role)).slice(-80).map(m=>({role:m.role,text:String(m.text||'').slice(0,9000),time:Number.isFinite(m.time)?m.time:Date.now()}));}
 function conversationTitle(messages){const first=messages.find(m=>m.role==='user'&&String(m.text||'').trim());return first?String(first.text).trim().replace(/\s+/g,' ').slice(0,66):'Новый диалог';}
 function normalizeConversations(){
  const raw=Array.isArray(state.chats)?state.chats:[];
- state.chats=raw.filter(c=>c&&typeof c==='object'&&typeof c.id==='string').slice(0,MAX_RECENT_CHATS).map(c=>({id:c.id.slice(0,75),title:String(c.title||'Новый диалог').slice(0,75),updated:Number.isFinite(c.updated)?c.updated:Date.now(),messages:safeConversationMessages(c.messages)}));
+ state.chats=raw.filter(c=>c&&typeof c==='object'&&typeof c.id==='string').map(c=>({id:c.id.slice(0,75),title:String(c.title||'Новый диалог').slice(0,75),updated:Number.isFinite(c.updated)?c.updated:Date.now(),messages:safeConversationMessages(c.messages)}));
  const existing=state.chats.find(c=>c.id===state.activeChatId);
  if(existing){state.messages=safeConversationMessages(existing.messages);}
  else if(state.messages.length){const id=uid();state.chats.unshift({id,title:conversationTitle(state.messages),updated:Date.now(),messages:safeConversationMessages(state.messages)});state.activeChatId=id;}
@@ -2551,7 +2563,7 @@ function saveCurrentConversation(){
  let c=state.chats.find(x=>x.id===state.activeChatId);
  if(!c){if(!state.messages.length)return;c={id:uid(),title:'Новый диалог',updated:Date.now(),messages:[]};state.chats.unshift(c);state.activeChatId=c.id;}
  c.messages=state.messages.map(m=>({...m}));c.title=conversationTitle(c.messages);c.updated=Date.now();
- state.chats.sort((a,b)=>b.updated-a.updated);state.chats=state.chats.slice(0,MAX_RECENT_CHATS);
+ state.chats.sort((a,b)=>b.updated-a.updated);
 }
 function renderRecentChats(){
  const el=$('recentChatsList');if(!el)return;el.replaceChildren();
@@ -2560,14 +2572,20 @@ function renderRecentChats(){
   const row=document.createElement('div');row.className='recent-row'+(c.id===state.activeChatId?' is-current':'');row.setAttribute('role','listitem');
   const open=document.createElement('button');open.type='button';open.className='recent-open';open.title=c.title;open.setAttribute('aria-label','Открыть чат: '+c.title);const bubble=document.createElement('span');bubble.className='recent-bubble';bubble.textContent='◉';const title=document.createElement('span');title.className='recent-name';title.textContent=c.title;open.append(bubble,title);
   open.addEventListener('click',()=>openRecentChat(c.id));
-  const del=document.createElement('button');del.type='button';del.className='recent-delete';del.title='Удалить чат';del.setAttribute('aria-label','Удалить чат: '+c.title);del.textContent='×';del.addEventListener('click',()=>deleteRecentChat(c.id));
+  const del=document.createElement('button');del.type='button';del.className='recent-delete';del.title='Удалить только этот чат';del.setAttribute('aria-label','Удалить только этот чат: '+c.title);del.textContent='Удалить';del.addEventListener('click',()=>deleteRecentChat(c.id));
   row.append(open,del);el.append(row);
  }
 }
 function closeRecentSidebar(){if(window.innerWidth<=760)$('sidebar')?.classList.remove('open');}
 function newRecentChat(){
  if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
- saveCurrentConversation();state.activeChatId=null;state.messages=[];pendingFiles=[];renderAttach();$('chatInput').value='';save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
+ saveCurrentConversation();
+ const id=uid();
+ state.activeChatId=id;state.messages=[];
+ state.chats.unshift({id,title:'Новый чат',updated:Date.now(),messages:[]});
+ pendingFiles=[];renderAttach();$('chatInput').value='';
+ save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
+ toast('Создан отдельный чат. Другие диалоги сохранены.');
 }
 function openRecentChat(id){
  if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
@@ -2580,8 +2598,15 @@ function deleteRecentChat(id){
  const c=state.chats.find(x=>x.id===id);if(!c)return;
  if(!confirm('Удалить диалог «'+c.title+'»? Восстановить его будет нельзя.'))return;
  state.chats=state.chats.filter(x=>x.id!==id);
- if(state.activeChatId===id){state.activeChatId=null;state.messages=[];pendingFiles=[];renderAttach();restoreChat();}
- save();renderRecentChats();toast('Диалог удалён');
+ state.history=state.history.filter(h=>h.chatId!==id);
+ if(state.activeChatId===id){
+  state.activeChatId=null;state.messages=[];
+  pendingFiles=[];renderAttach();$('chatInput').value='';restoreChat();
+ }
+ if(!save()){toast('Не удалось сохранить удаление в браузере.');return;}
+ renderRecentChats();renderHistory();renderStats();closeRecentSidebar();
+ privacyChannel?.postMessage({kind:'delete-chat',id});
+ toast('Удалён только выбранный чат. Другие данные сохранены.');
 }
 const previousLoad42=load;load=function(){previousLoad42();normalizeConversations();renderRecentChats();};
 const previousSave42=save;save=function(){saveCurrentConversation();const result=previousSave42();renderRecentChats();return result;};
@@ -2606,6 +2631,14 @@ function applyPrivateChangeAcrossTabs(kind){
 }
 if(privacyChannel)privacyChannel.addEventListener('message',event=>{
  if(event.data?.kind==='chats'||event.data?.kind==='all')applyPrivateChangeAcrossTabs(event.data.kind);
+ if(event.data?.kind==='delete-chat'&&typeof event.data.id==='string'){
+  state.chats=state.chats.filter(c=>c.id!==event.data.id);
+  state.history=state.history.filter(h=>h.chatId!==event.data.id);
+  if(state.activeChatId===event.data.id){
+   state.activeChatId=null;state.messages=[];pendingFiles=[];renderAttach();restoreChat();
+  }
+  previousSave42();renderRecentChats();renderHistory();renderStats();
+ }
 });
 window.addEventListener('storage',event=>{
  if(event.key===DBKEY&&event.newValue===null)applyPrivateChangeAcrossTabs('all');
@@ -2613,7 +2646,7 @@ window.addEventListener('storage',event=>{
 $('deleteAllChats').onclick=()=>{
  if(privacyOperation)return;
  if(activeController){toast('Сначала останови генерацию, затем повтори удаление.');return;}
- if(!confirm('Навсегда удалить ВСЕ переписки, сообщения и историю действий ARCHANGEL в этом браузере? Настройки, файлы и заметки останутся.'))return;
+ if(!confirm('Очистить всю историю ARCHANGEL в этом браузере: все чаты, сообщения и записи действий? Файлы, задачи, заметки и настройки останутся. Отменить нельзя.'))return;
  privacyOperation=true;
  try{
   resetChatMemory();
@@ -2623,48 +2656,6 @@ $('deleteAllChats').onclick=()=>{
  }catch(error){toast('Не удалось закончить удаление: '+error.message);}
  finally{privacyOperation=false;}
 };
-async function erasePrivateFiles(){
- // Fail loudly: do not report full deletion if IndexedDB is blocked by other tabs.
- const db=await openAssetDB();
- await new Promise((resolve,reject)=>{
-  const tx=db.transaction('files','readwrite');
-  tx.objectStore('files').clear();
-  tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||Error('Не удалось удалить файлы.'));
-  tx.onabort=()=>reject(tx.error||Error('Хранилище отклонило удаление.'));
- });
- db.close();assetDBPromise=null;
-}
-$('wipeData').onclick=async()=>{
- if(privacyOperation)return;
- if(activeController){toast('Сначала останови генерацию, затем повтори удаление.');return;}
- if(!confirm('ПОЛНЫЙ СБРОС: удалить все переписки, историю, файлы, заметки и настройки этого браузера, а также отключить API в текущей серверной сессии? Это нельзя отменить.'))return;
- privacyOperation=true;$('wipeData').disabled=true;
- const issues=[];
- try{
-  stopVoicePlayback(false);
-  if(voiceWake&&typeof stopRecognition==='function')stopRecognition();
-  try{await erasePrivateFiles()}catch(e){issues.push('Файлы: '+e.message);}
-  try{await fetch('/api/purge',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirm:'DELETE_ARCHANGEL_SESSION'})}).then(async r=>{if(!r.ok)throw Error('HTTP '+r.status);});}
-  catch(e){issues.push('Серверная сессия: '+e.message);}
-  resetChatMemory();
-  state=JSON.parse(JSON.stringify(DEFAULT_PRIVATE_STATE));
-  api={protocol:'chat',endpoint:'/api/chat',model:'',key:''};
-  for(const key of [...volatileStore.keys()])if(key===DBKEY||key.startsWith('archangel_'))volatileStore.delete(key);
-  try{
-   for(let i=localStorage.length-1;i>=0;i--){
-    const key=localStorage.key(i);
-    if(key&&(key===DBKEY||key.startsWith('archangel_')))localStorage.removeItem(key);
-   }
-   if(localStorage.getItem(DBKEY)!==null)throw Error('Профиль остался в localStorage');
-  }catch(e){issues.push('Профиль браузера: '+e.message);}
-  restorePrefs();renderAll();restoreChat();renderRecentChats();updateVoiceCatalog();syncBrainMode();
-  if(typeof apiStatus==='function')apiStatus('Сессия очищена. Подключи модель заново, если потребуется.',false);
-  privacyChannel?.postMessage({kind:'all'});
-  toast(issues.length?'Часть данных не удалось удалить. '+issues.join('; ').slice(0,190):'Все данные Архангела в этом браузере удалены; сессия отключена.');
- }finally{privacyOperation=false;$('wipeData').disabled=false;}
-};
-
-
 // ARCHANGEL 4.4 — accessible mobile navigation, drawer and active tab state.
 (function initMobileNavigation(){
  const drawer=document.getElementById('sidebar'),menu=document.getElementById('mobileMenu'),scrim=document.getElementById('mobileScrim');
@@ -2693,7 +2684,7 @@ $('wipeData').onclick=async()=>{
   document.querySelectorAll('.mobile-tab').forEach((tab,i)=>{const parts=tab.querySelectorAll('span');if(parts[1])parts[1].textContent=strings[i];});
 }
 refreshMobileLabels();document.getElementById('interfaceLanguage')?.addEventListener('change',refreshMobileLabels);
-document.getElementById('newRecentChat').setAttribute('aria-label','Создать новый чат');
+document.getElementById('newRecentChat').setAttribute('aria-label','Создать отдельный чат');
  const recentList=document.getElementById('recentChatsList');
  const observer=new MutationObserver(()=>{for(const del of recentList.querySelectorAll('.recent-delete')){if(del.dataset.labeled)return;del.dataset.labeled='1';del.textContent='Удалить';}});
  observer.observe(recentList,{childList:true,subtree:true});
