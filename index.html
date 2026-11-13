@@ -1293,12 +1293,42 @@ button:disabled{opacity:.5}
 @media(max-width:760px){.recent-panel{max-height:43dvh!important}.recent-chat-filter{min-height:44px;margin:4px 0 9px;font-size:16px}.recent-row{min-height:49px}.recent-open,.recent-delete{min-height:44px!important}#page-chat .chat-input-wrap{padding-inline:max(7px,env(safe-area-inset-left))!important}#page-chat .chat-card{max-width:100%!important}}
 @media(prefers-reduced-motion:reduce){.recent-row,.recent-new,#page-chat button{transition:none!important}}
 </style>
+<style id="archangel-71-ios-keyboard">
+/* iOS Safari can scroll the visual viewport separately from the layout viewport.
+   Match BOTH its document offset and its visible height when keyboard is open. */
+@media(max-width:760px){
+ body.arch-keyboard-open{overflow:hidden!important}
+ body.arch-keyboard-open .app{
+  position:absolute!important;
+  top:var(--arch-visual-top,0px)!important;
+  left:0!important;right:0!important;
+  width:100%!important;
+  height:var(--arch-visual-height,100dvh)!important;
+  min-height:0!important;
+  overflow:hidden!important;
+ }
+ body.arch-keyboard-open .main{
+  display:flex!important;flex-direction:column!important;
+  height:100%!important;min-height:0!important;overflow:hidden!important;
+ }
+ body.arch-keyboard-open .main>.content:has(#page-chat.active){
+  padding:0!important;min-height:0!important;flex:1 1 auto!important;
+ }
+ body.arch-keyboard-open #page-chat.active,
+ body.arch-keyboard-open #page-chat .chat-layout,
+ body.arch-keyboard-open #page-chat .chat-card{height:100%!important;min-height:0!important}
+ body.arch-keyboard-open #page-chat .chat-input-wrap{padding:4px 8px 4px!important;margin:0!important}
+ body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important}
+ body.arch-keyboard-open #page-chat .chat-top{display:none!important}
+ body.arch-keyboard-open .mobile-tabbar{display:none!important}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 7.0</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 7.1</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1328,7 +1358,7 @@ button:disabled{opacity:.5}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 7.0</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 7.1</div>
   </div>
 </aside>
 <main class="main">
@@ -1450,8 +1480,8 @@ button:disabled{opacity:.5}
    <p class="footnote">«Очистить всю историю» удаляет все чаты, сообщения и журнал действий в этом браузере. Файлы, заметки, задачи, настройки и подключение модели сохраняются. Отдельные чаты удаляются кнопкой «Удалить» рядом с каждым названием. Резервные копии и данные внешних ИИ-провайдеров не удаляются.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 7.0.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 7.0.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 7.1.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 7.1.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -2203,7 +2233,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
- if(deep)messages[0].content+=' Перепроверяй ключевые факты и выводы на внутреннюю согласованность; при сомнениях прямо указывай уровень уверенности. Для программирования сначала предложи минимальный проверяемый фикс, а не бездоказательную полную переработку. Для математики проверяй подстановку и ограничения области определения. Используй только сообщения текущего чата как контекст; не смешивай отдельные диалоги. Для сложного вопроса сначала выяви цель, затем проверь каждый существенный пункт ответа, включая фактические ограничения и возможные ошибки. Разделяй факты, расчёты и предположения. Сначала решай основную задачу, затем сверяй каждый пункт запроса с результатом. Для анализа ошибок UI явно проверяй мобильную клавиатуру, динамическую высоту viewport и состояние кнопок. Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
+ if(deep)messages[0].content+=' Для фронтенд-ошибок различай layout viewport и visual viewport, учитывай клавиатуру и iOS Safari. Для решений задач явно проверяй результат, а для технических рекомендаций приводи воспроизводимую проверку. Перепроверяй ключевые факты и выводы на внутреннюю согласованность; при сомнениях прямо указывай уровень уверенности. Для программирования сначала предложи минимальный проверяемый фикс, а не бездоказательную полную переработку. Для математики проверяй подстановку и ограничения области определения. Используй только сообщения текущего чата как контекст; не смешивай отдельные диалоги. Для сложного вопроса сначала выяви цель, затем проверь каждый существенный пункт ответа, включая фактические ограничения и возможные ошибки. Разделяй факты, расчёты и предположения. Сначала решай основную задачу, затем сверяй каждый пункт запроса с результатом. Для анализа ошибок UI явно проверяй мобильную клавиатуру, динамическую высоту viewport и состояние кнопок. Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
  const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
@@ -2848,7 +2878,7 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
     const mobile=window.innerWidth<=760;
     const keyboard=document.body.classList.contains('arch-keyboard-open');
     const maximum=mobile?(keyboard?60:76):280;
-    const minimum=mobile?42:94;
+    const minimum=mobile?(keyboard?40:42):94;
     input.style.height=Math.max(minimum,Math.min(input.scrollHeight,maximum))+'px';
    };
    input.addEventListener('input',sizeInput);
@@ -2857,20 +2887,33 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
    // Hide the bottom tabs only while the keyboard actually occupies the viewport.
    const viewport=window.visualViewport;
    let viewportFrame=0;
+   // iOS Safari can shift the visible viewport DOWN as the keyboard opens.
+   // The page layout must follow both pageTop and visible height, not just
+   // visualViewport.height, or the composer floats hundreds of pixels above it.
+   let baselineHeight=Math.max(window.innerHeight,viewport?.height||0);
    function syncMobileViewport(){
-    if(window.innerWidth>760){
+    const mobile=window.innerWidth<=760;
+    if(!mobile){
      document.body.classList.remove('arch-keyboard-open');
      document.documentElement.style.removeProperty('--arch-visual-height');
+     document.documentElement.style.removeProperty('--arch-visual-top');
+     sizeInput();
      return;
     }
     const visible=viewport?.height||window.innerHeight;
-    // VisualViewport reflects the real usable height when iOS shows its keyboard.
-    // Only apply the viewport override when the keyboard is actually visible.
-    const covered=Math.max(0,window.innerHeight-visible-(viewport?.offsetTop||0));
-    const keyboardOpen=document.activeElement===input&&covered>110;
+    const focused=document.activeElement===input;
+    if(!focused)baselineHeight=Math.max(window.innerHeight,visible);
+    const obscured=Math.max(0,baselineHeight-visible,window.innerHeight-visible);
+    const keyboardOpen=focused&&obscured>110;
     document.body.classList.toggle('arch-keyboard-open',keyboardOpen);
-    if(keyboardOpen)document.documentElement.style.setProperty('--arch-visual-height',Math.max(240,Math.round(visible))+'px');
-    else document.documentElement.style.removeProperty('--arch-visual-height');
+    if(keyboardOpen){
+     const top=Math.max(0,Math.round(viewport?.pageTop??window.scrollY));
+     document.documentElement.style.setProperty('--arch-visual-height',Math.max(240,Math.floor(visible))+'px');
+     document.documentElement.style.setProperty('--arch-visual-top',top+'px');
+    }else{
+     document.documentElement.style.removeProperty('--arch-visual-height');
+     document.documentElement.style.removeProperty('--arch-visual-top');
+    }
     sizeInput();
    }
    const scheduleViewport=()=>{
@@ -2880,7 +2923,8 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
    if(viewport){viewport.addEventListener('resize',scheduleViewport,{passive:true});viewport.addEventListener('scroll',scheduleViewport,{passive:true});}
    input.addEventListener('focus',scheduleViewport);
    input.addEventListener('blur',()=>setTimeout(scheduleViewport,120));
-   window.addEventListener('orientationchange',()=>setTimeout(scheduleViewport,180));
+   window.addEventListener('resize',scheduleViewport,{passive:true});
+   window.addEventListener('orientationchange',()=>{baselineHeight=0;setTimeout(scheduleViewport,180);});
    scheduleViewport();
 
    const send=document.getElementById('sendButton');
