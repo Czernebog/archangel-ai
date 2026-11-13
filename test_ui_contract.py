@@ -54,7 +54,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-62-voice-ui', self.html)
         self.assertIn("state.prefs.voiceRuGender='female'", self.html)
         self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
-        self.assertIn("VERSION 6.5.0", self.html)
+        self.assertIn("VERSION 6.6.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
@@ -103,7 +103,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.5.0', self.html)
+        self.assertIn('VERSION 6.6.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -127,7 +127,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=focused&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.5.0", self.html)
+        self.assertIn("VERSION 6.6.0", self.html)
 
     def test_history_delete_erases_chats_and_action_history(self):
         self.assertIn('id="clearHistory" type="button">Удалить историю и все переписки', self.html)
@@ -148,7 +148,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('flex-direction:column!important', self.html)
         self.assertIn("button.textContent='⧉ Копировать'", self.html)
         self.assertIn("button.setAttribute('aria-label','Копировать ответ ARCHANGEL')", self.html)
-        self.assertIn('VERSION 6.5.0', self.html)
+        self.assertIn('VERSION 6.6.0', self.html)
 
     def test_mobile_drawer_has_no_redundant_close_button(self):
         self.assertNotIn('id="mobileClose"', self.html)
@@ -159,6 +159,30 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("if(ev.key==='Escape'&&drawer.classList.contains('open'))", self.html)
         self.assertIn("go=function(page){originalGo(page);closeMenu();", self.html)
         self.assertIn('archangel-65-navigation', self.html)
+
+    def test_no_other_assistant_brand_in_public_site(self):
+        for name in ("index.html", "manifest.webmanifest", "sw.js"):
+            with self.subTest(file=name):
+                self.assertNotIn("chatgpt", Path(name).read_text("utf-8").lower())
+        self.assertIn("ARCHANGEL AI", self.html)
+        self.assertIn("VERSION 6.6.0", self.html)
+
+    def test_ui_performance_size_and_unique_ids(self):
+        # An explicit first-party HTML budget is measured in UTF-8 bytes.
+        # Actual mobile INP/LCP require a real-device browser test.
+        document_bytes = len(self.html.encode("utf-8"))
+        duplicates = {name: count for name, count in self.parser.ids.items() if count != 1}
+        self.assertEqual(duplicates, {}, f"Duplicate HTML IDs: {duplicates}")
+        self.assertLess(document_bytes, 400_000, f"HTML size budget exceeded: {document_bytes}")
+        self.assertGreater(len(self.parser.ids), 100)
+        print(f"ARCHANGEL UI METRICS: HTML={document_bytes} bytes, IDs={len(self.parser.ids)}, duplicated=0")
+
+    def test_copy_controls_are_batched_to_frames(self):
+        self.assertIn("new MutationObserver(records=>", self.html)
+        self.assertIn("if(dirty.size&&!copyFrame)copyFrame=requestAnimationFrame(flushCopy)", self.html)
+        self.assertIn("if(node.isConnected)addCopyButtons(node)", self.html)
+        self.assertIn("contextRemaining=48000", self.html)
+        self.assertIn("Math.min(4500,contextRemaining)", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
