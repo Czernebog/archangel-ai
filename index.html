@@ -2547,10 +2547,10 @@ const originalGo=go;go=function(page){originalGo(page);applyInterfaceLanguage();
 // ARCHANGEL AI 4.2 — multiple private local conversations; migration from 4.1.
 const MAX_RECENT_CHATS=1000;
 function safeConversationMessages(messages){return(Array.isArray(messages)?messages:[]).filter(m=>m&&['user','assistant'].includes(m.role)).slice(-80).map(m=>({role:m.role,text:String(m.text||'').slice(0,9000),time:Number.isFinite(m.time)?m.time:Date.now()}));}
-function conversationTitle(messages){const first=messages.find(m=>m.role==='user'&&String(m.text||'').trim());return first?String(first.text).trim().replace(/\s+/g,' ').slice(0,66):'Новый диалог';}
+function conversationTitle(messages){const first=messages.find(m=>m.role==='user'&&String(m.text||'').trim());return first?String(first.text).trim().replace(/\s+/g,' ').slice(0,66):'Новый чат';}
 function normalizeConversations(){
  const raw=Array.isArray(state.chats)?state.chats:[];
- state.chats=raw.filter(c=>c&&typeof c==='object'&&typeof c.id==='string').map(c=>({id:c.id.slice(0,75),title:String(c.title||'Новый диалог').slice(0,75),updated:Number.isFinite(c.updated)?c.updated:Date.now(),messages:safeConversationMessages(c.messages)}));
+ state.chats=raw.filter(c=>c&&typeof c==='object'&&typeof c.id==='string').map(c=>({id:c.id.slice(0,75),title:String(c.title||'Новый диалог').slice(0,75),updated:Number.isFinite(c.updated)?c.updated:Date.now(),draft:String(c.draft||'').slice(0,12000),messages:safeConversationMessages(c.messages)}));
  const existing=state.chats.find(c=>c.id===state.activeChatId);
  if(existing){state.messages=safeConversationMessages(existing.messages);}
  else if(state.messages.length){const id=uid();state.chats.unshift({id,title:conversationTitle(state.messages),updated:Date.now(),messages:safeConversationMessages(state.messages)});state.activeChatId=id;}
@@ -2561,8 +2561,8 @@ function saveCurrentConversation(){
  state.messages=safeConversationMessages(state.messages);
  if(!state.messages.length&&!state.activeChatId)return;
  let c=state.chats.find(x=>x.id===state.activeChatId);
- if(!c){if(!state.messages.length)return;c={id:uid(),title:'Новый диалог',updated:Date.now(),messages:[]};state.chats.unshift(c);state.activeChatId=c.id;}
- c.messages=state.messages.map(m=>({...m}));c.title=conversationTitle(c.messages);c.updated=Date.now();
+ if(!c){if(!state.messages.length)return;c={id:uid(),title:'Новый чат',updated:Date.now(),draft:'',messages:[]};state.chats.unshift(c);state.activeChatId=c.id;}
+ c.messages=state.messages.map(m=>({...m}));c.draft=String($('chatInput')?.value||'').slice(0,12000);c.title=conversationTitle(c.messages);c.updated=Date.now();
  state.chats.sort((a,b)=>b.updated-a.updated);
 }
 function renderRecentChats(){
@@ -2582,7 +2582,7 @@ function newRecentChat(){
  saveCurrentConversation();
  const id=uid();
  state.activeChatId=id;state.messages=[];
- state.chats.unshift({id,title:'Новый чат',updated:Date.now(),messages:[]});
+ state.chats.unshift({id,title:'Новый чат',draft:'',updated:Date.now(),messages:[]});
  pendingFiles=[];renderAttach();$('chatInput').value='';
  save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
  toast('Создан отдельный чат. Другие диалоги сохранены.');
@@ -2591,7 +2591,7 @@ function openRecentChat(id){
  if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
  if(state.activeChatId===id){go('chat');closeRecentSidebar();return;}
  saveCurrentConversation();const c=state.chats.find(x=>x.id===id);if(!c)return;
- state.activeChatId=id;state.messages=safeConversationMessages(c.messages);pendingFiles=[];renderAttach();$('chatInput').value='';save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
+ state.activeChatId=id;state.messages=safeConversationMessages(c.messages);pendingFiles=[];renderAttach();$('chatInput').value=String(c.draft||'').slice(0,12000);$('chatInput').dispatchEvent(new Event('input',{bubbles:true}));save();restoreChat();go('chat');renderRecentChats();closeRecentSidebar();
 }
 function deleteRecentChat(id){
  if(typeof activeController!=='undefined'&&activeController){toast('Сначала останови текущий ответ ИИ.');return;}
@@ -2608,7 +2608,11 @@ function deleteRecentChat(id){
  privacyChannel?.postMessage({kind:'delete-chat',id});
  toast('Удалён только выбранный чат. Другие данные сохранены.');
 }
-const previousLoad42=load;load=function(){previousLoad42();normalizeConversations();renderRecentChats();};
+const previousLoad42=load;load=function(){
+ previousLoad42();normalizeConversations();renderRecentChats();
+ const active=state.chats.find(c=>c.id===state.activeChatId);
+ if(active&&$('chatInput'))$('chatInput').value=String(active.draft||'').slice(0,12000);
+};
 const previousSave42=save;save=function(){saveCurrentConversation();const result=previousSave42();renderRecentChats();return result;};
 $('newRecentChat').addEventListener('click',newRecentChat);
 // Existing clear button becomes a new dialog action, preserving earlier conversations.
