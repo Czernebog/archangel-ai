@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ARCHANGEL AI 6.6 web gateway with isolated browser sessions."""
+"""ARCHANGEL AI 7.2 web gateway with isolated browser sessions."""
 from __future__ import annotations
 import base64, json, mimetypes, os, re, sys, threading, urllib.request, urllib.error, zipfile, webbrowser, subprocess, ipaddress, shutil, secrets, time, hmac
 import hashlib
@@ -382,7 +382,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '7.1.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '7.2.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                      'webSearchAvailable': bool(BRAVE_SEARCH_API_KEY),
@@ -709,7 +709,7 @@ class Handler(SimpleHTTPRequestHandler):
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'text/event-stream, application/json',
-            'User-Agent': 'ARCHANGEL-AI/6.6',
+            'User-Agent': 'ARCHANGEL-AI/7.2',
         }
         if cfg['api_key']:
             headers['Authorization'] = 'Bearer ' + cfg['api_key']
