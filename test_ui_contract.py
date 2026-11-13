@@ -340,6 +340,18 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('Никогда не представляйся Полиной, Polina', self.html)
         self.assertIn('При вопросе о твоём имени отвечай только', self.html)
 
+    def test_accessible_mobile_design_and_offline_state(self):
+        self.assertIn('archangel-72-ux-hardening', self.html)
+        self.assertIn('id="archOfflineBanner"', self.html)
+        self.assertIn('aria-live="polite" hidden', self.html)
+        self.assertIn("navigator.onLine===false", self.html)
+        self.assertIn("window.addEventListener('offline',sync,{passive:true})", self.html)
+        self.assertIn("window.addEventListener('online',sync,{passive:true})", self.html)
+        self.assertIn("outline:2px solid #fff!important", self.html)
+        self.assertIn("font-size:16px", self.html)
+        self.assertIn("#page-code .codearea{tab-size:2", self.html)
+        self.assertIn("#page-search .research-result{border-left:2px solid #eee}", self.html)
+
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
         self.assertIn('aria-label="Отправить сообщение"', self.html)
