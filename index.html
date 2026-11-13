@@ -1219,12 +1219,62 @@ button:disabled{opacity:.5}
  #page-chat .messages{overscroll-behavior:contain}
 }
 </style>
+<style id="archangel-67-mobile-composer">
+/* The entire chat must fit the visual viewport; the composer cannot cover tools. */
+@media(max-width:760px){
+ html,body,.app,.main{max-width:100%;overflow-x:hidden!important}
+ body,.app,.main{height:var(--arch-visual-height,100dvh)!important;min-height:0!important}
+ .main>.content:has(#page-chat.active){min-height:0!important;overflow:hidden!important}
+ #page-chat.active,#page-chat .chat-layout,#page-chat .chat-card{min-height:0!important;max-height:100%!important}
+ #page-chat .chat-card{display:flex!important;flex-direction:column!important}
+ #page-chat .messages{flex:1 1 0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important}
+ #page-chat .chat-input-wrap{flex:0 0 auto!important;min-height:0!important;padding:5px 8px 7px!important;overflow:visible!important}
+ #page-chat .composer{
+  display:grid!important;grid-template-columns:minmax(0,1fr) 46px!important;
+  grid-template-rows:minmax(0,auto) 44px!important;
+  width:100%!important;min-width:0!important;align-items:center!important;
+  gap:3px 7px!important;padding:6px 8px!important;
+  border-radius:15px!important
+ }
+ #page-chat .composer #chatInput{
+  grid-row:1!important;grid-column:1/-1!important;align-self:stretch!important;
+  width:100%!important;box-sizing:border-box!important;min-width:0!important;
+  min-height:42px!important;max-height:76px!important;
+  font-size:16px!important;line-height:1.38!important;
+  padding:7px 4px!important;margin:0!important;overflow-y:auto!important;
+  resize:none!important
+ }
+ #page-chat .composer .compose-tools{
+  grid-column:1!important;grid-row:2!important;min-width:0!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:8px!important;z-index:1!important
+ }
+ #page-chat .composer .compose-tools #attachButton,
+ #page-chat .composer .compose-tools #voiceStart{
+  position:static!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
+  flex:0 0 44px!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important
+ }
+ #page-chat .composer #sendButton{
+  grid-column:2!important;grid-row:2!important;justify-self:end!important;
+  width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important
+ }
+ #page-chat .attach-row{max-height:84px!important;overflow-y:auto!important}
+ #page-chat .chat-input-wrap>.between{display:none!important}
+ body.arch-keyboard-open .main>.content:has(#page-chat.active){padding-bottom:0!important}
+ body.arch-keyboard-open #page-chat .composer #chatInput{max-height:60px!important}
+}
+@media(max-width:360px){
+ #page-chat .composer{padding:4px 6px!important;gap:2px 5px!important}
+ #page-chat .composer .compose-tools{gap:5px!important}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.6</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.7</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1254,7 +1304,7 @@ button:disabled{opacity:.5}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.6</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.7</div>
   </div>
 </aside>
 <main class="main">
@@ -1376,8 +1426,8 @@ button:disabled{opacity:.5}
    <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.6.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.6.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.7.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.7.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -2129,7 +2179,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
- if(deep)messages[0].content+=' Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
+ if(deep)messages[0].content+=' Разделяй факты, расчёты и предположения. Сначала решай основную задачу, затем сверяй каждый пункт запроса с результатом. Для анализа ошибок UI явно проверяй мобильную клавиатуру, динамическую высоту viewport и состояние кнопок. Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
  const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
@@ -2172,7 +2222,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 };
 sendChat=async function(){
  const q=$('chatInput').value.trim();if(activeController){activeController.abort();return;}if((!q&&!pendingFiles.length)||$('sendButton').disabled)return;
- const files=[...pendingFiles];$('chatInput').value='';pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённые файлы.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=false;$('sendButton').textContent='■';$('sendButton').classList.add('is-stop');$('sendButton').title='Остановить генерацию';$('sendButton').setAttribute('aria-label','Остановить генерацию');$('sendButton').setAttribute('aria-busy','true');
+ const files=[...pendingFiles];$('chatInput').value='';$('chatInput').dispatchEvent(new Event('input',{bubbles:true}));pendingFiles=[];renderAttach();addMessage('user',q||'Проанализируй прикреплённые файлы.',files.find(f=>f.kind==='image'));record('chat',q||'Отправлено вложение',files.map(f=>f.name).join(', '));$('tokenHint').textContent='Архангел думает…';$('sendButton').disabled=false;$('sendButton').textContent='■';$('sendButton').classList.add('is-stop');$('sendButton').title='Остановить генерацию';$('sendButton').setAttribute('aria-label','Остановить генерацию');$('sendButton').setAttribute('aria-busy','true');
  const thinking=showThinking();let body=null,answer='';activeController=new AbortController();
  try{
   if(api.key==='server-configured'){
@@ -2754,29 +2804,45 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
  const input=document.getElementById('chatInput');
  const messages=document.getElementById('messages');
  if(input){
-   const sizeInput=()=>{input.style.height='auto';const mobile=window.innerWidth<=760,keyboard=document.body.classList.contains('arch-keyboard-open');const maximum=mobile?(keyboard?90:Math.min(112,Math.round(window.innerHeight*.20))):280;input.style.height=Math.max(mobile?(keyboard?44:56):94,Math.min(input.scrollHeight,maximum))+'px'};
+   const sizeInput=()=>{
+    input.style.height='auto';
+    const mobile=window.innerWidth<=760;
+    const keyboard=document.body.classList.contains('arch-keyboard-open');
+    const maximum=mobile?(keyboard?60:76):280;
+    const minimum=mobile?42:94;
+    input.style.height=Math.max(minimum,Math.min(input.scrollHeight,maximum))+'px';
+   };
    input.addEventListener('input',sizeInput);
    window.addEventListener('resize',sizeInput,{passive:true});
    // visualViewport shrinks with the on-screen keyboard on supported phones.
    // Hide the bottom tabs only while the keyboard actually occupies the viewport.
    const viewport=window.visualViewport;
-   let baseHeight=0;
+   let viewportFrame=0;
    function syncMobileViewport(){
-    if(window.innerWidth>760){document.body.classList.remove('arch-keyboard-open');return;}
-    const focused=document.activeElement===input;
-    const outerHeight=window.innerHeight;
-    if(!focused)baseHeight=Math.max(baseHeight,outerHeight,viewport?.height||0);
-    const visible=viewport?.height||outerHeight;
-    const covered=Math.max(0,outerHeight-visible-(viewport?.offsetTop||0));
-    const keyboardOpen=focused&&covered>110;
+    if(window.innerWidth>760){
+     document.body.classList.remove('arch-keyboard-open');
+     document.documentElement.style.removeProperty('--arch-visual-height');
+     return;
+    }
+    const visible=viewport?.height||window.innerHeight;
+    // VisualViewport reflects the real usable height when iOS shows its keyboard.
+    // Only apply the viewport override when the keyboard is actually visible.
+    const covered=Math.max(0,window.innerHeight-visible-(viewport?.offsetTop||0));
+    const keyboardOpen=document.activeElement===input&&covered>110;
     document.body.classList.toggle('arch-keyboard-open',keyboardOpen);
+    if(keyboardOpen)document.documentElement.style.setProperty('--arch-visual-height',Math.max(240,Math.round(visible))+'px');
+    else document.documentElement.style.removeProperty('--arch-visual-height');
     sizeInput();
-    if(keyboardOpen)requestAnimationFrame(()=>{const box=messages;if(box)box.scrollTop=box.scrollHeight;});
    }
-   if(viewport)viewport.addEventListener('resize',syncMobileViewport,{passive:true});
-   input.addEventListener('focus',()=>requestAnimationFrame(syncMobileViewport));
-   input.addEventListener('blur',()=>setTimeout(syncMobileViewport,120));
-   window.addEventListener('orientationchange',()=>{baseHeight=0;setTimeout(syncMobileViewport,180);});
+   const scheduleViewport=()=>{
+    if(viewportFrame)return;
+    viewportFrame=requestAnimationFrame(()=>{viewportFrame=0;syncMobileViewport();});
+   };
+   if(viewport){viewport.addEventListener('resize',scheduleViewport,{passive:true});viewport.addEventListener('scroll',scheduleViewport,{passive:true});}
+   input.addEventListener('focus',scheduleViewport);
+   input.addEventListener('blur',()=>setTimeout(scheduleViewport,120));
+   window.addEventListener('orientationchange',()=>setTimeout(scheduleViewport,180));
+   scheduleViewport();
 
    const send=document.getElementById('sendButton');
    send?.addEventListener('click',()=>requestAnimationFrame(sizeInput));

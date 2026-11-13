@@ -54,7 +54,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-62-voice-ui', self.html)
         self.assertIn("state.prefs.voiceRuGender='female'", self.html)
         self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
-        self.assertIn("VERSION 6.6.0", self.html)
+        self.assertIn("VERSION 6.7.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
@@ -103,7 +103,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.6.0', self.html)
+        self.assertIn('VERSION 6.7.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -124,10 +124,10 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-61-mobile-fit', self.html)
         self.assertIn('body.arch-keyboard-open .mobile-tabbar{display:none!important}', self.html)
         self.assertIn('visualViewport', self.html)
-        self.assertIn('keyboardOpen=focused&&covered>110', self.html)
+        self.assertIn('keyboardOpen=document.activeElement===input&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.6.0", self.html)
+        self.assertIn("VERSION 6.7.0", self.html)
 
     def test_history_delete_erases_chats_and_action_history(self):
         self.assertIn('id="clearHistory" type="button">Удалить историю и все переписки', self.html)
@@ -148,7 +148,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('flex-direction:column!important', self.html)
         self.assertIn("button.textContent='⧉ Копировать'", self.html)
         self.assertIn("button.setAttribute('aria-label','Копировать ответ ARCHANGEL')", self.html)
-        self.assertIn('VERSION 6.6.0', self.html)
+        self.assertIn('VERSION 6.7.0', self.html)
 
     def test_mobile_drawer_has_no_redundant_close_button(self):
         self.assertNotIn('id="mobileClose"', self.html)
@@ -165,7 +165,7 @@ class UIContractTests(unittest.TestCase):
             with self.subTest(file=name):
                 self.assertNotIn("chatgpt", Path(name).read_text("utf-8").lower())
         self.assertIn("ARCHANGEL AI", self.html)
-        self.assertIn("VERSION 6.6.0", self.html)
+        self.assertIn("VERSION 6.7.0", self.html)
 
     def test_ui_performance_size_and_unique_ids(self):
         # An explicit first-party HTML budget is measured in UTF-8 bytes.
@@ -183,6 +183,24 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("if(node.isConnected)addCopyButtons(node)", self.html)
         self.assertIn("contextRemaining=48000", self.html)
         self.assertIn("Math.min(4500,contextRemaining)", self.html)
+
+    def test_mobile_composer_never_overlaps_attachments_or_mic(self):
+        self.assertIn('archangel-67-mobile-composer', self.html)
+        self.assertIn('#page-chat .composer .compose-tools #attachButton', self.html)
+        self.assertIn('#page-chat .composer .compose-tools #voiceStart', self.html)
+        self.assertIn('grid-row:2!important', self.html)
+        self.assertIn('max-height:76px!important', self.html)
+        self.assertIn('min-height:42px!important', self.html)
+        self.assertIn('--arch-visual-height', self.html)
+        self.assertIn('visible=viewport?.height||window.innerHeight', self.html)
+        self.assertIn("scheduleViewport", self.html)
+        self.assertIn("input.style.height=Math.max(minimum,Math.min(input.scrollHeight,maximum))+'px'", self.html)
+        self.assertIn("VERSION 6.7.0", self.html)
+
+    def test_message_send_releases_composer_height(self):
+        self.assertIn("document.body.classList.toggle('arch-keyboard-open',keyboardOpen)", self.html)
+        self.assertIn("$('chatInput').dispatchEvent(new Event('input',{bubbles:true}))", self.html)
+        self.assertIn("if(window.innerWidth>760)$('chatInput').focus()", self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
