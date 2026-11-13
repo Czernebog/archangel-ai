@@ -2641,7 +2641,8 @@ if(privacyChannel)privacyChannel.addEventListener('message',event=>{
   if(state.activeChatId===event.data.id){
    state.activeChatId=null;state.messages=[];pendingFiles=[];renderAttach();restoreChat();
   }
-  previousSave42();renderRecentChats();renderHistory();renderStats();
+  // Another tab has already persisted the deletion. Avoid overwriting its newer chats.
+  renderRecentChats();renderHistory();renderStats();
  }
 });
 window.addEventListener('storage',event=>{
