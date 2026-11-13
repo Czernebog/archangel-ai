@@ -60,6 +60,17 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("read?'Страница прочитана", self.html)
         self.assertIn('archangel-73-research-layout', self.html)
 
+    def test_research_and_code_review_mobile_navigation(self):
+        self.assertEqual(self.parser.ids.get("reviewCodeWithAI"), 1)
+        self.assertIn('data-mobile-page="search"', self.html)
+        self.assertIn("const strings={ru:['Чат','Чаты','Поиск','Файлы','Настройки']", self.html)
+        self.assertIn("if(source.length>9000)return toast(", self.html)
+        self.assertIn("id=\"analyzePythonAST\"", self.html)
+        self.assertIn("const draft=instructions+'\\n\\n```'", self.html)
+        self.assertIn("toast('Запрос подготовлен. Проверь код и возможные секреты, затем отправь вручную.')", self.html)
+        self.assertIn('archangel-74-mobile-research', self.html)
+        self.assertIn("if(needsWeb&&!needsResearch)", self.html)
+
     def test_unique_critical_controls(self):
         for id_ in (
             "chatInput", "sendButton", "clearChat", "messages", "sidebar",
