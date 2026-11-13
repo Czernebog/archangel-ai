@@ -2195,9 +2195,19 @@ const ARCHANGEL_VERSION='7.2.0';
 let activeController=null;
 const localGateway=()=>((location.protocol==='http:'||location.protocol==='https:')&&!!location.hostname);
 async function gatewayJSON(path,payload){
- const r=await fetch(path,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
- let d={};try{d=await r.json()}catch{}
- if(!r.ok)throw Error(d.error||`HTTP ${r.status}`);return d;
+ // A stuck gateway must never freeze the interface indefinitely.
+ const allowedTimeouts={'/api/research':65000,'/api/web-search':18000,'/api/code-analyze':15000,'/api/extract':35000,'/api/math':25000,'/api/config':16000,'/api/tts':55000};
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),allowedTimeouts[path]||20000);
+ try{
+  const response=await fetch(path,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal,cache:'no-store'});
+  let data={};try{data=await response.json()}catch{}
+  if(!response.ok)throw Error(data.error||`HTTP ${response.status}`);
+  return data;
+ }catch(error){
+  if(error?.name==='AbortError')throw Error('Превышено время ожидания ответа сервера. Повтори запрос позже.');
+  throw error;
+ }finally{clearTimeout(timer);}
 }
 async function extractDocument(file){
  if(file.size>10*1024*1024)throw Error('Максимум 10 МБ для извлечения текста.');
