@@ -194,6 +194,25 @@ class GatewaySecurityTests(unittest.TestCase):
         self.assertIn("voice = 'shimmer'", source)
         self.assertIn("'speed': 0.92", source)
 
+    def test_search_requires_key_and_same_origin(self):
+        original = server.BRAVE_SEARCH_API_KEY
+        server.BRAVE_SEARCH_API_KEY = ""
+        try:
+            origin = f"http://127.0.0.1:{self.port}"
+            status, raw, hdr = self.request("/api/web-search", "POST",
+                                             {"q": "python documentation"}, origin=origin)
+            self.assertEqual(status, 503)
+            self.assertIn("BRAVE_SEARCH_API_KEY", json.loads(raw)["error"])
+            self.assertIn("no-store", hdr.get("Cache-Control", ""))
+            status, _, _ = self.request("/api/web-search", "POST",
+                                         {"q": "python"}, origin="https://attacker.example")
+            self.assertEqual(status, 403)
+            status, _, _ = self.request("/api/web-search", "POST",
+                                         {"q": "a" * 300}, origin=origin)
+            self.assertEqual(status, 400)
+        finally:
+            server.BRAVE_SEARCH_API_KEY = original
+
     def test_bad_provider_and_invalid_model(self):
         origin = f"http://127.0.0.1:{self.port}"
         status, _, _ = self.request(
