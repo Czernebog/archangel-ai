@@ -46,6 +46,10 @@ DEFAULT_CONFIG = {'provider': None, 'model': None, 'api_key': None, 'endpoint': 
 SESSIONS = {}
 # Sliding-window request timestamps and in-flight chat guards are RAM-only.
 RATE_WINDOWS = {}
+# IP-only failed password counters; entries are RAM-only and expire.
+AUTH_FAILURES = {}
+AUTH_FAILURE_WINDOW = 300.0
+AUTH_FAILURE_LIMIT = 8
 ACTIVE_CHATS = set()
 ACTIVE_CHAT_IPS = {}
 RATE_LAST_CLEAN = 0.0
@@ -140,16 +144,34 @@ class Handler(SimpleHTTPRequestHandler):
         """Optional HTTP Basic gate for private deployments; sessions remain isolated."""
         if not SITE_PASSWORD:
             return True
+        ip = self._client_identity()
+        now = time.monotonic()
+        with LOCK:
+            failures = [stamp for stamp in AUTH_FAILURES.get(ip, ()) if now - stamp < AUTH_FAILURE_WINDOW]
+            if failures:
+                AUTH_FAILURES[ip] = failures
+            else:
+                AUTH_FAILURES.pop(ip, None)
+            locked = len(failures) >= AUTH_FAILURE_LIMIT
+        if locked:
+            return self._reject_rate_limit(AUTH_FAILURE_WINDOW - (now - failures[0]),
+                                           'Слишком много попыток входа. Повтори позже.')
         supplied = ''
         header = self.headers.get('Authorization', '')
-        if header.startswith('Basic '):
+        if header.startswith('Basic ') and len(header) < 4096:
             try:
                 decoded = base64.b64decode(header[6:], validate=True).decode('utf-8')
                 supplied = decoded.split(':', 1)[1] if ':' in decoded else ''
             except Exception:
                 supplied = ''
         if supplied and hmac.compare_digest(supplied, SITE_PASSWORD):
+            with LOCK:
+                AUTH_FAILURES.pop(ip, None)
             return True
+        with LOCK:
+            AUTH_FAILURES.setdefault(ip, []).append(now)
+            if len(AUTH_FAILURES) > 2048:
+                AUTH_FAILURES.pop(next(iter(AUTH_FAILURES)))
         body = json.dumps({'error': 'Доступ к ARCHANGEL защищён.'}, ensure_ascii=False).encode('utf-8')
         self.send_response(401)
         self.send_header('WWW-Authenticate', 'Basic realm="ARCHANGEL", charset="UTF-8"')
@@ -349,7 +371,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '6.8.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '7.0.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),

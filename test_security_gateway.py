@@ -78,6 +78,42 @@ class GatewaySecurityTests(unittest.TestCase):
         self.assertIn("class NoRedirect", source)
         self.assertIn("def redirect_request", source)
 
+    def test_password_bruteforce_is_limited(self):
+        import base64
+        original = server.SITE_PASSWORD
+        server.SITE_PASSWORD = "archangel-test-gate"
+        try:
+            with server.LOCK:
+                server.AUTH_FAILURES.clear()
+            bad = base64.b64encode(b"visitor:wrong").decode("ascii")
+            for _ in range(server.AUTH_FAILURE_LIMIT):
+                conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+                conn.request("GET", "/", headers={"Authorization": "Basic " + bad})
+                response = conn.getresponse()
+                self.assertEqual(response.status, 401)
+                response.read()
+                conn.close()
+            conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+            conn.request("GET", "/", headers={"Authorization": "Basic " + bad})
+            response = conn.getresponse()
+            self.assertEqual(response.status, 429)
+            self.assertIsNotNone(response.getheader("Retry-After"))
+            response.read()
+            conn.close()
+            with server.LOCK:
+                server.AUTH_FAILURES.clear()
+            good = base64.b64encode(b"visitor:archangel-test-gate").decode("ascii")
+            conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+            conn.request("GET", "/", headers={"Authorization": "Basic " + good})
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            response.read()
+            conn.close()
+        finally:
+            server.SITE_PASSWORD = original
+            with server.LOCK:
+                server.AUTH_FAILURES.clear()
+
     def test_cross_origin_config_blocked(self):
         status, body, _ = self.request(
             "/api/config", "POST",
