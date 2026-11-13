@@ -243,6 +243,16 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important;border:0!important", self.html)
         self.assertIn("VERSION 7.1.0", self.html)
 
+    def test_stream_updates_are_frame_batched(self):
+        self.assertIn("renderFrame=requestAnimationFrame(()=>{", self.html)
+        self.assertIn("if(renderFrame)cancelAnimationFrame(renderFrame)", self.html)
+        self.assertIn("body.textContent=answer;", self.html)
+
+    def test_activity_updates_only_visible_lists(self):
+        self.assertIn("renderStats();renderRecent();if($('page-history')?.classList.contains('active'))renderHistory()", self.html)
+        self.assertIn("if(el.dataset.renderSignature===signature)return;", self.html)
+        self.assertIn("el.dataset.renderSignature=signature;el.replaceChildren();", self.html)
+
     def test_assistant_identity_remains_archangel(self):
         self.assertIn('Ты — ARCHANGEL AI (Архангел)', self.html)
         self.assertIn('Никогда не представляйся Полиной, Polina', self.html)
