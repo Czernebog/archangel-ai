@@ -1206,12 +1206,25 @@ button:disabled{opacity:.5}
 #mobileMenu[aria-expanded="true"]{border-color:#fff!important;background:#fff!important;color:#080808!important}
 @media(prefers-reduced-motion:reduce){.sidebar,.mobile-scrim{transition:none!important}}
 </style>
+<style id="archangel-66-ui">
+/* Uniform focus state and touch-area sizing on both form factors. */
+#page-chat button:focus-visible,#settings-api button:focus-visible,.recent-open:focus-visible{
+ outline:2px solid #fff!important;outline-offset:3px
+}
+#page-chat .chat-input-wrap{min-width:0}
+#page-chat .messages .message.assistant{min-width:0;overflow-wrap:anywhere}
+@media(max-width:760px){
+ .sidebar .nav button,.sidebar .recent-open{min-height:44px!important}
+ #page-chat .composer #sendButton,#page-chat .compose-tools .icon-btn{touch-action:manipulation}
+ #page-chat .messages{overscroll-behavior:contain}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
  <div class="boot-mark" aria-label="Эмблема ARCHANGEL AI"><img id="bootEmblem" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22258%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%22286%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E" width="104" height="104" alt="Эмблема ARCHANGEL AI" fetchpriority="high" decoding="sync"></div><div class="boot-name">ARCHANGEL</div>
  <div class="boot-caption" id="bootCaption">ПОДГОТОВКА РАБОЧЕГО ПРОСТРАНСТВА</div>
- <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.5</div>
+ <div class="boot-track" id="bootTrack"><i></i></div><div class="boot-version">CZERNEBOG · ARCHANGEL 6.6</div>
  <button class="btn secondary" id="bootRetry" type="button" hidden>Перезапустить приложение</button>
 </div>
 <div class="app">
@@ -1241,7 +1254,7 @@ button:disabled{opacity:.5}
   </section>
   <div class="side-bottom">
     <div class="status-card"><div class="status-row"><span><i class="status-dot"></i>Локальное ядро</span><b style="color:#eee">ГОТОВО</b></div><div class="status-row" style="margin-top:9px"><span>Режим</span><span id="sideMode">Автономный</span></div></div>
-    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.5</div>
+    <div class="side-foot">ARCHANGEL AI · WEB APP · 6.6</div>
   </div>
 </aside>
 <main class="main">
@@ -1312,7 +1325,7 @@ button:disabled{opacity:.5}
     <div class="api-step"><b class="num">01</b><div><b>Google AI Studio · Gemini</b><span><a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Официальный сайт и создание Gemini API key</a>. Есть бесплатный уровень с ограничениями; модели и квоты меняются.</span></div></div>
     <div class="api-step"><b class="num">02</b><div><b>GroqCloud</b><span><a href="https://console.groq.com/" target="_blank" rel="noopener noreferrer">Официальная консоль Groq</a>. Доступен бесплатный уровень с лимитами по моделям и запросам.</span></div></div>
     <div class="api-step"><b class="num">03</b><div><b>OpenRouter</b><span><a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">Официальный сайт OpenRouter</a>. Есть бесплатные модели; для free-вариантов действуют лимиты запросов.</span></div></div>
-    <div class="api-step"><b class="num">04</b><div><b>OpenAI</b><span><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">Управление API-ключами OpenAI</a>. API оплачивается отдельно от подписки ChatGPT.</span></div></div>
+    <div class="api-step"><b class="num">04</b><div><b>OpenAI</b><span><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">Управление API-ключами OpenAI</a>. API оплачивается отдельно по тарифам выбранного провайдера.</span></div></div>
     <div class="api-step"><b class="num">02</b><div><b>Создай ключ и выбери модель</b><span>Ключ создаётся в аккаунте API владельцем проекта. Не присылай его в чат, сообщения или скриншоты. Если тебе нет 18 лет, настройку аккаунта и оплату должен выполнять родитель или опекун с твоего разрешения.</span></div></div>
     <div class="api-step"><b class="num">03</b><div><b>Заполни поля вверху</b><span>Выбери провайдера в списке. Архангел подставит endpoint и протокол; сверь точное имя модели в панели провайдера, введи ключ и нажми «Подключить».</span></div></div>
     <div class="api-step"><b class="num">04</b><div><b>Проверь соединение</b><span>Нажми «Проверить соединение». Если тест успешен, перейди в «ИИ-ассистент» и отправь запрос.</span></div></div>
@@ -1363,8 +1376,8 @@ button:disabled{opacity:.5}
    <p class="footnote">«Удалить историю и переписки» удаляет все чаты, сообщения и журнал действий только в этом браузере. «Полный сброс» дополнительно удаляет заметки, файлы, настройки и ключ API из серверной сессии. Скачанные резервные копии и данные, уже отправленные внешним ИИ-провайдерам, эти кнопки не удаляют.</p>
   </div>
   <div class="card" id="settings-about">
-   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.5.0</span></div>
-   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.5.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
+   <div class="between"><h3 class="section-title">О приложении</h3><span class="badge ok">VERSION 6.6.0</span></div>
+   <div class="item"><div class="item-body"><div class="item-title">ARCHANGEL AI · Web App Edition 6.6.0</div><div class="item-desc">Однофайловый персональный помощник с локальными инструментами и подключаемой моделью. Переписка и заметки хранятся в браузере текущего устройства; конфигурация API изолирована отдельной сессией. Полный веб-поиск требует отдельного поискового инструмента или сервиса; языковая модель сама по себе не гарантирует доступ к интернету.</div></div></div>
    <div class="divider"></div><div class="small muted">Рекомендуются актуальные Microsoft Edge или Google Chrome. Голосовые API зависят от браузера, системы и разрешений.</div>
   </div>
  </div>
@@ -2087,7 +2100,16 @@ $('disconnectApi').onclick=async()=>{
 };
 // Build an OpenAI-compatible conversation and consume server-sent token events.
 modelRequest=async function(q,files=[],onDelta=()=>{}){
- const history=state.messages.slice(0,-1).filter(m=>m.role==='user'||m.role==='assistant').slice(-28).map(m=>({role:m.role,text:String(m.text||'').slice(0,6500)}));
+ // Keep newest context first within an explicit size budget to avoid sluggish,
+ // expensive requests when previous answers were very long.
+ const recent=state.messages.slice(0,-1).filter(m=>m.role==='user'||m.role==='assistant').slice(-28);
+ const history=[];let contextRemaining=48000;
+ for(let i=recent.length-1;i>=0&&contextRemaining>0;i--){
+  const m=recent[i],text=String(m.text||'').slice(0,Math.min(4500,contextRemaining));
+  if(!text.trim())continue;
+  history.unshift({role:m.role,text});
+  contextRemaining-=text.length;
+ }
  const prompt=[];if(q)prompt.push(q);
  for(const f of files){if(f.kind==='text')prompt.push(`\n--- НАЧАЛО ДАННЫХ ПРИЛОЖЕННОГО ФАЙЛА: ${f.name} ---\n${f.text||'(текст не извлечён)'}\n--- КОНЕЦ ДАННЫХ ФАЙЛА ---`);}
  const promptText=prompt.join('\n\n')||(files.some(f=>f.kind==='audio')?'Расшифруй и проанализируй прикреплённую аудиодорожку. Если слова неразборчивы, скажи об этом.':'Рассмотри приложенные изображения и внимательно прочитай видимый текст, математические символы и формулы.');
@@ -2107,7 +2129,7 @@ modelRequest=async function(q,files=[],onDelta=()=>{}){
 
  const messages=[{role:'system',content:systemPrompt(q,files)},...history.map(m=>({role:m.role,content:String(m.text||'')})),{role:'user',content:content.length>1?content:promptText}];
  const deep=state.prefs.brainMode==='deep';
- if(deep)messages[0].content+=' Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
+ if(deep)messages[0].content+=' Проверяй, отвечает ли итог каждому пункту запроса. Для арифметики и формул при возможности делай обратную подстановку; для программирования предлагай конкретную проверку после исправления. Не придумывай результаты тестов или подключение инструментов. Для сложных запросов не пропускай ограничения, отделяй проверенные факты от предположений и явно отмечай границы знаний. При диагностике сайта указывай воспроизводимый сценарий, корневую причину, минимальное исправление и проверку результата. Не выдавай план за выполненную работу. Для ответов на учебные задачи объясняй ход решения понятными формулами и делай быструю проверку подстановкой, особенно для тригонометрии. Для программирования сначала определи причину сбоя, учитывай мобильные браузеры и совместимость с существующим кодом; предлагай проверяемое исправление, а не голословные обещания. Для неопределённых данных говори, чего не хватает. Сначала установи главную цель вопроса и ожидаемый формат ответа, затем проведи проверку наиболее важных фактов. Если получены неполные сведения, отделяй доказательства от догадок. Если задача составная — не пропускай существенные части и сохраняй оговорённые ограничения. Работай как тщательный исследователь: уточни задачу из контекста, выдели ограничения, проверь результат независимым способом, если это возможно. Для математики проверь ограничения и подстановку, для программирования — воспроизведение проблемы, совместимость и тесты, для текста — смысл, стиль и фактическую точность. Отличай доказанное от предположений. Если нет доступа к интернету, не утверждай, что проверил новости. Излагай только полезный результат и необходимые шаги проверки, без скрытых внутренних рассуждений.';
  const requestBody=JSON.stringify({messages,mode:deep?'deep':'balanced',temperature:deep?.2:.35,max_tokens:deep?8192:3072});
  if(requestBody.length>15*1024*1024)throw Error('Вложения слишком большие для безопасной отправки. Уменьши изображения или длину аудио.');
  const controller=activeController||new AbortController();
@@ -2761,9 +2783,12 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
    input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey)requestAnimationFrame(sizeInput)});
    sizeInput();
  }
- function addCopyButtons(){
-   if(!messages)return;
-   messages.querySelectorAll('.message.assistant:not([data-copy-ready])').forEach(message=>{
+ function addCopyButtons(root=messages){
+   if(!root)return;
+   const candidates=[];
+   if(root.matches?.('.message.assistant:not([data-copy-ready])'))candidates.push(root);
+   root.querySelectorAll?.('.message.assistant:not([data-copy-ready])').forEach(message=>candidates.push(message));
+   candidates.forEach(message=>{
      message.dataset.copyReady='1';
      const body=Array.from(message.children).find(el=>el.tagName==='DIV'&&!el.classList.contains('meta'));
      if(!body)return;
@@ -2782,7 +2807,17 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
      message.appendChild(button);
    });
  }
- if(messages){new MutationObserver(addCopyButtons).observe(messages,{childList:true,subtree:false});addCopyButtons()}
+ if(messages){
+   // Coalesce bursts of streamed UI changes into one animation frame. No
+   // repeated full message-list scan for each appended response.
+   const dirty=new Set();let copyFrame=0;
+   const flushCopy=()=>{copyFrame=0;for(const node of dirty){if(node.isConnected)addCopyButtons(node);}dirty.clear();};
+   new MutationObserver(records=>{
+     for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1)dirty.add(node);
+     if(dirty.size&&!copyFrame)copyFrame=requestAnimationFrame(flushCopy);
+   }).observe(messages,{childList:true,subtree:false});
+   addCopyButtons();
+ }
  // Keep mouse-wheel and trackpad scrolling inside the actual message list.
  // No global interception: inputs, modals and code blocks retain native behavior.
  const chatCard=document.querySelector('#page-chat .chat-card');
