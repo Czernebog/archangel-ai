@@ -120,6 +120,16 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("audio.onended=()=>", self.html)
         self.assertIn("resumeMic();", self.html)
 
+    def test_workspace_scroll_regression_after_chat_keyboard(self):
+        # Leaving chat must not leave an iOS keyboard viewport lock behind.
+        self.assertIn('archangel-final-scroll-fix', self.html)
+        self.assertIn("if(page!=='chat'){if(document.activeElement===$('chatInput'))$('chatInput').blur()", self.html)
+        self.assertIn("scrollArea.scrollTop=0", self.html)
+        self.assertIn("scrollArea.style.overflowY=page==='chat'?'hidden':'auto'", self.html)
+        self.assertIn(".main>.content:not(:has(#page-chat.active)){overflow-y:auto!important", self.html)
+        self.assertIn("if(!document.getElementById('page-chat')?.classList.contains('active'))", self.html)
+        self.assertIn("if(window.innerWidth>760&&$('page-chat').classList.contains('active'))$('chatInput').focus()", self.html)
+
     def test_mobile_layout_and_keyboard_fit(self):
         self.assertIn('archangel-61-mobile-fit', self.html)
         self.assertIn('body.arch-keyboard-open .mobile-tabbar{display:none!important}', self.html)
