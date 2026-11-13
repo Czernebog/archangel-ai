@@ -71,6 +71,23 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(len(pages), 12)
         self.assertTrue(all(row['url'].startswith('https://') for row in result['sources']))
 
+    def test_unexpected_source_parser_failure_is_isolated(self):
+        def fake_search(query, key, count=6):
+            return [
+                {'title': 'Broken page', 'url': 'https://example.org/1'},
+                {'title': 'Working page', 'url': 'https://example.org/2'},
+            ]
+        def fake_read(url):
+            if url.endswith('/1'):
+                raise RuntimeError('Malformed HTML parser failure')
+            return 'Verified public page excerpt', ''
+        result = research_engine.research('topic', 'test-api', search=fake_search, reader=fake_read)
+        self.assertEqual(result['indexedCount'], 2)
+        self.assertEqual(result['readCount'], 1)
+        self.assertFalse(result['sources'][0]['read'])
+        self.assertEqual(result['sources'][0]['text'], '')
+        self.assertTrue(result['sources'][1]['read'])
+
     def test_unavailable_pages_not_faked(self):
         def fake_search(query, key, count=6):
             return [{'title': 'Example', 'url': 'https://example.org/1', 'description': 'snippet'}]
