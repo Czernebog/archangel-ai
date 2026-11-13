@@ -208,7 +208,7 @@ class GatewaySecurityTests(unittest.TestCase):
         self.assertEqual(status, 400)
 
         status, raw, _ = self.request("/api/code-analyze", "POST",
-                                      {"language": "Python", "source": "def add(x):\\n    return x + 1"},
+                                      {"language": "Python", "source": "def add(x):\n    return x + 1"},
                                       origin=origin)
         self.assertEqual(status, 200)
         self.assertTrue(json.loads(raw)["ok"])
