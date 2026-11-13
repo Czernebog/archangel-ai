@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 from http.cookies import SimpleCookie
 from xml.etree import ElementTree as ET
 from web_search import search_web, WebSearchError
+from research_engine import research
+from code_analyzer import analyze_python
 
 ROOT = Path(__file__).resolve().parent
 
@@ -217,6 +219,10 @@ class Handler(SimpleHTTPRequestHandler):
                      ('math-ip', ip, 40, 60.0, 0.0)),
             'web-search': (('web-search-session', self.session_id, 8, 60.0, 2.0),
                            ('web-search-ip', ip, 20, 60.0, 0.0)),
+            'research': (('research-session', self.session_id, 2, 120.0, 15.0),
+                         ('research-ip', ip, 5, 120.0, 0.0)),
+            'code-analyze': (('code-analyze-session', self.session_id, 18, 60.0, 0.0),
+                             ('code-analyze-ip', ip, 50, 60.0, 0.0)),
         }
         specs = policies[action]
         now = time.monotonic()
@@ -419,7 +425,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         action = {'/api/config': 'config', '/api/disconnect': 'disconnect',
-                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/purge': 'purge', '/api/extract': 'extract', '/api/math': 'math', '/api/web-search': 'web-search'}.get(self.path)
+                  '/api/chat': 'chat', '/api/tts': 'tts', '/api/purge': 'purge', '/api/extract': 'extract', '/api/math': 'math', '/api/web-search': 'web-search', '/api/research': 'research', '/api/code-analyze': 'code-analyze'}.get(self.path)
         if not action:
             return self._json(404, {'error': 'Маршрут не найден.'})
         if not self._require_site_password(): return
@@ -437,6 +443,8 @@ class Handler(SimpleHTTPRequestHandler):
             if action == 'extract': return self._extract()
             if action == 'math': return self._math()
             if action == 'web-search': return self._web_search()
+            if action == 'research': return self._research()
+            if action == 'code-analyze': return self._code_analyze()
         except (ValueError, json.JSONDecodeError) as e:
             return self._json(400, {'error': str(e)})
         except BrokenPipeError:
@@ -548,6 +556,32 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(503, {'error': str(exc)})
         return self._json(200, {'ok': True, 'provider': 'Brave Search', 'results': results,
                                 'query': query.strip(), 'sourceType': 'web-index'})
+
+    def _research(self):
+        """User-initiated research; bounded queries/pages with no server-side history."""
+        data = self._read_json(max_bytes=4 * 1024)
+        query, depth = data.get('q'), data.get('depth', 'quick')
+        if not isinstance(query, str) or not query.strip() or len(query) > 220:
+            return self._json(400, {'error': 'Запрос должен содержать от 1 до 220 символов.'})
+        if depth not in ('quick', 'deep'):
+            return self._json(400, {'error': 'Выбери обычное или глубокое исследование.'})
+        try:
+            result = research(query, BRAVE_SEARCH_API_KEY, depth)
+        except WebSearchError as exc:
+            return self._json(503, {'error': str(exc)})
+        return self._json(200, {'ok': True, **result,
+                                'notice': 'Внешние страницы являются недоверенными источниками. Текст может быть неполным.'})
+
+    def _code_analyze(self):
+        """Read-only Python syntax diagnostics; submitted code is never run."""
+        data = self._read_json(max_bytes=100 * 1024)
+        if data.get('language') != 'Python':
+            return self._json(400, {'error': 'Для AST-проверки доступен только Python.'})
+        try:
+            result = analyze_python(data.get('source'))
+        except ValueError as exc:
+            return self._json(400, {'error': str(exc)})
+        return self._json(200, result)
 
     def _tts(self):
         """Opt-in neural speech with this browser session's own OpenAI key.
