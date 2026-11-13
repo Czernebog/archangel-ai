@@ -95,6 +95,13 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("grid-column:1/-1!important", self.html)
         self.assertIn("input.style.height=Math.max(", self.html)
 
+    def test_reasoning_guidance_and_opening_context(self):
+        self.assertIn("РЕЖИМ ГЛУБОКОГО АНАЛИЗА", self.html)
+        self.assertIn("const opening=prior.length>28?prior.slice(0,2)", self.html)
+        self.assertIn("if(opening.length)history.unshift(...opening)", self.html)
+        self.assertIn("не заявляй, что тесты выполнены", self.html)
+        self.assertIn("Отдельные чаты не смешивай", self.html)
+
     def test_advanced_context_remains_bounded(self):
         self.assertIn("slice(-28)", self.html)
         self.assertIn("mode:deep?'deep':'balanced'", self.html)
