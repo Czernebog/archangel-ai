@@ -1370,6 +1370,19 @@ button:disabled{opacity:.5}
 #runResearch:disabled,#analyzePythonAST:disabled{opacity:.55;cursor:progress}
 @media(max-width:760px){.research-pane .row{width:100%;justify-content:space-between}.research-pane .select{width:auto;flex:1;min-width:0}.research-pane button{min-height:44px}.research-pane .research-excerpt{max-height:150px}}
 </style>
+<style id="archangel-74-mobile-research">
+@media(max-width:760px){
+ .mobile-tabbar{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+ .mobile-tab{min-width:0!important;font-size:10px!important}
+ .mobile-tab .tab-symbol{font-size:18px!important}
+ #page-code .card>.between{flex-wrap:wrap;align-items:flex-start}
+ #page-code .card>.between .row{flex-wrap:wrap;min-width:0}
+ #page-code .card>.row{flex-wrap:wrap!important}
+ #page-code .card>.row button{min-height:44px}
+ #page-search .searchbar{min-width:0}
+ #page-search .searchbar .input{min-width:0}
+}
+</style>
 </head>
 <body>
 <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
@@ -1454,7 +1467,7 @@ button:disabled{opacity:.5}
  <div class="page-head"><div><div class="eyebrow">Точный вычислительный модуль</div><h1 class="h1">Математика</h1><div class="lead">Безопасный парсер выражений — математические выражения разбираются по грамматике, без выполнения произвольного JavaScript.</div></div><span class="badge ok">LOCAL ENGINE</span></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><h3 class="section-title">Научный калькулятор</h3><label class="label">Выражение</label><input class="input" id="mathInput" placeholder="sqrt(81) + 2^5 - sin(pi/2)" value="sqrt(81) + 2^5 - sin(pi/2)"><div class="row" style="margin-top:10px"><button class="btn" id="mathCalculate">Вычислить</button><button class="btn secondary" id="mathCopy">Копировать</button><select class="select" id="mathExactMode" aria-label="Точная математическая операция" style="max-width:190px;min-height:40px"><option value="simplify">Точно вычислить</option><option value="solve">Решить уравнение</option><option value="factor">Разложить на множители</option><option value="diff">Производная по x</option><option value="integrate">Интеграл по x</option></select><button class="btn secondary" type="button" id="mathExact">Решить точно</button></div><div class="divider"></div><div class="small muted">Результат</div><div class="result" id="mathResult">Ожидается вычисление…</div><p class="footnote">Поддерживаются + − × ÷ %, степень ^, скобки, pi, e, sqrt, abs, sin, cos, tan, asin, acos, atan, log, ln, exp, floor, ceil, round, min, max, факториал !.</p></div><div class="card"><h3 class="section-title">Статистический анализ</h3><label class="label">Числа через запятую или пробел</label><textarea id="statsInput" class="textarea" placeholder="12, 15, 17, 18, 22, 24"></textarea><button class="btn" id="statsCalculate" style="margin-top:9px">Рассчитать статистику</button><div class="result" id="statsResult" style="margin-top:12px">Среднее, медиана, стандартное отклонение, минимум и максимум.</div><p class="footnote">Стандартное отклонение рассчитывается для всей введённой выборки (population).</p></div></div>
 </section>
 <section class="page" id="page-code">
- <div class="page-head"><div><div class="eyebrow">Инженерный модуль</div><h1 class="h1">Анализ кода</h1><div class="lead">Статическая проверка Python, JavaScript, TypeScript, HTML и CSS: баланс скобок, подозрительные конструкции, потенциальные секреты и базовые структурные проблемы. Код не запускается.</div></div><span class="badge ok">SAFE ANALYSIS</span></div><div class="card"><div class="between"><h3 class="section-title">Исходный код</h3><div class="row"><select id="codeLanguage" class="select" style="width:140px"><option>Python</option><option>JavaScript</option><option>TypeScript</option><option>HTML</option><option>CSS</option></select><button class="btn secondary" id="loadExample">Пример</button></div></div><textarea id="codeInput" class="textarea codearea" spellcheck="false" placeholder="Вставь исходный код…"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="analyzeCode">Проверить код</button><button class="btn secondary" id="copyCode">Копировать</button><button class="btn secondary" type="button" id="analyzePythonAST" title="Проверка синтаксиса и типичных рисков без выполнения кода">Проверить Python AST</button><span class="small muted" id="codeMeta"></span></div><div class="divider"></div><h3 class="section-title">Отчёт анализа</h3><div class="result" id="codeResult">Отчёт появится здесь. Помни: статический анализ не заменяет полноценные тесты и ревью.</div></div>
+ <div class="page-head"><div><div class="eyebrow">Инженерный модуль</div><h1 class="h1">Анализ кода</h1><div class="lead">Статическая проверка Python, JavaScript, TypeScript, HTML и CSS: баланс скобок, подозрительные конструкции, потенциальные секреты и базовые структурные проблемы. Код не запускается.</div></div><span class="badge ok">SAFE ANALYSIS</span></div><div class="card"><div class="between"><h3 class="section-title">Исходный код</h3><div class="row"><select id="codeLanguage" class="select" style="width:140px"><option>Python</option><option>JavaScript</option><option>TypeScript</option><option>HTML</option><option>CSS</option></select><button class="btn secondary" id="loadExample">Пример</button></div></div><textarea id="codeInput" class="textarea codearea" spellcheck="false" placeholder="Вставь исходный код…"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="analyzeCode">Проверить код</button><button class="btn secondary" id="copyCode">Копировать</button><button class="btn secondary" type="button" id="analyzePythonAST" title="Проверка синтаксиса и типичных рисков без выполнения кода">Проверить Python AST</button><button class="btn secondary" type="button" id="reviewCodeWithAI" title="Подготовить код к отправке подключённой модели, без автоматической отправки">ИИ-ревью</button><span class="small muted" id="codeMeta"></span></div><div class="divider"></div><h3 class="section-title">Отчёт анализа</h3><div class="result" id="codeResult">Отчёт появится здесь. Помни: статический анализ не заменяет полноценные тесты и ревью.</div></div>
 </section>
 <section class="page" id="page-plugins">
  <div class="page-head"><div><div class="eyebrow">Архитектура возможностей</div><h1 class="h1">Модули</h1><div class="lead">Управляй встроенными возможностями. Отключение модуля скрывает его из локального маршрутизатора, но не удаляет данные.</div></div></div><div id="pluginList" class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
@@ -1546,6 +1559,7 @@ button:disabled{opacity:.5}
 <nav class="mobile-tabbar" id="mobileTabbar" aria-label="Основные разделы" aria-hidden="true" hidden>
   <button type="button" class="mobile-tab is-active" data-mobile-page="chat" aria-label="Открыть чат с ИИ"><span class="tab-symbol" aria-hidden="true">◉</span><span>Чат</span></button>
   <button type="button" class="mobile-tab" data-mobile-action="chats" aria-label="Открыть недавние чаты"><span class="tab-symbol" aria-hidden="true">☷</span><span>Чаты</span></button>
+  <button type="button" class="mobile-tab" data-mobile-page="search" aria-label="Открыть исследование"><span class="tab-symbol" aria-hidden="true">⌕</span><span>Поиск</span></button>
   <button type="button" class="mobile-tab" data-mobile-page="library" aria-label="Открыть файлы"><span class="tab-symbol" aria-hidden="true">▤</span><span>Файлы</span></button>
   <button type="button" class="mobile-tab" data-mobile-page="settings" aria-label="Открыть настройки"><span class="tab-symbol" aria-hidden="true">⚙</span><span>Настройки</span></button>
 </nav>
@@ -1719,6 +1733,17 @@ $('analyzePythonAST').addEventListener('click',async()=>{
   $('codeResult').textContent='Python AST: '+(data.ok?'синтаксис корректен':'найдена ошибка')+'\nСтрок: '+data.lines+' · Функций: '+data.functions+' · Классов: '+data.classes+'\n\n'+(problems||'Критичных замечаний по AST не обнаружено.')+'\n\n'+data.note;
  }catch(e){$('codeResult').textContent='Проверка AST недоступна: '+e.message;}
  finally{button.disabled=false;button.textContent='Проверить Python AST';}
+});
+$('reviewCodeWithAI').addEventListener('click',()=>{
+ const source=$('codeInput').value.trim(),language=$('codeLanguage').value;
+ if(!source)return toast('Вставь код, который нужно разобрать.');
+ if(source.length>9000)return toast('Для ИИ-ревью выбери фрагмент до 9 000 символов.');
+ const instructions='Проведи предметный code review: найди воспроизводимые ошибки, проблемы безопасности, сложности алгоритмов и тестов. Сначала покажи главное исправление, затем минимальный diff и проверки. Не утверждай, что код был выполнен. Сохраняй совместимость. Язык: '+language;
+ const input=$('chatInput');
+ const draft=instructions+'\\n\\n\\u0060\\u0060\\u0060'+language.toLowerCase()+'\\n'+source+'\\n\\u0060\\u0060\\u0060';
+ if(input.value.trim()&&!confirm('Заменить черновик текущего чата подготовленным запросом на ИИ-ревью?'))return;
+ go('chat');input.value=draft;input.dispatchEvent(new Event('input',{bubbles:true}));
+ toast('Запрос подготовлен. Проверь код и возможные секреты, затем отправь вручную.');
 });
 function copyText(t){if(!t)return toast('Нечего копировать');navigator.clipboard?.writeText(t).then(()=>toast('Скопировано')).catch(()=>toast('Копирование недоступно в этом контексте'))}
 function showModal(title,html){$('modalTitle').textContent=title;$('modalBody').innerHTML=html;$('modal').classList.add('open')}$('closeModal').onclick=()=>$('modal').classList.remove('open');$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').classList.remove('open')};
@@ -2918,7 +2943,7 @@ $('deleteAllChats').onclick=()=>{
  const chats=document.querySelector('[data-mobile-action="chats"]');chats.addEventListener('click',()=>{if(drawer.classList.contains('open'))closeMenu();else openMenu();});
  function refreshMobileLabels(){
   const lang=document.getElementById('interfaceLanguage')?.value||'ru';
-  const strings={ru:['Чат','Чаты','Файлы','Настройки'],en:['Chat','Chats','Files','Settings'],es:['Chat','Chats','Archivos','Ajustes']}[lang]||['Чат','Чаты','Файлы','Настройки'];
+  const strings={ru:['Чат','Чаты','Поиск','Файлы','Настройки'],en:['Chat','Chats','Search','Files','Settings'],es:['Chat','Chats','Buscar','Archivos','Ajustes']}[lang]||['Чат','Чаты','Поиск','Файлы','Настройки'];
   document.querySelectorAll('.mobile-tab').forEach((tab,i)=>{const parts=tab.querySelectorAll('span');if(parts[1])parts[1].textContent=strings[i];});
 }
 refreshMobileLabels();document.getElementById('interfaceLanguage')?.addEventListener('change',refreshMobileLabels);
