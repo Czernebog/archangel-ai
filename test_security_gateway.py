@@ -63,6 +63,20 @@ class GatewaySecurityTests(unittest.TestCase):
         self.assertIn("frame-ancestors 'none'", hdr.get("Content-Security-Policy", ""))
         self.assertIn("SameSite=Strict", hdr.get("Set-Cookie", ""))
 
+    def test_private_status_is_not_cached(self):
+        status, body, headers = self.request("/api/status")
+        self.assertEqual(status, 200)
+        self.assertTrue(json.loads(body)["ok"])
+        self.assertIn("no-store", headers.get("Cache-Control", ""))
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+
+    def test_private_llm_stream_no_store_policy(self):
+        import inspect
+        source = inspect.getsource(server.Handler._chat)
+        self.assertIn("private, no-store, no-transform", source)
+        self.assertIn("Pragma', 'no-cache'", source)
+        self.assertIn("no-follow", source.replace("NoRedirect", "no-follow") if "NoRedirect" in source else "")
+
     def test_cross_origin_config_blocked(self):
         status, body, _ = self.request(
             "/api/config", "POST",
