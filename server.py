@@ -250,6 +250,8 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header('X-Frame-Options', 'DENY')
         self.send_header('X-Robots-Tag', 'noindex, nofollow, noarchive')
         self.send_header('Referrer-Policy', 'no-referrer')
+        self.send_header('X-DNS-Prefetch-Control', 'off')
+        self.send_header('X-Download-Options', 'noopen')
         self.send_header('Permissions-Policy', 'microphone=(self), camera=(), geolocation=(), payment=(), usb=()')
         self.send_header('Cross-Origin-Resource-Policy', 'same-origin')
         self.send_header('Cross-Origin-Opener-Policy', 'same-origin')
@@ -257,7 +259,7 @@ class Handler(SimpleHTTPRequestHandler):
         # Hosted edition calls providers exclusively through this server-side gateway.
         # Local development retains optional direct HTTPS connections.
         connect_sources = "'self'" if PUBLIC_MODE else "'self' https:"
-        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' " + INLINE_SCRIPT_HASHES + "; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src " + connect_sources + "; media-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none'")
+        self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' " + INLINE_SCRIPT_HASHES + "; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src " + connect_sources + "; media-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none'; " + ("upgrade-insecure-requests" if PUBLIC_MODE else ""))
         if PUBLIC_MODE or self.headers.get('X-Forwarded-Proto', '').split(',')[0].strip().lower() == 'https':
             self.send_header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
         if getattr(self, 'clear_session_cookie', False):
@@ -347,7 +349,7 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 cfg = dict(self._session_entry()['config'])
             configured = bool(cfg['provider'] and cfg['model'] and (cfg['provider'] == 'ollama' or cfg['api_key']))
-            data = {'ok': True, 'version': '6.4.0', 'gateway': True, 'configured': configured,
+            data = {'ok': True, 'version': '6.5.0', 'gateway': True, 'configured': configured,
                     'provider': cfg['provider'], 'model': cfg['model'], 'keyStored': False,
                     'sessionIsolated': True, 'historyStoredOnServer': False,
                     'neuralTtsAvailable': cfg['provider'] == 'openai' and bool(cfg['api_key']),
