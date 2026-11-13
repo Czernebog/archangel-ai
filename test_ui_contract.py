@@ -54,7 +54,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('archangel-62-voice-ui', self.html)
         self.assertIn("state.prefs.voiceRuGender='female'", self.html)
         self.assertIn("playNeuralVoice(text,'ru-RU','female')", self.html)
-        self.assertIn("VERSION 6.4.0", self.html)
+        self.assertIn("VERSION 6.5.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
     def test_response_mode_buttons_are_accessible(self):
@@ -103,7 +103,7 @@ class UIContractTests(unittest.TestCase):
     def test_final_monochrome_release_and_loader(self):
         self.assertIn('archangel-six-finish', self.html)
         self.assertIn('ARCHANGEL 6.0', self.html)
-        self.assertIn('VERSION 6.4.0', self.html)
+        self.assertIn('VERSION 6.5.0', self.html)
         self.assertIn('color-scheme:dark', self.html)
         self.assertIn('focus-visible', self.html)
 
@@ -127,7 +127,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('keyboardOpen=focused&&covered>110', self.html)
         self.assertIn("grid-template-columns:minmax(0,1fr) auto", self.html)
         self.assertIn("max-height:min(20dvh,112px)", self.html)
-        self.assertIn("VERSION 6.4.0", self.html)
+        self.assertIn("VERSION 6.5.0", self.html)
 
     def test_history_delete_erases_chats_and_action_history(self):
         self.assertIn('id="clearHistory" type="button">Удалить историю и все переписки', self.html)
@@ -148,7 +148,17 @@ class UIContractTests(unittest.TestCase):
         self.assertIn('flex-direction:column!important', self.html)
         self.assertIn("button.textContent='⧉ Копировать'", self.html)
         self.assertIn("button.setAttribute('aria-label','Копировать ответ ARCHANGEL')", self.html)
-        self.assertIn('VERSION 6.4.0', self.html)
+        self.assertIn('VERSION 6.5.0', self.html)
+
+    def test_mobile_drawer_has_no_redundant_close_button(self):
+        self.assertNotIn('id="mobileClose"', self.html)
+        self.assertNotIn("close.addEventListener('click',closeMenu)", self.html)
+        self.assertIn("menu.onclick=()=>{if(drawer.classList.contains('open'))closeMenu();else openMenu();}", self.html)
+        self.assertIn("drawer.inert=mobile&&!opened", self.html)
+        self.assertIn("scrim.addEventListener('click',closeMenu)", self.html)
+        self.assertIn("if(ev.key==='Escape'&&drawer.classList.contains('open'))", self.html)
+        self.assertIn("go=function(page){originalGo(page);closeMenu();", self.html)
+        self.assertIn('archangel-65-navigation', self.html)
 
     def test_html_language_and_accessibility(self):
         self.assertTrue(self.parser.has_lang)
