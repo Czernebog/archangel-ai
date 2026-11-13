@@ -48,14 +48,15 @@ def clean_excerpt(value, limit=420):
     return re.sub(r"\s+", " ", text).strip()[:limit]
 
 
-def search_web(query, api_key, opener=None):
+def search_web(query, api_key, opener=None, count=6):
     """Return a small set of cited snippets; never fetch result URLs."""
     if not isinstance(query, str) or not query.strip() or len(query) > 250 or len(query.split()) > 40:
         raise ValueError("Запрос должен содержать от 1 до 250 символов (не более 40 слов).")
     if not api_key:
         raise WebSearchError("Интернет-поиск не настроен: добавь BRAVE_SEARCH_API_KEY в переменные окружения Render.")
+    count = max(1, min(10, count if type(count) is int else 6))
     params = urllib.parse.urlencode({
-        "q": query.strip(), "count": 6, "safesearch": "strict", "text_decorations": "false",
+        "q": query.strip(), "count": count, "safesearch": "strict", "text_decorations": "false",
     })
     req = urllib.request.Request(
         BRAVE_URL + "?" + params,
@@ -102,6 +103,6 @@ def search_web(query, api_key, opener=None):
             "url": url,
             "description": clean_excerpt(item.get("description"), 420),
         })
-        if len(results) >= 6:
+        if len(results) >= count:
             break
     return results
