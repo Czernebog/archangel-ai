@@ -208,7 +208,7 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("state.chats=state.chats.filter(x=>x.id!==id)", self.html)
         self.assertIn("state.history=state.history.filter(h=>h.chatId!==id)", self.html)
         self.assertIn("privacyChannel?.postMessage({kind:'delete-chat',id})", self.html)
-        self.assertIn("c.draft=String($('chatInput')?.value||'').slice(0,12000)", self.html)
+        self.assertIn("c.draft=draft;c.title=title;c.updated=Date.now()", self.html)
         self.assertIn("c.draft||''", self.html)
         self.assertIn("type==='chat'?state.activeChatId:null", self.html)
         self.assertIn("Создать отдельный чат", self.html)
