@@ -285,6 +285,12 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("body.arch-keyboard-open #page-chat .composer #chatInput{min-height:40px!important;max-height:60px!important;border:0!important", self.html)
         self.assertIn("VERSION 7.1.0", self.html)
 
+    def test_streaming_appends_only_new_text(self):
+        self.assertIn("const liveText=document.createTextNode('');body.append(liveText);", self.html)
+        self.assertIn("if(pendingText.startsWith(lastRendered))liveText.appendData(", self.html)
+        self.assertIn("lastRendered=pendingText", self.html)
+        self.assertIn("body.textContent=answer;", self.html)
+
     def test_stream_updates_are_frame_batched(self):
         self.assertIn("renderFrame=requestAnimationFrame(()=>{", self.html)
         self.assertIn("if(renderFrame)cancelAnimationFrame(renderFrame)", self.html)
