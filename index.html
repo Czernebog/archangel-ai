@@ -1982,6 +1982,87 @@ async function modelRequest(q,files){
  if(Array.isArray(message))return message.map(x=>x.text||'').filter(Boolean).join('\n')||'Модель вернула пустой ответ.';
  return 'Модель вернула пустой ответ.';
 }
+
+/* Browser profile keeps non-secret API fields. The optional vault is encrypted
+   with a password that never leaves the browser or goes to persistent storage. */
+const ARCH_API_PREFS='archangel_api_prefs_v2',ARCH_API_VAULT='archangel_api_vault_v1';
+const ARCH_PROVIDERS=['custom','gemini','groq','openrouter','ollama','openai'];
+function saveApiPreferences(){
+ const provider=$('apiProvider').value;
+ if(!ARCH_PROVIDERS.includes(provider))return;
+ const data={provider,model:$('apiModel').value.trim().slice(0,180),endpoint:$('apiEndpoint').value.trim().slice(0,700)};
+ storageSet(ARCH_API_PREFS,JSON.stringify(data));
+}
+function loadApiPreferences(){
+ try{
+  const data=JSON.parse(storageGet(ARCH_API_PREFS)||'{}');
+  if(ARCH_PROVIDERS.includes(data.provider)){
+   $('apiProvider').value=data.provider;
+   $('apiModel').value=typeof data.model==='string'?data.model.slice(0,180):'';
+   $('apiEndpoint').value=typeof data.endpoint==='string'?data.endpoint.slice(0,700):'';
+   $('apiKey').required=data.provider!=='ollama';
+   const preset=providerPresets[data.provider];
+   if(preset)$('providerHint').textContent=preset.hint;
+  }
+ }catch(e){}
+ $('rememberApiKey').checked=!!storageGet(ARCH_API_VAULT);
+ if($('rememberApiKey').checked)$('apiVaultStatus').textContent='Ключ зашифрован на устройстве. Для восстановления введи пароль.';
+}
+const asB64=bytes=>btoa(String.fromCharCode(...bytes));
+const fromB64=str=>Uint8Array.from(atob(str),c=>c.charCodeAt(0));
+async function vaultCryptoKey(pass,salt){
+ const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+ return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:220000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+async function saveEncryptedKey(provider,model,key,endpoint,password){
+ if(!crypto?.subtle)throw Error('Для шифрования необходим HTTPS.');
+ if(password.length<12||password.length>200)throw Error('Пароль должен содержать от 12 до 200 символов.');
+ const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+ const cipher=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await vaultCryptoKey(password,salt),new TextEncoder().encode(JSON.stringify({provider,model,key,endpoint}))));
+ if(!storageSet(ARCH_API_VAULT,JSON.stringify({version:1,salt:asB64(salt),iv:asB64(iv),data:asB64(cipher)})))throw Error('Браузер не разрешил сохранить зашифрованный ключ.');
+}
+async function readEncryptedKey(password){
+ const stored=storageGet(ARCH_API_VAULT);
+ if(!stored)throw Error('Сохранённый ключ отсутствует.');
+ if(!password)throw Error('Введи пароль.');
+ try{
+  const record=JSON.parse(stored);
+  if(record.version!==1||typeof record.data!=='string'||record.data.length>9000)throw Error('Неверный формат');
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:fromB64(record.iv)},await vaultCryptoKey(password,fromB64(record.salt)),fromB64(record.data));
+  const data=JSON.parse(new TextDecoder().decode(plain));
+  if(!ARCH_PROVIDERS.includes(data.provider)||typeof data.model!=='string'||typeof data.key!=='string'||!data.key)throw Error('Неверные данные');
+  return data;
+ }catch(e){throw Error('Не удалось восстановить ключ: неверный пароль или повреждённое хранилище.');}
+}
+function clearEncryptedKey(){
+ storageRemove(ARCH_API_VAULT);$('rememberApiKey').checked=false;$('apiVaultPass').value='';
+ $('apiVaultStatus').textContent='Зашифрованная копия ключа удалена.';
+}
+$('forgetSavedApiKey').addEventListener('click',()=>{
+ if(storageGet(ARCH_API_VAULT)&&!confirm('Удалить зашифрованную копию ключа с устройства?'))return;
+ clearEncryptedKey();
+});
+$('unlockApiKey').addEventListener('click',async()=>{
+ const button=$('unlockApiKey');button.disabled=true;
+ try{
+  const data=await readEncryptedKey($('apiVaultPass').value);
+  await gatewayJSON('/api/config',{provider:data.provider,model:data.model,api_key:data.key,endpoint:data.endpoint});
+  api={protocol:'chat',endpoint:'/api/chat',model:data.model,key:'server-configured',provider:data.provider};
+  $('apiProvider').value=data.provider;$('apiModel').value=data.model;$('apiEndpoint').value=data.endpoint;
+  $('apiKey').value='';$('apiKey').placeholder='Ключ подключён на сервере';
+  $('apiVaultPass').value='';saveApiPreferences();
+  $('apiVaultStatus').textContent='Ключ восстановлен в серверной сессии.';
+  apiStatus('Модель подключена: '+data.provider+' · '+data.model,true);renderAll();
+ }catch(e){$('apiVaultStatus').textContent=e.message;}
+ finally{button.disabled=false;}
+});
+for(const id of ['apiProvider','apiModel','apiEndpoint']){
+ $(id).addEventListener(id==='apiProvider'?'change':'input',()=>{
+  clearTimeout(saveApiPreferences.timer);
+  saveApiPreferences.timer=setTimeout(saveApiPreferences,200);
+ });
+}
+
 // API key is deliberately kept only in JS memory for this tab.
 function setApiProtocol(){return 'chat';}
 $('toggleApiKey').onclick=()=>{const field=$('apiKey');const reveal=field.type==='password';field.type=reveal?'text':'password';$('toggleApiKey').textContent=reveal?'◌':'◉';$('toggleApiKey').title=reveal?'Скрыть ключ':'Показать ключ'};
@@ -2371,7 +2452,18 @@ $('saveApi').onclick=async()=>{
  const provider=$('apiProvider').value,model=$('apiModel').value.trim(),key=provider==='ollama'?'':$('apiKey').value.trim(),endpoint=$('apiEndpoint').value.trim();
  if(!model)return toast('Укажи точный ID модели из каталога провайдера.');if(provider!=='ollama'&&!key)return toast('Введи API-ключ провайдера.');if(provider==='custom'&&!/^https:\/\//i.test(endpoint))return toast('Пользовательский endpoint должен начинаться с HTTPS.');if(provider==='ollama'&&location.hostname!== '127.0.0.1'&&location.hostname!=='localhost')return toast('Ollama доступна только при локальном запуске на компьютере.');
  $('saveApi').disabled=true;
- try{await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};$('apiKey').value='';$('apiKey').type='password';$('toggleApiKey').textContent='◉';apiStatus(`Шлюз настроен: ${provider} · ${model}. Ключ хранится только в памяти текущей сессии сервера.`,true);renderAll();updateVoiceCatalog();toast('Провайдер подключён к серверу ARCHANGEL.');}
+ try{
+  await gatewayJSON('/api/config',{provider,model,api_key:key,endpoint});
+  api={protocol:'chat',endpoint:'/api/chat',model,key:'server-configured',provider};
+  saveApiPreferences();
+  if($('rememberApiKey').checked&&provider!=='ollama'){
+   try{await saveEncryptedKey(provider,model,key,endpoint,$('apiVaultPass').value);$('apiVaultStatus').textContent='Ключ зашифрован и сохранён. Для восстановления нужен пароль.';}
+   catch(e){$('apiVaultStatus').textContent='Подключение работает, но ключ не сохранён: '+e.message;}
+  }else if(!storageGet(ARCH_API_VAULT)){$('apiVaultStatus').textContent='Провайдер и модель сохранены. Ключ активен только в серверной сессии.';}
+  $('apiKey').value='';$('apiKey').type='password';$('apiKey').placeholder='Ключ подключён на сервере';
+  $('apiVaultPass').value='';$('toggleApiKey').textContent='◉';
+  apiStatus(`Шлюз настроен: ${provider} · ${model}.`,true);renderAll();updateVoiceCatalog();toast('Провайдер подключён к серверу ARCHANGEL.');
+ }
  catch(e){apiStatus('Ошибка настройки: '+e.message,false);toast(e.message)}finally{$('saveApi').disabled=false;}
 };
 $('disconnectApi').onclick=async()=>{
@@ -2381,7 +2473,7 @@ $('disconnectApi').onclick=async()=>{
   let result={};try{result=await response.json()}catch{}
   if(!response.ok||!result.ok)throw Error(result.error||`HTTP ${response.status}`);
   api={protocol:'chat',endpoint:'/api/chat',model:'',key:'',provider:null};
-  $('apiKey').value='';$('apiModel').value='';
+  $('apiKey').value='';$('apiModel').value='';clearEncryptedKey();storageRemove(ARCH_API_PREFS);
   apiStatus('Провайдер отключён. Сервер подтвердил удаление ключа из памяти.',false);
   renderAll();updateVoiceCatalog();stopVoicePlayback(false);toast('Подключение отключено, ключ удалён из RAM сервера.');
  }catch(e){apiStatus('Не удалось подтвердить отключение: '+e.message,false);toast('Отключение не подтверждено. Проверь окно сервера ARCHANGEL.');}
@@ -3009,6 +3101,7 @@ async function initializeArchangel(){
  const started=performance.now(),boot=$('bootScreen');
  setBootCaption('ЗАГРУЗКА ЛОКАЛЬНОГО ПРОФИЛЯ');
  load();
+ loadApiPreferences();
  setBootCaption('ПОДГОТОВКА ИНТЕРФЕЙСА');
  restorePrefs();syncBrainMode();updateVoiceCatalog();renderAll();restoreChat();setVoiceUI();syncSpeakerButton();updateVoiceValueLabels();if(window.matchMedia('(max-width:760px)').matches)go('chat');
  if(!SR&&$('voiceSupportBadge'))$('voiceSupportBadge').textContent='НЕТ API';
@@ -3017,7 +3110,7 @@ async function initializeArchangel(){
   try{
    const status=await waitAtMost(fetch('/api/status',{cache:'no-store',credentials:'same-origin'}).then(r=>r.ok?r.json():null),1800);
    if(status?.ok){
-    if(status.configured){api={protocol:'chat',endpoint:'/api/chat',model:status.model,key:'server-configured',provider:status.provider};apiStatus(`Шлюз активен: ${status.provider} · ${status.model}.`,true);}
+    if(status.configured){api={protocol:'chat',endpoint:'/api/chat',model:status.model,key:'server-configured',provider:status.provider};if(ARCH_PROVIDERS.includes(status.provider))$('apiProvider').value=status.provider;$('apiModel').value=status.model||'';$('apiKey').placeholder='Ключ подключён на сервере';saveApiPreferences();apiStatus(`Шлюз активен: ${status.provider} · ${status.model}.`,true);}
     else apiStatus('Локальный шлюз активен · подключи модель в настройках.',false);
     renderAll();
    }else apiStatus('Сервер ARCHANGEL отвечает с ошибкой. Проверь окно запуска.',false);
