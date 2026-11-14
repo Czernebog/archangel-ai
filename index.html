@@ -1412,6 +1412,24 @@ button:disabled{opacity:.5}
 }
 @media(prefers-reduced-motion:reduce){.arch-offline-banner{transition:none!important}}
 </style>
+<style id="archangel-72-secure-profile">
+/* Credential controls remain clear and accessible on desktop and mobile. */
+#settings-api .api-remember-panel{display:grid;gap:10px;margin:14px 0;padding:15px;border:1px solid #505050;border-radius:12px;background:#101010}
+#settings-api .api-remember-panel .small{display:flex;align-items:flex-start;gap:9px;line-height:1.5;color:#e7e7e7}
+#settings-api .api-remember-panel input[type="checkbox"]{flex:none;width:19px;height:19px;accent-color:#fff}
+#settings-api #apiVaultStatus{line-height:1.5;min-height:20px;overflow-wrap:anywhere}
+#settings-api .api-remember-panel button{min-height:42px}
+#settings-api .api-remember-panel .row{align-items:stretch}
+#settings-api :is(#apiKey,#apiVaultPass){font-size:16px}
+#settings-style #tone,#settings-style #interfaceLanguage,#settings-style #language{background:#151515;border-color:#505050}
+#settings-style .label{line-height:1.5}
+@media(max-width:760px){
+ #settings-api .api-remember-panel{padding:12px}
+ #settings-api .api-remember-panel .row button{flex:1 1 160px}
+ #settings-api .api-actions{display:flex;flex-wrap:wrap;gap:8px}
+ #settings-api .api-actions button{min-height:44px;flex:1 1 140px}
+}
+</style>
 </head>
 <body>
 <div id="archOfflineBanner" class="arch-offline-banner" role="status" aria-live="polite" hidden>Нет соединения с интернетом. Локальные данные доступны.</div>
@@ -1524,7 +1542,7 @@ button:disabled{opacity:.5}
  <label class="label" for="apiVaultPass">Пароль хранилища (не менее 12 символов)</label>
  <input class="input" id="apiVaultPass" type="password" autocomplete="new-password" spellcheck="false" placeholder="Понадобится для восстановления после перезапуска">
  <div class="row" style="flex-wrap:wrap"><button class="btn secondary" type="button" id="unlockApiKey">Восстановить сохранённый ключ</button><button class="btn ghost" type="button" id="forgetSavedApiKey">Удалить сохранённый ключ</button></div>
- <div id="apiVaultStatus" class="small muted" role="status" aria-live="polite">Провайдер и модель сохраняются автоматически. Ключ сохраняется только при включённой защите паролем.</div>
+ <div id="apiVaultStatus" class="small muted" role="status" aria-live="polite">Провайдер и модель сохраняются автоматически. Ключ можно зашифровать и сохранить по желанию. После закрытия или перезапуска нужен пароль для восстановления.</div>
 </div>
 <div class="api-actions"><button class="btn" id="saveApi">Подключить</button><button class="btn secondary" id="testApi">Проверить соединение</button><button class="btn ghost" id="disconnectApi">Отключить</button></div>
     <div class="api-state" id="apiState"><i class="state-light"></i><span id="apiStatus">Модель не подключена · локальные инструменты доступны</span></div>
@@ -2042,6 +2060,19 @@ $('forgetSavedApiKey').addEventListener('click',()=>{
  if(storageGet(ARCH_API_VAULT)&&!confirm('Удалить зашифрованную копию ключа с устройства?'))return;
  clearEncryptedKey();
 });
+$('rememberApiKey').addEventListener('change',()=>{
+ if($('rememberApiKey').checked){
+  $('apiVaultStatus').textContent='Введи отдельный пароль и нажми «Подключить»: ключ будет зашифрован на этом устройстве.';
+ }else{
+  $('apiVaultStatus').textContent=storageGet(ARCH_API_VAULT)
+   ?'Зашифрованная копия ещё сохранена. Для полного удаления нажми «Удалить сохранённый ключ».'
+   :'Ключ не будет сохраняться на устройстве. Провайдер и модель сохраняются.';
+ }
+});
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='hidden')saveApiPreferences();
+});
+window.addEventListener('pagehide',saveApiPreferences,{passive:true});
 $('unlockApiKey').addEventListener('click',async()=>{
  const button=$('unlockApiKey');button.disabled=true;
  try{
