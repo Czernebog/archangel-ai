@@ -73,7 +73,11 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("const ARCH_API_PREFS=", self.html)
         self.assertIn("loadApiPreferences();", self.html)
         self.assertIn("storageRemove(ARCH_API_VAULT)", self.html)
-        self.assertIn("Разделяй", self.html) if False else None
+        self.assertIn('archangel-72-secure-profile', self.html)
+        self.assertIn("window.addEventListener('pagehide',saveApiPreferences,{passive:true})", self.html)
+        self.assertIn("document.visibilityState==='hidden'", self.html)
+        self.assertIn("async function readEncryptedKey(password)", self.html)
+        self.assertIn("state.prefs.tone='focused';state.prefs.language='ru';", self.html)
 
     def test_research_and_code_review_mobile_navigation(self):
         self.assertEqual(self.parser.ids.get("reviewCodeWithAI"), 1)
