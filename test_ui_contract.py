@@ -120,6 +120,15 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("VERSION 7.2.0", self.html)
         self.assertNotIn('data-voice-use=', self.html)
 
+    def test_no_duplicate_detail_setting(self):
+        self.assertNotIn('id="detail"', self.html)
+        self.assertNotIn("state.prefs.detail=$('detail').value", self.html)
+        self.assertNotIn("const detailRule=", self.html)
+        self.assertNotIn("${detailRule}", self.html)
+        self.assertNotIn("setLabel('detail',d.detail)", self.html)
+        self.assertEqual({mode for mode, _ in self.parser.brain_buttons}, {"balanced", "deep"})
+        self.assertIn("mode:deep?'deep':'balanced'", self.html)
+
     def test_response_mode_buttons_are_accessible(self):
         self.assertEqual({mode for mode, _ in self.parser.brain_buttons},
                          {"balanced", "deep"})
