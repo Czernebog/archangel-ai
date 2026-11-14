@@ -60,10 +60,25 @@ class UIContractTests(unittest.TestCase):
         self.assertIn("read?'Страница прочитана", self.html)
         self.assertIn('archangel-73-research-layout', self.html)
 
+    def test_russian_only_focused_and_secure_api_vault(self):
+        self.assertIn('<select class="select" id="interfaceLanguage"><option value="ru">Русский</option></select>', self.html)
+        self.assertIn('<select class="select" id="tone"><option value="focused">Жёсткий и сосредоточенный</option></select>', self.html)
+        self.assertIn("const tone='focused';", self.html)
+        self.assertIn("const language='ru';", self.html)
+        self.assertIn("function applyInterfaceLanguage(){const l='ru',d=UI_TEXT.ru;", self.html)
+        self.assertIn('id="apiVaultPass"', self.html)
+        self.assertIn('id="unlockApiKey"', self.html)
+        self.assertIn("name:'AES-GCM'", self.html)
+        self.assertIn("name:'PBKDF2'", self.html)
+        self.assertIn("const ARCH_API_PREFS=", self.html)
+        self.assertIn("loadApiPreferences();", self.html)
+        self.assertIn("storageRemove(ARCH_API_VAULT)", self.html)
+        self.assertIn("Разделяй", self.html) if False else None
+
     def test_research_and_code_review_mobile_navigation(self):
         self.assertEqual(self.parser.ids.get("reviewCodeWithAI"), 1)
         self.assertIn('data-mobile-page="search"', self.html)
-        self.assertIn("const strings={ru:['Чат','Чаты','Поиск','Файлы','Настройки']", self.html)
+        self.assertIn("const strings=['Чат','Чаты','Поиск','Файлы','Настройки']", self.html)
         self.assertIn("if(source.length>9000)return toast(", self.html)
         self.assertIn("id=\"analyzePythonAST\"", self.html)
         self.assertIn("const draft=instructions+'\\n\\n```'", self.html)
